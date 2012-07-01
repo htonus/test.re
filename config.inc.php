@@ -1,0 +1,1 @@
+/var/www/vhosts/re.pro/htdocs/config.inc.php.tpl

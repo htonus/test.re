@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!DOCTYPE metaconfiguration SYSTEM "meta.dtd">
+
+<!-- $Id$ -->
+
+<metaconfiguration>
+<classes>
+
+	<class name="User" type="final">
+		<properties>
+			<identifier name="id" />
+			<property name="name" type="String" size="64" required="true" />
+			<property name="surname" type="String" size="64" required="true" />
+			<property name="username" type="String" size="64" required="true" />
+			<property name="password" type="String" size="32" required="true" />
+			<property name="email" type="String" size="128" required="true" />
+		</properties>
+		<pattern name="DictionaryClass" />
+	</class>
+	
+	<class name="Unit" type="final">
+		<properties>
+			<identifier name="id" />
+			<property name="name" type="String" size="32" required="true" />
+		</properties>
+		<pattern name="DictionaryClass" />
+	</class>
+	
+	<class name="FeatureType" type="final">
+		<properties>
+			<identifier name="id" />
+			<property name="name" type="String" size="32" required="true" />
+			<property name="unit" type="Unit" relation="OneToOne" required="false" fetch="lazy" />
+		</properties>
+		<pattern name="DictionaryClass" />
+	</class>
+
+	<class name="Feature" type="final">
+		<properties>
+			<identifier name="id" />
+			<property name="content" type="String" size="128" required="false" />
+			<property name="value" type="Numeric" size="20,2" required="false" />
+			<property name="type" type="FeatureType" relation="OneToOne" required="true" fetch="lazy"/>
+			<property name="property" type="Property" relation="OneToOne" required="true" fetch="lazy" />
+		</properties>
+		<pattern name="DictionaryClass" />
+	</class>
+
+
+	<class name="OfferType" type="final">
+		<properties>
+			<identifier name="id" />
+			<property name="name" type="String" size="16" required="true" />
+		</properties>
+		<pattern name="EnumerationClass" />
+	</class>
+	
+	<class name="PropertyType" type="final">
+		<properties>
+			<identifier name="id" />
+			<property name="name" type="String" size="16" required="true" />
+		</properties>
+		<pattern name="EnumerationClass" />
+	</class>
+	
+	<class name="Property" type="final">
+		<properties>
+			<identifier name="id" />
+			<property name="name" type="String" size="128" required="true" />
+			<property name="description" type="String" size="512" required="false" />
+			<property name="user" type="User" relation="OneToOne" required="true" fetch="lazy" />
+			<property name="price" type="Numeric" size="10,2" required="false" />
+			<property name="type" type="PropertyType" relation="OneToOne" required="true" fetch="lazy" />
+			<property name="offer" type="OfferType" relation="OneToOne" required="true" fetch="lazy" />
+			<property name="features" relation="OneToMany" type="Feature" required="false" />
+		</properties>
+		<pattern name="DictionaryClass" />
+	</class>
+
+
+
+</classes>
+</metaconfiguration>
