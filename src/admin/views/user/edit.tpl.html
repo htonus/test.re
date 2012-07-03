@@ -1,0 +1,34 @@
+<?php
+/*
+ * $Id$
+ */
+
+
+?>
+
+<h2><?=$form->getValue('id') ? 'Update User '.$form->getValue('id')->getId() : 'Add new User'?></h2>
+<table>
+<form name="editForm" action="" method="post">
+
+<?php
+
+	foreach ($form->getPrimitiveList() as $name => $primitive) {
+		 if ($name == 'id')
+			 continue;
+?>
+	<tr>
+		<td align="right"><?=$primitive->isRequired() ? '*' : ''?> <b><?=$name?></b> </td>
+		<td><input type="text" name="<?=$name?>" value="<?= $form->getValue($name)?>"></td>
+	</tr>
+<?php
+		
+	}
+?>
+
+	<tr>
+		<td></td>
+		<td><input type="submit"></td>
+	</tr>
+	
+</form>
+</table>

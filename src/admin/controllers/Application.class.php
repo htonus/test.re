@@ -13,7 +13,8 @@
 final class Application
 {
 	private $allowedAreas = array(
-		'main'
+		'main',
+		'user'
 	);
 	
 	public static function create()
@@ -96,6 +97,7 @@ final class Application
 		
 		if ($view instanceof View) {
 			$model->set('area', $request->getAttachedVar('area'));
+			$model->set('urlMapper', $request->getAttachedVar('urlMapper'));
 			
 //			$model->set('action', $request->getAttachedVar('action'));
 			
@@ -111,6 +113,7 @@ final class Application
 			addPrefix(PATH_TEMPLATES);
 		
 		$request->setAttachedVar('resolver', $resolver);
+		$request->setAttachedVar('urlMapper', UrlMapper::create(PATH_WEB_ADMIN));
 		
 		return $this;
 	}

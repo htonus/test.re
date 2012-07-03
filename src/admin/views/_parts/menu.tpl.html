@@ -1,0 +1,31 @@
+<?php
+/*
+ * $Id$
+ */
+
+	$areas = array(
+		'main'	=> 'Home',
+		'user'	=> 'Users',
+		'featureType'	=> 'Feature Types',
+		'feature'		=> 'Features',
+		'propetyType'	=> 'Property Types',
+		'properties'	=> 'Property to Offer',
+	);
+?>
+	<div id="topMenu">
+<?php
+
+	foreach ($areas as $_area => $name) {
+		if (empty($first))
+			$first = true;
+		else
+			echo ' | ';
+		
+		if ($area == $_area)
+			echo '<b>'.$_area.'</b>';
+		else
+			echo '<a href="'.$urlMapper->getAreaUrl($_area).'">'.$_area.'</a>';
+	}
+?>
+	</div>
+	<hr />

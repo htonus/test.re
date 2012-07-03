@@ -15,37 +15,24 @@ final class controllerUser extends PrototypedEditor
 	public function __construct()
 	{
 		parent::__construct(User::create());
-		$this->
-			setMethodMappingList(
-				array(
-					'index'	=> 'actionIndex',
-				)
-			)->
+
+		$this->setMethodMapping('index', 'doIndex')->
 			setDefaultAction('index');
 	}
-	
-	public function actionIndex(HttpRequest $request)
+
+	protected function doIndex(HttpRequest $request)
 	{
-		$model = Model::create();
-		
-		$list = User::dao()->getPlainList();
-		
-		$model->set('list', $list);
-		
-		$mav = ModelAndView::create()->
-			setModel($model);
-		
-		return $mav;
-	}
-	
-	protected function actionEdit(HttpRequest $request)
-	{
-		$this->getForm()->
-			import($request->getGet())->
-			importMore($request->getPost());
-		
-		if ($this->getForm()->getErrors()) {
-			
+		try {
+			$list = User::dao()->getPlainList();
+		} catch (ObjectNotFoundException $e) {
+			$list = array();
 		}
+		
+		$model = Model::create()->
+			set('list', $list)->
+			set('subject', $this->subject);
+
+		return ModelAndView::create()->
+			setModel($model);
 	}
 }
