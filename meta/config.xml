@@ -12,7 +12,7 @@
 			<property name="name" type="String" size="64" required="true" />
 			<property name="surname" type="String" size="64" required="true" />
 			<property name="username" type="String" size="64" required="true" />
-			<property name="password" type="String" size="32" required="true" />
+			<property name="password" type="String" size="40" required="true" />
 			<property name="email" type="String" size="128" required="true" />
 		</properties>
 		<pattern name="DictionaryClass" />

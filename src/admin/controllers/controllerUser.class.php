@@ -16,8 +16,14 @@ final class controllerUser extends PrototypedEditor
 	{
 		parent::__construct(User::create());
 
+		$this->map->addSource('id', RequestType::post());
+
 		$this->setMethodMapping('index', 'doIndex')->
 			setDefaultAction('index');
+
+		$this->getForm()->
+			get('password')->
+			addImportFilter(Filter::hash());
 	}
 
 	protected function doIndex(HttpRequest $request)
