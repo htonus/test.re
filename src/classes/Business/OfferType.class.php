@@ -7,6 +7,16 @@
 
 	final class OfferType extends Enumeration
 	{
-		// implement me!
+		const OFFER_BUY		= 1;
+		const OFFER_SELL	= 2;
+		const OFFER_RENT	= 3;
+		const OFFER_LEASE	= 4;
+
+		protected $names = array(
+			self::OFFER_BUY		=> 'buy',
+			self::OFFER_SELL	=> 'sell',
+			self::OFFER_RENT	=> 'rent',
+			self::OFFER_LEASE	=> 'lease',
+		);
 	}
 ?>

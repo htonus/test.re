@@ -70,13 +70,22 @@
 			<property name="description" type="String" size="512" required="false" />
 			<property name="user" type="User" relation="OneToOne" required="true" fetch="lazy" />
 			<property name="price" type="Numeric" size="10,2" required="false" />
-			<property name="type" type="PropertyType" relation="OneToOne" required="true" fetch="lazy" />
-			<property name="offer" type="OfferType" relation="OneToOne" required="true" fetch="lazy" />
-			<property name="features" relation="OneToMany" type="Feature" required="false" />
+			<property name="propertyType" type="PropertyType" relation="OneToOne" required="true" fetch="lazy" />
+			<property name="offerType" type="OfferType" relation="OneToOne" required="true" fetch="lazy" />
+			<property name="features" type="Feature" relation="OneToMany" required="false" />
 		</properties>
 		<pattern name="DictionaryClass" />
 	</class>
 
+	<!--class name="Language" type="final">
+		<properties>
+			<identifier name="id" />
+			<property name="name" type="String" size="16" required="true" />
+			<property name="code" type="String" size="2" required="true" />
+			<property name="native" type="String" size="16" required="true" />
+		</properties>
+		<pattern name="EnumerationClass" />
+	</class-->
 
 
 </classes>

@@ -7,6 +7,16 @@
 
 	final class PropertyType extends Enumeration
 	{
-		// implement me!
+		const ROOM			= 1;
+		const FLAT			= 2;
+		const APPARTMENT	= 3;
+		const HOUSE			= 4;
+
+		protected $names = array(
+			self::ROOM			=> 'room',
+			self::FLAT			=> 'flat',
+			self::APPARTMENT	=> 'appartment',
+			self::HOUSE			=> 'house',
+		);
 	}
 ?>
