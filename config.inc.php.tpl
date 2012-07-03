@@ -29,6 +29,10 @@
 	define('PATH_TEMPLATES', PATH_SOURCE.'views'.DIRECTORY_SEPARATOR);
 	
 	// onPHP init
+	define(
+		'ONPHP_TMP_PATH',
+		PATH_BASE.'..'.DIRECTORY_SEPARATOR.tmp.DIRECTORY_SEPARATOR
+	);
 	require PATH_BASE.'../onphp/global.inc.php.tpl';
 	
 	// everything else
