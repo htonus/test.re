@@ -30,7 +30,7 @@
 	
 	// onPHP init
 	define(
-		'ONPHP_TMP_PATH',
+		'ONPHP_TEMP_PATH',
 		PATH_BASE.'..'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR
 	);
 	require PATH_BASE.'../onphp/global.inc.php.tpl';
