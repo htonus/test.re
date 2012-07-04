@@ -11,26 +11,10 @@
  *
  * @author htonus
  */
-final class controllerUser extends CommonEditor
+final class controllerFeatureType extends CommonEditor
 {
 	public function __construct()
 	{
-		parent::__construct(User::create());
-
-		$this->getForm()->
-			get('password')->
-			addImportFilter(Filter::hash());
-	}
-
-	public function doSave(HttpRequest $request)
-	{
-		$this->getForm()->drop('password');
-		return parent::doSave($request);
-	}
-
-	public function doTake(HttpRequest $request)
-	{
-		$this->getForm()->drop('password');
-		return parent::doTake($request);
+		parent::__construct(FeatureType::create());
 	}
 }

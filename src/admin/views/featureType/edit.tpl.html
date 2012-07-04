@@ -6,7 +6,7 @@
 	$id = $form->getValue('id')
 		? $form->getValue('id')->getId()
 		: null;
-	
+
 	$class = get_class($subject);
 ?>
 
@@ -20,7 +20,7 @@
 
 <table>
 <form name="editForm" action="<?=PATH_WEB_ADMIN?>" method="post">
-<input type="hidden" name="area" value="user" />
+<input type="hidden" name="area" value="<?=$area?>" />
 <input type="hidden" name="action" value="<?=$id ? 'save' : 'add'?>" />
 <input type="hidden" name="id" value="<?=$id?>" />
 <?php
@@ -34,7 +34,36 @@
 ?>
 	<tr>
 		<td align="right"><?=$primitive->isRequired() ? '*' : ''?> <b><?=$name?></b> </td>
-		<td><input type="text" name="<?=$name?>" value="<?= $form->getValue($name)?>"></td>
+		<td>
+<?php
+		if (
+			$primitive instanceof IdentifiablePrimitive
+			&& isset(${$name.'List'})
+		) {
+?>
+			<select name="<?=$name?>">
+<?php
+			if (!$primitive->isRequired()) {
+?>
+				<option value=""></option>
+<?php
+			}
+			foreach(${$name.'List'} as $option) {
+?>
+				<option value="<?=$option->getId()?>"><?=$option->getName()?> (<?=$option->getValue()?>)</option>
+<?php
+			}
+?>
+			</select>
+<?php
+		} else {
+?>
+			<input type="text" name="<?=$name?>" value="<?= $form->getValue($name)?>">
+<?php
+		}
+?>
+
+		</td>
 	</tr>
 <?php
 		

@@ -23,7 +23,16 @@ final class controllerMain extends MethodMappedController
 			)->
 			setDefaultAction('index');
 	}
-	
+
+	public function handleRequest(HttpRequest $request)
+	{
+		$mav = parent::handleRequest($request);
+
+		$request->setAttachedVar('layout', 'default');
+
+		return $mav;
+	}
+
 	public function actionIndex(HttpRequest $request)
 	{
 		$model = Model::create();

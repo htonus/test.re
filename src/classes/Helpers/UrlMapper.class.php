@@ -29,7 +29,10 @@
 
 		public function getObjectUrl(Identifiable $object, $action='edit')
 		{
-			return $this->getAreaUrl(strtolower(get_class($object)))
+			$area = get_class($object);
+			$area[0] = strtolower($area[0]);
+			
+			return $this->getAreaUrl($area)
 				.(defined('NICE_URL') ? '/' : '&action=').$action
 				.(defined('NICE_URL') ? '/' : '&id=').$object->getId();
 		}

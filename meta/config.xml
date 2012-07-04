@@ -22,6 +22,7 @@
 		<properties>
 			<identifier name="id" />
 			<property name="name" type="String" size="32" required="true" />
+			<property name="value" type="String" size="32" required="true" />
 		</properties>
 		<pattern name="DictionaryClass" />
 	</class>

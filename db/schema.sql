@@ -54,9 +54,10 @@ CREATE SEQUENCE unit_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 CREATE TABLE unit (
     id		bigint PRIMARY KEY DEFAULT nextval('unit_id'::regclass) NOT NULL,
-    name	character varying(32) NOT NULL
+    name	character varying(32) NOT NULL,
+    value	character varying(32) NOT NULL
 );
-
+CREATE UNIQUE INDEX unit_name_uidx ON unit("name");
 
 CREATE SEQUENCE feature_type_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;

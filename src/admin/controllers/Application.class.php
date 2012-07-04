@@ -14,7 +14,10 @@ final class Application
 {
 	private $allowedAreas = array(
 		'main',
-		'user'
+		'user',
+		'unit',
+		'featureType',
+		'property',
 	);
 	
 	public static function create()
@@ -39,7 +42,6 @@ final class Application
 		$controller = 'controller'.ucfirst($area);
 		
 		switch ($area) {
-			case 'main':
 			default:
 				$chain = new $controller;
 				break;
@@ -81,18 +83,19 @@ final class Application
 			return $view->render($model);
 		}
 		
-		$resolver = $request->getAttachedVar('resolver');
+		$layout = $request->hasAttachedVar('layout')
+			? $request->getAttachedVar('layout')
+			: $request->getAttachedVar('area');
 		
+		$model->set('layout', $layout);
+
 		if (empty($view)) {
-			$view = $request->hasAttachedVar('layout')
-				? $request->getAttachedVar('layout')
-				: $request->getAttachedVar('area');
-			
-			$model->set('layout', $view);
+			$view = $layout;
 		}
-		
+
 		if (is_string($view)) {
-			$view = $resolver->resolveViewName($view);
+			$view = $request->getAttachedVar('resolver')->
+				resolveViewName($view);
 		}
 		
 		if ($view instanceof View) {
@@ -100,9 +103,11 @@ final class Application
 			$model->set('urlMapper', $request->getAttachedVar('urlMapper'));
 			
 //			$model->set('action', $request->getAttachedVar('action'));
-			
-			$view->render($model);
+		} else {
+			$view = RedirectView::create(PATH_WEB_ADMIN.'error/404');
 		}
+		
+		$view->render($model);
 	}
 	
 	private function attachResolver(HttpRequest $request)
