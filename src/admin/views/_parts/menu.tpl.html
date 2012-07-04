@@ -20,11 +20,13 @@
 			$first = true;
 		else
 			echo ' | ';
-		
+
 		if ($area == $_area)
-			echo '<b>'.$_area.'</b>';
+			$title = '<b>'.$_area.'</b>';
 		else
-			echo '<a href="'.$urlMapper->getAreaUrl($_area).'">'.$_area.'</a>';
+			$title = $_area;
+
+		echo '<a href="'.$urlMapper->getAreaUrl($_area).'">'.$title.'</a>';
 	}
 ?>
 	</div>
