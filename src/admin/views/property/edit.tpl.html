@@ -26,7 +26,7 @@
 <?php
 
 	foreach ($form->getPrimitiveList() as $name => $primitive) {
-		 if ($name == 'id')
+		 if ($name == 'id' || $name == 'features')
 			 continue;
 		 
 		 if (($name == 'password') && $id)
@@ -36,10 +36,8 @@
 		<td align="right"><?=$primitive->isRequired() ? '*' : ''?> <b><?=$name?></b> </td>
 		<td>
 <?php
-		if (
-			$primitive instanceof IdentifiablePrimitive
-			&& isset(${$name.'List'})
-		) {
+		if ($primitive instanceof IdentifiablePrimitive) {
+			if (isset(${$name.'List'})) {
 ?>
 			<select name="<?=$name?>">
 <?php
@@ -56,6 +54,14 @@
 ?>
 			</select>
 <?php
+			} elseif (isset(${$name.'Lookup'})) {
+				$partViewer->view(
+					'_parts/lookup',
+					Model::create()->
+						set('name', $name)->
+						set('class', ${$name.'Lookup'})
+				);
+			}
 		} else {
 ?>
 			<input type="text" name="<?=$name?>" value="<?= $form->getValue($name)?>">

@@ -17,4 +17,14 @@ final class controllerProperty extends CommonEditor
 	{
 		parent::__construct(Property::create());
 	}
+
+	protected function attachCollections(Model $model)
+	{
+		parent::attachCollections($model);
+
+		$model->set('unitList', Unit::dao()->getPlainList());
+
+		return $this;
+	}
+
 }

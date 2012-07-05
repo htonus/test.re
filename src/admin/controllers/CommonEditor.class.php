@@ -68,17 +68,42 @@ class CommonEditor extends PrototypedEditor
 			setModel($model);
 	}
 
-	private function attachCollections(Model $model)
+	protected function attachCollections(Model $model)
 	{
 		$fieldList = $this->subject->proto()->
 			getExpandedPropertyList();
 
 		foreach ($fieldList as $name => $field) {
-			if ($field->getRelationId() == 1) {
+			if (
+				in_array(
+					$field->getRelationId(),
+					array(MetaRelation::ONE_TO_ONE, MetaRelation::ONE_TO_MANY)
+				)
+			) {
 				switch($field->getType()) {
 					case 'identifier':
-						$list = call_user_func(array($field->getClassName(), 'dao'))->
-							getPlainList();
+						$dao = call_user_func(array($field->getClassName(), 'dao'));
+						$total = $dao->getTotalCount();
+						$model->set($name.'Total', $total);
+
+						if ($total < 50)
+							$model->set($name.'List', $dao->getPlainList());
+						else
+							$model->set($name.'Lookup', $field->getClassName());
+
+						break;
+					case 'identifierList':
+						if ($this->getForm()->getValue('id')) {
+							$dao = $this->getForm()->getValue('id')->
+								{$field->getGetter()}();
+
+							$model->set($name.'List', $dao->getLust());
+							$model->set($name.'Total', $dao->getCount());
+						} else {
+							$model->set($name.'List', array());
+							$model->set($name.'Total', 0);
+						}
+
 						break;
 
 					case 'enumeration':
@@ -86,11 +111,12 @@ class CommonEditor extends PrototypedEditor
 						$class = new $className(
 							call_user_func(array($className, 'getAnyId'))
 						);
-						$list = $class->getObjectList();
+						$model->set($name.'List', $class->getObjectList());
+						$model->set($name.'Total', count($model->get($name.'List')));
+
+
 						break;
 				}
-				
-				$model->set($name.'List', $list);
 			}
 		}
 

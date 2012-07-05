@@ -28,6 +28,9 @@
 
 	<link rel="StyleSheet" href="<?=PATH_WEB?>html/static/style.css?17" type="text/css">
 	<link rel="stylesheet" type="text/css" href="<?=PATH_WEB?>html/static/brand-panzar.css"/>
+<?php
+	$partViewer->view('_parts/js', Model::create()->set('name', 'jquery-1.7.2.min'));
+?>
 </head>
 
 <body>
