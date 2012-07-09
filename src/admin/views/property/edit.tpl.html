@@ -68,13 +68,40 @@
 <?php
 		}
 ?>
-
 		</td>
 	</tr>
 <?php
 		
 	}
 ?>
+	<tr>
+		<td colspan="2">
+			<table cellspacing="0" cellpadding="5" border="1">
+				<tr>
+					<th>Name</th>
+					<th>Value</th>
+					<th>Comment</th>
+					<th>Unit</th>
+				</tr>
+<?php
+		foreach ($featureList as $feature) {
+			$type = $feature->getType();
+?>
+				<tr>
+					<td>
+						<?=$type->getName()?>
+						<?=$type->isRequired() ? '*' : null?>
+					</td>
+					<td><input type="test" name="featureList[<?=$type->getId()?>][value]" value="<?=$feature->getValue()?>" /></td>
+					<td><input type="test" name="featureList[<?=$type->getId()?>][content]" value="<?=$feature->getContent()?>" /></td>
+					<td><?=$type->getUnit() ? $type->getUnit()->getValue() : null?></td>
+				</tr>
+<?
+		}
+?>
+			</table>
+		</td>
+	</tr>
 
 	<tr>
 		<td></td>
