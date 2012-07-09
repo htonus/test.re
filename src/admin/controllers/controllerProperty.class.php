@@ -90,7 +90,10 @@ final class controllerProperty extends CommonEditor
 		
 		$featureList = $object->getFeatures()->getList();
 		foreach ($list as $typeId => $row) {
-			if (empty($row['value'])) {
+			if (
+				empty($row['value'])
+				&& empty($row['comment'])
+			) {
 				if (!empty($row['id']))
 					Feature::dao ()->dropById($row['id']);
 			} else {
