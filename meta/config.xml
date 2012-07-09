@@ -31,6 +31,7 @@
 		<properties>
 			<identifier name="id" />
 			<property name="name" type="String" size="32" required="true" />
+			<property name="required" type="Boolean" required="true" default="true" />
 			<property name="unit" type="Unit" relation="OneToOne" required="false" fetch="lazy" />
 		</properties>
 		<pattern name="DictionaryClass" />
@@ -39,6 +40,7 @@
 	<class name="Feature" type="final">
 		<properties>
 			<identifier name="id" />
+			<!-- current feature instance description -->
 			<property name="content" type="String" size="128" required="false" />
 			<property name="value" type="Numeric" size="20,2" required="false" />
 			<property name="type" type="FeatureType" relation="OneToOne" required="true" fetch="lazy"/>

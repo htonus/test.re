@@ -19,7 +19,9 @@
 	define('PATH_WEB_ADMIN', 'http://admin.'.DOMAIN.'/');
 	define('PATH_WEB_PIX', '/pix/'); // dynamic stuff
 	define('PATH_WEB_IMG', '/img/'); // static stuff
-	
+	define('PATH_WEB_JS', '/js/'); // static stuff
+	define('PATH_WEB_CSS', '/css/'); // static stuff
+
 	// shared classes
 	define(
 		'PATH_CLASSES',
