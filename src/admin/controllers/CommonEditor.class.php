@@ -97,7 +97,7 @@ class CommonEditor extends PrototypedEditor
 							$dao = $this->getForm()->getValue('id')->
 								{$field->getGetter()}();
 
-							$model->set($name.'List', $dao->getLust());
+							$model->set($name.'List', $dao->getList());
 							$model->set($name.'Total', $dao->getCount());
 						} else {
 							$model->set($name.'List', array());

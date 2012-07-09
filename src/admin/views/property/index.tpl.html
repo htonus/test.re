@@ -8,7 +8,9 @@
 	<table>
 		<tr>
 			<th>Name</th>
-			<th>Value</th>
+			<th>Type</th>
+			<th>Offer</th>
+			<th>Price</th>
 			<th></th>
 		</tr>
 <?php
@@ -16,7 +18,9 @@
 ?>
 	<tr>
 		<td><?=$item->getName()?></td>
-		<td><?=$item->getValue()?></td>
+		<td><?=$item->getPropertyType()->getName()?></td>
+		<td><?=$item->getOfferType()->getName()?></td>
+		<td><?=$item->getPrice()?></td>
 		<td>
 			<a href="<?=$urlMapper->getObjectUrl($item, 'edit')?>">edit</a> |
 			<a href="<?=$urlMapper->getObjectUrl($item, 'drop')?>">drop</a>

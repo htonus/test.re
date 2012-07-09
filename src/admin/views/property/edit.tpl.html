@@ -91,9 +91,10 @@
 					<td>
 						<?=$type->getName()?>
 						<?=$type->isRequired() ? '*' : null?>
+						<input type="hidden" name="featureList[<?=$type->getId()?>][id]" value="<?=$feature->getId()?>" />
 					</td>
-					<td><input type="test" name="featureList[<?=$type->getId()?>][value]" value="<?=$feature->getValue()?>" /></td>
-					<td><input type="test" name="featureList[<?=$type->getId()?>][content]" value="<?=$feature->getContent()?>" /></td>
+					<td><input type="text" name="featureList[<?=$type->getId()?>][value]" value="<?=$feature->getValue()?>" /></td>
+					<td><input type="text" name="featureList[<?=$type->getId()?>][content]" value="<?=$feature->getContent()?>" /></td>
 					<td><?=$type->getUnit() ? $type->getUnit()->getValue() : null?></td>
 				</tr>
 <?

@@ -21,6 +21,13 @@ final class controllerProperty extends CommonEditor
 			Primitive::set('featureList')
 		);
 	}
+	
+	public function doEdit(HttpRequest $request)
+	{
+		$this->getForm()->drop('featureList');
+		return parent::doEdit($request);
+	}
+
 
 	protected function attachCollections(Model $model)
 	{
@@ -57,10 +64,12 @@ final class controllerProperty extends CommonEditor
 					setType($featureType);
 			}
 		}
-
+		
 		return $list;
 	}
-
+	
+	
+	
 	protected function addObject(HttpRequest $request, Form $form, Identifiable $object)
 	{
 		$subject =  parent::addObject($request, $form, $object);
@@ -78,11 +87,26 @@ final class controllerProperty extends CommonEditor
 		if (!($list = $this->getForm()->getValue('featureList'))) {
 			throw new WrongArgumentException('Do not have featureList to store');
 		}
-
+		
 		$featureList = $object->getFeatures()->getList();
-
-		foreach ($list as $row) {
-
+		foreach ($list as $typeId => $row) {
+			if (empty($row['value'])) {
+				if (!empty($row['id']))
+					Feature::dao ()->dropById($row['id']);
+			} else {
+				$feature = Feature::create()->
+					setPropertyId($object->getId())->
+					setTypeId($typeId)->
+					setValue($row['value'])->
+					setContent($row['content']);
+				
+				if (!empty($row['id']))
+					$feature->setId($row['id']);
+				
+				$feature->dao()->take($feature);
+			}
 		}
+		
+		return $object;
 	}
 }
