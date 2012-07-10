@@ -6,6 +6,49 @@
 
 ?>
 <!-- Put your HTML content here -->
+<form action="" method="post">
+	<input type="hidden" value="search" name="area"/>
+	<br/>
+	Price: <select name="price">
+		<option value="1">&lt; 100'000</option>
+		<option value="2">&lt; 200'000</option>
+		<option value="3">&lt; 300'000</option>
+		<option value="4">&lt; 400'000</option>
+		<option value="5">&lt; 500'000</option>
+		<option value="6">&gt; 500'000</option>
+	</select>
+	<br/>
+	Property type: <select name="propertyType">
+		<option value="1">room</option>
+		<option value="2">flat</option>
+		<option value="3">apartment</option>
+		<option value="4">house</option>
+	</select>
+	<br/>
+	Offer type: <select name="offerType">
+		<option value="1">buy</option>
+		<option value="2">sell</option>
+		<option value="3">rent</option>
+		<option value="4">lease</option>
+	</select>
+	<br/>
+	Bedrooms: <select name="bedroom">
+		<option value="1">&lt; 1</option>
+		<option value="2">&lt; 2</option>
+		<option value="3">&gt; 3</option>
+	</select>
+	<br/>
+	Bathrooms: <select name="bedroom">
+		<option value="1">&lt; 1</option>
+		<option value="2">&lt; 2</option>
+		<option value="3">&gt; 3</option>
+	</select>
+	<br/>
+	<input type="submit" value="Submit"/>
 <?php
 
-	echo 'Default ACTION!';
+
+?>
+
+</form>
+	

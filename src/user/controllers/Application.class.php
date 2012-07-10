@@ -14,10 +14,7 @@ final class Application
 {
 	private $allowedAreas = array(
 		'main',
-		'user',
-		'unit',
-		'featureType',
-		'property',
+		'search',
 	);
 	
 	public static function create()
