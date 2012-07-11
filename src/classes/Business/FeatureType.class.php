@@ -31,6 +31,28 @@
 			return Singleton::getInstance('ProtoFeatureType');
 		}
 		
-		// your brilliant stuff goes here
+		const AREA		= 1;
+		const PRICE		= 2;
+		const BEDROOMS	= 3;
+		const TOYLETS	= 4;
+		const BALCONS	= 5;
+		const LEVELS	= 6;
+		const PARKING	= 7;
+		const COVERED_PARKING	= 8;
+		const GARDEN	= 9;
+		const BARBEQUE	= 10;
+		const POOL		= 11;
+		const GARAGE	= 12;
+		const KITCHENS	= 13;
+		const STORAGE	= 15;
+		const LAUNDRY	= 16;
+		const FURNITURE	= 17;
+		const FIREPLACE	= 18;
+		const CELLAR	= 19;
+		const ATTIC		= 20;
+		const ELEVATOR	= 21;
+		const FLOOR		= 22;
+		const SEA_VIEW	= 23;
+		const MOUNTAIN_VIEW = 24;
 	}
 ?>
