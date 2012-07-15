@@ -92,6 +92,21 @@ final class controllerSearch extends MethodMappedController
 			}
 		}
 		
+		$logic = Expression::chain()->
+				expAnd(
+					Expression::eq(
+						'property.propertyType', $form->getValue('propertyType')
+					)
+				)->
+				expAnd(
+					Expression::eq(
+						'property.offerType', $form->getValue('offerType')
+					)
+				);
+		
+		if ($orLogic->getSize())
+			$logic->expAnd($orLogic);
+		
 		$criteria = Criteria::create(Feature::dao())->
 			setProjection(
 				Projection::chain()->
@@ -116,20 +131,7 @@ final class controllerSearch extends MethodMappedController
 					)
 				)
 			)->
-			add(
-				Expression::chain()->
-				expAnd(
-					Expression::eq(
-						'property.propertyType', $form->getValue('propertyType')
-					)
-				)->
-				expAnd(
-					Expression::eq(
-						'property.offerType', $form->getValue('offerType')
-					)
-				)->
-				expAnd($orLogic)
-			)->
+			add($logic)->
 			addOrder(
 				OrderBy::create('relevance')->desc()
 			);

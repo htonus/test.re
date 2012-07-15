@@ -5,7 +5,7 @@
 ?>
 	<a href="<?=$urlMapper->getObjectUrl($subject, 'edit')?>">Add new</a><br />
 	
-	<table>
+	<table width="50%">
 		<tr>
 			<th>Name</th>
 			<th>Type</th>
@@ -17,14 +17,15 @@
 	foreach ($list as $item) {
 ?>
 	<tr>
-		<td><?=$item->getName()?></td>
-		<td><?=$item->getPropertyType()->getName()?></td>
-		<td><?=$item->getOfferType()->getName()?></td>
-		<td><?/*=$item->getPrice()*/?></td>
-		<td>
+		<td><b><?=$item->getName()?></b></td>
+		<td><b><?=$item->getPropertyType()->getName()?></b></td>
+		<td><b><?=$item->getOfferType()->getName()?></b></td>
+		<td rowspan="2">
 			<a href="<?=$urlMapper->getObjectUrl($item, 'edit')?>">edit</a> |
 			<a href="<?=$urlMapper->getObjectUrl($item, 'drop')?>">drop</a>
 		</td>
+	</tr><tr>
+		<td colspan="3"><?=$item->getFeaturesAnounce()?></td>
 	</tr>
 <?php
 	}

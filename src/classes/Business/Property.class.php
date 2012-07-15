@@ -31,6 +31,17 @@
 			return Singleton::getInstance('ProtoProperty');
 		}
 		
-		// your brilliant stuff goes here
+		private $featureList = array();
+		
+		public function getFeaturesAnounce()
+		{
+			$list = $this->getFeatures()->getList();
+			
+			$out = '';
+			foreach ($list as $feature) {
+				$out .= ' | '.$feature->getType()->getName().': '.$feature->getValue();
+			}
+			return mb_substr($out, 3);
+		}
 	}
 ?>
