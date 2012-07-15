@@ -104,7 +104,7 @@ final class controllerSearch extends MethodMappedController
 				add(
 					Projection::group('property')
 				)->
-				add(
+				add(	// Remove me n case of neighbores search
 					Projection::having(
 						Expression::eq(
 							SQLFunction::create(
