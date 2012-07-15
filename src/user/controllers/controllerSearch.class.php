@@ -96,10 +96,10 @@ final class controllerSearch extends MethodMappedController
 			setProjection(
 				Projection::chain()->
 				add(
-					Projection::count('id', 'matchCount')
+					Projection::count('id', 'relevance')
 				)->
 				add(
-					Projection::property('property')
+					Projection::property('property', 'id')
 				)->
 				add(
 					Projection::group('property')
@@ -131,9 +131,19 @@ final class controllerSearch extends MethodMappedController
 				expAnd($orLogic)
 			)->
 			addOrder(
-				OrderBy::create('matchCount')->desc()
+				OrderBy::create('relevance')->desc()
 			);
-		echo $criteria->toString();
+		
+		// Need pager here
+		$relevance = ArrayHelper::toKeyValueArray($criteria->getCustomList(), 'id', 'relevance');
+		$list = Property::dao()->getListByIds(array_keys($relevance));
+		
+		$model = Model::create()->
+			set('relevance', $relevance)->
+			set('list', $list);
+		
+		return ModelAndView::create()->
+			setModel($model);
 	}
 	
 }

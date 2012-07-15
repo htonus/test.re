@@ -28,5 +28,10 @@
 		{
 			return 'property_id';
 		}
+		
+		public function getList()
+		{
+			return ArrayHelper::toListByGetter(parent::getList(), 'getTypeId');
+		}
 	}
 ?>
