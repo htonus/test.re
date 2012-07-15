@@ -31,28 +31,28 @@
 			return Singleton::getInstance('ProtoFeatureType');
 		}
 		
-		const AREA		= 1;
-		const PRICE		= 2;
-		const BEDROOMS	= 3;
-		const TOYLETS	= 4;
-		const BALCONS	= 5;
-		const LEVELS	= 6;
-		const PARKING	= 7;
-		const COVERED_PARKING	= 8;
-		const GARDEN	= 9;
-		const BARBEQUE	= 10;
-		const POOL		= 11;
-		const GARAGE	= 12;
-		const KITCHENS	= 13;
-		const STORAGE	= 15;
-		const LAUNDRY	= 16;
-		const FURNITURE	= 17;
-		const FIREPLACE	= 18;
-		const CELLAR	= 19;
-		const ATTIC		= 20;
-		const ELEVATOR	= 21;
-		const FLOOR		= 22;
-		const SEA_VIEW	= 23;
-		const MOUNTAIN_VIEW = 24;
+		const AREA		= 10;
+		const PRICE		= 20;
+		const BEDROOMS	= 30;
+		const TOYLETS	= 40;
+		const BALCONS	= 50;
+		const LEVELS	= 60;
+		const PARKING	= 70;
+		const COVERED_PARKING	= 80;
+		const GARDEN	= 90;
+		const BARBEQUE	= 100;
+		const POOL		= 110;
+		const GARAGE	= 120;
+		const KITCHENS	= 130;
+		const STORAGE	= 150;
+		const LAUNDRY	= 160;
+		const FURNITURE	= 170;
+		const FIREPLACE	= 180;
+		const CELLAR	= 190;
+		const ATTIC		= 200;
+		const ELEVATOR	= 210;
+		const FLOOR		= 220;
+		const SEA_VIEW	= 230;
+		const MOUNTAIN_VIEW = 240;
 	}
 ?>

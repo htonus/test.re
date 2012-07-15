@@ -33,85 +33,107 @@ final class controllerSearch extends MethodMappedController
 		return $mav;
 	}
 
-	public function actionSearch(HttpRequest $request)
+	public function actionIndex(HttpRequest $request)
 	{
 		$form = Form::create()->
 			add(
-				Primitive::integer('priceMin')->
-				setMin(0)->
-				setMax(10)->
-				setDefault(0)
-			)->
-			add(
-				Primitive::integer('priceMax')->
-				setMin(0)->
-				setMax(10)->
-				setDefault(0)
+				Primitive::set('type')
 			)->
 			add(
 				Primitive::choice('offerType')->
-				setList(EnumHelper::getNames('OfferType'))
+				setList(EnumHelper::getNames('OfferType'))->
+				required()
 			)->
 			add(
 				Primitive::choice('propertyType')->
-				setList(EnumHelper::getNames('PropertyType'))
-			)->
-			add(
-				Primitive::integer('bedrooms')->
-				setMin(0)->
-				setMax(10)->
-				setDefault(0)
-			)->
-			add(
-				Primitive::choice('bathrooms')->
-				setMin(0)->
-				setMax(10)->
-				setDefault(0)
+				setList(EnumHelper::getNames('PropertyType'))->
+				required()
 			)->
 			import($request->getPost());
+		
+		if ($form->getErrors()) {
+			// Really weird
+		}
+		
+		$filters = $form->getValue('type');
+		$typeCasts = FeatureType::proto()->getCasts();
+		
+		$orLogic = Expression::orBlock();
+		$filterNumber = 0;
+		foreach($typeCasts as $typeId => $castId) {
+			if (!empty($filters[$typeId])) {
+				$andBlock = Expression::andBlock()->
+					expAnd(
+						Expression::eq('type', $typeId)
+					);
+				
+				switch ($castId) {
+					case ProtoFeatureType::BOOLEAN:
+						$andBlock->expAnd(
+							Expression::eq('value', 1)
+						);
+						break;
+					case ProtoFeatureType::INTEGER:
+						$andBlock->expAnd(
+							Expression::eq('value', $filters[$typeId])
+						);
+						break;
+					case ProtoFeatureType::INT_RANGE:
+						$start = $filters[$typeId];
+						
+						$andBlock->expAnd(
+							Expression::between('value', ($start - 1) * 100000, $start * 100000)
+						);
+						break;
+				}
+				
+				$orLogic->expOr($andBlock);
+				$filterNumber ++;
+			}
+		}
 		
 		$criteria = Criteria::create(Feature::dao())->
 			setProjection(
 				Projection::chain()->
-					add(
-						Projection::count('id')
-					)->
-					add(
-						Projection::group('property')
+				add(
+					Projection::count('id', 'matchCount')
+				)->
+				add(
+					Projection::property('property')
+				)->
+				add(
+					Projection::group('property')
+				)->
+				add(
+					Projection::having(
+						Expression::eq(
+							SQLFunction::create(
+								'count',
+								DBField::create('id', Feature::dao()->getTable())
+							),
+							$filterNumber
+						)
 					)
+				)
+			)->
+			add(
+				Expression::chain()->
+				expAnd(
+					Expression::eq(
+						'property.propertyType', $form->getValue('propertyType')
+					)
+				)->
+				expAnd(
+					Expression::eq(
+						'property.offerType', $form->getValue('offerType')
+					)
+				)->
+				expAnd($orLogic)
+			)->
+			addOrder(
+				OrderBy::create('matchCount')->desc()
 			);
-		
-		$logic = Expression::chain();
-		
-		if ($priceMax = $form->getValue('priceMax')) 
-			$logic->expAnd(
-				Expression::ltEq('price', $priceMax)
-			);
-		
-		if ($priceMin = $form->getValue('priceMin')) 
-			$logic->expAnd(
-				Expression::gtEq('price', $priceMin)
-			);
-		
-		if ($offerType = $form->getValue('offerType')) 
-			$logic->expAnd(
-				Expression::eqId('offerType', $offerType)
-			);
-		
-		if ($propertyType = $form->getValue('propertyType')) 
-			$logic->expAnd(
-				Expression::eq ('propertyType', $propertyType)
-			);
-		
-		if ($bedrooms = $form->getValue('bedrooms')) 
-			$logic->expAnd(
-				Expression::eq ('bedrooms', $bedrooms)
-			);
-		
-		if ($bathrooms = $form->getValue('bathrooms')) 
-			$logic->expAnd(
-				Expression::eq ('bathrooms', $bathrooms)
-			);
+		echo $criteria->toString();
 	}
 	
 }

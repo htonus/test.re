@@ -5,5 +5,41 @@
  *   This file will never be generated again - feel free to edit.            *
  *****************************************************************************/
 
-	final class ProtoFeatureType extends AutoProtoFeatureType {/*_*/}
+	final class ProtoFeatureType extends AutoProtoFeatureType
+	{
+		const BOOLEAN	= 1;
+		const INTEGER	= 2;
+		const INT_RANGE	= 3;
+		
+		protected $casts = array(
+			FeatureType::AREA		=> self::INT_RANGE,
+			FeatureType::PRICE		=> self::INT_RANGE,
+			FeatureType::BEDROOMS	=> self::INTEGER,
+			FeatureType::TOYLETS	=> self::INTEGER,
+			FeatureType::BALCONS	=> self::INTEGER,
+			FeatureType::LEVELS		=> self::INTEGER,
+			FeatureType::PARKING	=> self::BOOLEAN,
+			FeatureType::GARDEN		=> self::BOOLEAN,
+			FeatureType::BARBEQUE	=> self::BOOLEAN,
+			FeatureType::POOL		=> self::BOOLEAN,
+			FeatureType::GARAGE		=> self::BOOLEAN,
+//			FeatureType::KITCHENS	=> ,
+			FeatureType::STORAGE	=> self::BOOLEAN,
+			FeatureType::LAUNDRY	=> self::BOOLEAN,
+			FeatureType::FURNITURE	=> self::BOOLEAN,
+			FeatureType::FIREPLACE	=> self::BOOLEAN,
+			FeatureType::CELLAR		=> self::BOOLEAN,
+			FeatureType::ATTIC		=> self::BOOLEAN,
+			FeatureType::ELEVATOR	=> self::BOOLEAN,
+			FeatureType::FLOOR		=> self::INTEGER,
+			FeatureType::SEA_VIEW	=> self::BOOLEAN,
+			FeatureType::COVERED_PARKING	=> self::BOOLEAN,
+			FeatureType::MOUNTAIN_VIEW		=> self::BOOLEAN,
+		);
+		
+		public function getCasts()
+		{
+			return $this->casts;
+		}
+	}
 ?>
