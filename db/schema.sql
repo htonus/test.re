@@ -8,20 +8,20 @@ SET client_min_messages = warning;
 CREATE SEQUENCE user_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 CREATE TABLE "user" (
-    id			bigint PRIMARY KEY DEFAULT nextval('user_id'::regclass) NOT NULL,
-    name		character varying(64) NOT NULL,
-    surname		character varying(64) NOT NULL,
-    email		character varying(128) NOT NULL,
-    username	character varying(64) NOT NULL,
-    password	character varying(32) NOT NULL
+    id			BIGINT PRIMARY KEY DEFAULT nextval('user_id'::regclass) NOT NULL,
+    name		VARCHAR(64) NOT NULL,
+    surname		VARCHAR(64) NOT NULL,
+    email		VARCHAR(128) NOT NULL,
+    username	VARCHAR(64) NOT NULL,
+    password	VARCHAR(32) NOT NULL
 );
 
 
 CREATE SEQUENCE offer_type_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 CREATE TABLE offer_type (
-    id		bigint PRIMARY KEY DEFAULT nextval('offer_type_id'::regclass) NOT NULL,
-    name	character varying(32) NOT NULL
+    id		BIGINT PRIMARY KEY DEFAULT nextval('offer_type_id'::regclass) NOT NULL,
+    name	VARCHAR(32) NOT NULL
 );
 
 
@@ -29,21 +29,20 @@ CREATE TABLE offer_type (
 CREATE SEQUENCE property_type_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 CREATE TABLE property_type (
-    id		bigint PRIMARY KEY DEFAULT nextval('property_type_id'::regclass) NOT NULL
-    name	character varying(32) NOT NULL
+    id		BIGINT PRIMARY KEY DEFAULT nextval('property_type_id'::regclass) NOT NULL
+    name	VARCHAR(32) NOT NULL
 );
 
 
 CREATE SEQUENCE property_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 CREATE TABLE property (
-    id			bigint PRIMARY KEY DEFAULT nextval('property_id'::regclass) NOT NULL,
-    name		character varying(128) NOT NULL,
-    description character varying(512),
-    price		numeric(10,2) NULL,
-    user_id				bigint NOT NULL REFERENCES "user"(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    property_type_id	bigint NOT NULL REFERENCES property_type(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    offer_type_id		bigint NOT NULL REFERENCES offer_type(id) ON UPDATE CASCADE ON DELETE RESTRICT
+    id			BIGINT PRIMARY KEY DEFAULT nextval('property_id'::regclass) NOT NULL,
+    name		VARCHAR(128) NOT NULL,
+    description VARCHAR(512),
+    user_id				BIGINT NOT NULL REFERENCES "user"(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    property_type_id	BIGINT NOT NULL REFERENCES property_type(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    offer_type_id		BIGINT NOT NULL REFERENCES offer_type(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 CREATE INDEX property_user_id_idx ON property USING btree (user_id);
 CREATE INDEX property_type_id_idx ON property USING btree (property_type_id);
@@ -53,17 +52,17 @@ CREATE INDEX property_offer_id_idx ON property USING btree (offer_type_id);
 CREATE SEQUENCE unit_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 CREATE TABLE unit (
-    id		bigint PRIMARY KEY DEFAULT nextval('unit_id'::regclass) NOT NULL,
-    name	character varying(32) NOT NULL,
-    value	character varying(32) NOT NULL
+    id		BIGINT PRIMARY KEY DEFAULT nextval('unit_id'::regclass) NOT NULL,
+    name	VARCHAR(32) NOT NULL,
+    value	VARCHAR(32) NOT NULL
 );
 CREATE UNIQUE INDEX unit_name_uidx ON unit("name");
 
 CREATE SEQUENCE feature_type_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 CREATE TABLE feature_type (
-    id			bigint PRIMARY KEY DEFAULT nextval('feature_type_id'::regclass) NOT NULL,
-    name 		character varying(32) NOT NULL,
+    id			BIGINT PRIMARY KEY DEFAULT nextval('feature_type_id'::regclass) NOT NULL,
+    name 		VARCHAR(32) NOT NULL,
 	required 	BOOLEAN NOT NULL DEFAULT true,
     unit_id bigint NULL REFERENCES unit(id) ON UPDATE CASCADE ON DELETE SET NULL
 );
@@ -73,17 +72,35 @@ CREATE INDEX feature_type_unit_id_idx ON feature_type USING btree (unit_id);
 CREATE SEQUENCE feature_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 CREATE TABLE feature (
-    id bigint	PRIMARY KEY DEFAULT nextval('feature_id'::regclass) NOT NULL,
-    content		character varying(128),
-    value		numeric(20,2),
-    type_id		bigint NOT NULL REFERENCES feature_type(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    property_id bigint NOT NULL REFERENCES property(id) ON UPDATE CASCADE ON DELETE CASCADE
+    id			BIGINT PRIMARY KEY DEFAULT nextval('feature_id'::regclass) NOT NULL,
+    content		VARCHAR(128),
+    value		INTEGER NULL,
+    type_id		BIGINT NOT NULL REFERENCES feature_type(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    property_id BIGINT NOT NULL REFERENCES property(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE INDEX feature_property_id_idx ON feature USING btree (property_id);
 CREATE INDEX feature_type_id_idx ON feature USING btree (type_id);
 
 
+CREATE TABLE image_type (
+    id 		INTEGER PRIMARY KEY NOT NULL,
+    name 	VARCHAR(4)
+);
 
+CREATE SEQUENCE picture_id;
+CREATE TABLE picture (
+    id 			BIGINT PRIMARY KEY DEFAULT nextval('picture_id'::regclass) NOT NULL,
+    name 		VARCHAR(128),
+    main 		BOOLEAN NOT NULL DEFAULT FALSE,
+	width 		INTEGER NOT NULL,
+	height 		INTEGER NOT NULL,
+    type_id 	INTEGER NOT NULL REFERENCES image_type(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    property_id BIGINT NOT NULL REFERENCES property(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+CREATE INDEX picture_property_id_idx ON picture USING btree (property_id);
+ALTER TABLE "property" ADD COLUMN "image_id" BIGINT NULL REFERENCES "picture"("id") ON DELETE RESTRICT ON UPDATE REStRICT;
+
+-- CREATE INDEX "image_id_idx" ON "property"("image_id");
 
 --
 -- PostgreSQL database dump complete
@@ -100,5 +117,5 @@ CREATE INDEX feature_type_id_idx ON feature USING btree (type_id);
 --
 -- CREATE TABLE language (
 --     id bigint DEFAULT nextval('feature_type_id'::regclass) NOT NULL,
---     name character varying(32) NOT NULL,
+--     name VARCHAR(32) NOT NULL,
 -- );
