@@ -4,95 +4,10 @@
  */
 
 
-?>
-<form action="" method="post">
-	<input type="hidden" value="search" name="area"/>
-	<br/>
-	Offer type: <select name="offerType">
-		<option value="<?=OfferType::BUY?>" selected="selected">buy</option>
-		<option value="<?=OfferType::SELL?>">sell</option>
-		<option value="<?=OfferType::RENT?>">rent</option>
-		<option value="<?=OfferType::LEASE?>">lease</option>
-	</select>
-	<br/>
-	Property type: <select name="propertyType">
-		<option value="<?=PropertyType::ROOM?>">room</option>
-		<option value="<?=PropertyType::FLAT?>">flat</option>
-		<option value="<?=PropertyType::APPARTMENT?>">appartment</option>
-		<option value="<?=PropertyType::HOUSE?>" selected="selected">house</option>
-	</select>
-	<br/>
-	Area: <select name="type<?=FeatureType::AREA?>">
-		<option value="0">Choose...</option>
-		<option value="1">&lt; 100</option>
-		<option value="2">&lt; 200</option>
-		<option value="3">&gt; 300</option>
-	</select>
-	<br/>
-	Price: <select name="type[<?=FeatureType::PRICE?>]">
-		<option value="0">Choose...</option>
-		<option value="1">&lt; 100'000</option>
-		<option value="2">&lt; 200'000</option>
-		<option value="3">&lt; 300'000</option>
-		<option value="4">&lt; 400'000</option>
-		<option value="5">&lt; 500'000</option>
-		<option value="6">&gt; 500'000</option>
-	</select>
-	<br/>
-	Bedrooms: <select name="type[<?=FeatureType::BEDROOMS?>]">
-		<option value="0">Choose...</option>
-		<option value="1">1</option>
-		<option value="2">2</option>
-		<option value="3">3</option>
-	</select>
-	<br/>
-	Bathrooms: <select name="type[<?=FeatureType::TOYLETS?>]">
-		<option value="0">Choose...</option>
-		<option value="1">1</option>
-		<option value="2">2</option>
-		<option value="3">3</option>
-	</select>
-	<br/>
-	Balcons: <select name="type[<?=FeatureType::BALCONS?>]">
-		<option value="0">Choose...</option>
-		<option value="1">1</option>
-		<option value="2">2</option>
-		<option value="3">3</onewFolderption>
-	</select>
-	<br/>
-	Levels: <select name="type[<?=FeatureType::LEVELS?>]">
-		<option value="0">Choose...</option>
-		<option value="1">1</option>
-		<option value="2">2</option>
-		<option value="3">3</option>
-		<option value="4">4</option>
-		<option value="5">5</option>
-	</select>
-	<br/>
-	Floor: <select name="type[<?=FeatureType::FLOOR?>]">
-		<option value="0">Choose...</option>
-		<option value="1">1</option>
-		<option value="2">2</option>
-		<option value="3">3</option>
-		<option value="4">4</option>
-		<option value="5">5</option>
-	</select>
-	<br/>
-	PARKING: <input type="checkbox" name="type[<?=FeatureType::PARKING?>]" value="1">
-	FURNITURE: <input type="checkbox" name="type[<?=FeatureType::FURNITURE?>]" value="1">
-	STORAGE: <input type="checkbox" name="type[<?=FeatureType::STORAGE?>]" value="1">
-	LAUNDRY: <input type="checkbox" name="type[<?=FeatureType::LAUNDRY?>]" value="1">
-	POOL: <input type="checkbox" name="type[<?=FeatureType::POOL?>]" value="1">
-	<br/>
-	<input type="submit" value="Submit"/>
-<?php
+
+//	$partViewer->view('_parts/searchForm', Model::create()->set('form', $form));
 
 
-?>
-
-</form>
-
-<?php
 	// TODO: add to object builder fetch collection and store in interanl array
 	
 	foreach ($list as $item) {

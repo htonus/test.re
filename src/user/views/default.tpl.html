@@ -2,14 +2,29 @@
 /*
  * $Id$
  */
-	$partViewer->
-		view('_parts/header')->
-		view('_parts/menu');
-
+	$partViewer->view('_parts/header');
 ?>
-<!-- Put your HTML content here -->
+
+<div class="container_12">
+
+<?php
+	$partViewer->view('_parts/menu');
+?>
+
+</div>
+<div class="container_12">
+
 <?php
 
 	$partViewer->view("$area/$action");
+?>
+
+</div>
+<div class="container_12">
+
+<?php
 
 	$partViewer->view('_parts/footer');
+?>
+
+</div>
