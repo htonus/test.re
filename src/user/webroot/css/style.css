@@ -1,5 +1,27 @@
 
-.container_12 {
+.container {
 	margin-top: 20px;
 }
 
+BODY {
+	margin: 0px;
+	padding: 0px;
+	background: url(/i/bg.png) repeat-y center #E3E3E3;
+}
+
+.topMenu, .userStuff {
+	text-align: right;
+}
+
+.block {
+	background: url(/i/block.png) repeat-x;
+	padding-top: 20px;
+}
+
+H1, H2, H3 {
+	color: #666666;
+}
+
+.topMenu, .userStuff {
+	text-align: right;
+}
