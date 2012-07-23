@@ -25,3 +25,20 @@ H1, H2, H3 {
 .topMenu, .userStuff {
 	text-align: right;
 }
+
+.searchTab LI {
+	float: left;
+	width: 50%;
+	padding: 5px 0px;
+	text-align: center;
+	font: bold 18px sans-serif;
+	text-transform: uppercase;
+}
+.buy {
+	background-color: #FFCD6C;
+	color: #FFF;
+}
+.rent {
+	background-color: #FFE6B6;
+	color: #999;
+}
