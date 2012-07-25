@@ -43,20 +43,48 @@ H1, H2, H3 {
 	color: #999;
 }
 
-IMPUT, SELECT, TEXTAREA {
+INPUT, SELECT, TEXTAREA {
 	background-color: #FFF;
 	width: 100%;
 	border: none;
 	outline: none;
 	padding: 5px;
 }
-.fields DIV {
+.fields > DIV {
 	border: 1px #FFCD6C solid;
 	background-color: #FFF;
 /*	padding: 5px;*/
 }
 
-.ul A {
-	width: 100%;
+
+.select INPUT {
+	background: url("/i/arr_down.png") no-repeat;
+	background-position: 95% 50%;
+	cursor: pointer;
+}
+
+.option {
 	padding: 5px;
+	cursor: pointer;
+}
+
+.option DIV {
+	width: 100%;
+	display: block;
+	text-decoration: none;
+	font: normal 13px sans-serif;
+	color: #666;
+}
+/*.ul .li DIV:hover{
+	background-color: #CCC;
+}
+*/
+.select UL {
+	display: none;
+	background-color: #FFF;
+	border: 1px #FFCD6C solid;
+}
+.option:hover {
+	color: #FFF !important;
+	background-color: #FFE6B6;
 }

@@ -7,6 +7,9 @@
 <script type="text/javascript">
 var clicked = null;
 $(document).ready(function(){
+	$(this).blur(function(){
+		
+	});
 	$('.mapArea')
 		.mouseover(function(){
 			$('#mapDiv').css(
@@ -30,6 +33,30 @@ $(document).ready(function(){
 				$('#chooseDiv').css('background-position-y', -220 * clicked.toString() + 'px');
 			}
 		});
+	
+	$('.select INPUT').click(function(){
+		var parent = $(this).parent();
+		var select = $('UL', parent);
+		
+		if (window.openSelect == undefined)
+			window.openSelect = '';
+		
+		if (window.openSelect != '') {
+			$('[id="' + window.openSelect + '"]').slideUp(100);
+		}
+		
+		if (window.openSelect == select.attr('id')) {
+			window.openSelect = '';
+		} else {
+			var offset = parent.offset();
+			offset['top'] = offset['top'] + parent.height();
+			select
+				.css({left: offset.left, top: offset.top})
+				.width(parent.width())
+				.slideDown(100);
+			window.openSelect = select.attr('id');
+		}
+	});
 });
 </script>
 
@@ -71,13 +98,28 @@ $(document).ready(function(){
 			<div class="g_1 alpha omega">&nbsp;</div>
 			<div class="g_3 fields">
 				Property type<br/>
-				<div class="ul">
-					<a href=""></a>
-					<div class="li">
-						<a href=""></a>
-					</div>
+				<div class="select">
+					<input type="text" readonly name="type[1]" value="Choose..."/>
+					<ul id="type[1]_options" style="position: absolute">
+						<li class="option" id="id1"><div>Choose property type...</div></li>
+						<li class="option" id="id1"><div>Choose property type...</div></li>
+						<li class="option" id="id1"><div>Choose property type...</div></li>
+						<li class="option" id="id1"><div>Choose property type...</div></li>
+						<li class="option" id="id1"><div>Choose property type...</div></li>
+					</ul>
 				</div>
-				<div>
+				Property type<br/>
+				<div class="select">
+					<input type="text" readonly name="type[2]" value="Choose..."/>
+					<ul id="type[2]_options" style="position: absolute">
+						<li class="option" id="id1"><div>Choose property type...</div></li>
+						<li class="option" id="id1"><div>Choose property type...</div></li>
+						<li class="option" id="id1"><div>Choose property type...</div></li>
+						<li class="option" id="id1"><div>Choose property type...</div></li>
+						<li class="option" id="id1"><div>Choose property type...</div></li>
+					</ul>
+				</div>
+				<!--div>
 					<select name="">
 						<option>Choose ...</option>
 					</select>
@@ -102,7 +144,7 @@ $(document).ready(function(){
 					<select name="">
 						<option>Choose ...</option>
 					</select>
-				</div>
+				</div-->
 			</div>
 			<div class="clear"></div>
 			<br />
