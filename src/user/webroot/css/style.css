@@ -57,34 +57,50 @@ INPUT, SELECT, TEXTAREA {
 }
 
 
-.select INPUT {
-	background: url("/i/arr_down.png") no-repeat;
+.select {
+	border: 1px #FFCD6C solid;
+	background: url("/i/arr_down.png") no-repeat #FFF;
 	background-position: 95% 50%;
-	cursor: pointer;
 }
 
-.option {
-	padding: 5px;
-	cursor: pointer;
+.input {
+	border: 1px #FFCD6C solid;
+	background-color: #FFF;
 }
 
-.option DIV {
-	width: 100%;
-	display: block;
-	text-decoration: none;
-	font: normal 13px sans-serif;
-	color: #666;
-}
-/*.ul .li DIV:hover{
-	background-color: #CCC;
-}
-*/
-.select UL {
+.select DL {
 	display: none;
+	position: absolute;
+	overflow: auto;
+	overflow-x: hidden;
+	max-height: 200px;
 	background-color: #FFF;
 	border: 1px #FFCD6C solid;
+/*	padding-top: 5px;*/
 }
-.option:hover {
-	color: #FFF !important;
-	background-color: #FFE6B6;
+
+.select DD {
+	cursor: pointer;
+	white-space: nowrap;
+	padding: 5px 10px;
+	margin: 0;
+	background-color: white;
+}
+
+.select DD DIV {
+	width: 100%;
+}
+
+.select .title {
+	padding: 5px 10px;
+	cursor: pointer;
+}
+
+.select DD:hover {
+	background-color: #FFF9E9;
+}
+
+.area {
+	background: url("/i/m2.png") no-repeat #FFF;
+	background-position: 95% 50%;
 }

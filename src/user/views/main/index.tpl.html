@@ -7,9 +7,15 @@
 <script type="text/javascript">
 var clicked = null;
 $(document).ready(function(){
-	$(this).blur(function(){
-		
-	});
+	$(window)
+		.resize(function(){
+			Selector.close();
+		})
+		.click(function(e){
+			if ($(e.target).parents('.select').size() == 0)
+				Selector.close();
+		});
+
 	$('.mapArea')
 		.mouseover(function(){
 			$('#mapDiv').css(
@@ -33,31 +39,56 @@ $(document).ready(function(){
 				$('#chooseDiv').css('background-position-y', -220 * clicked.toString() + 'px');
 			}
 		});
-	
-	$('.select INPUT').click(function(){
-		var parent = $(this).parent();
-		var select = $('UL', parent);
-		
-		if (window.openSelect == undefined)
-			window.openSelect = '';
-		
-		if (window.openSelect != '') {
-			$('[id="' + window.openSelect + '"]').slideUp(100);
-		}
-		
-		if (window.openSelect == select.attr('id')) {
-			window.openSelect = '';
-		} else {
-			var offset = parent.offset();
-			offset['top'] = offset['top'] + parent.height();
-			select
-				.css({left: offset.left, top: offset.top})
-				.width(parent.width())
-				.slideDown(100);
-			window.openSelect = select.attr('id');
-		}
+
+	$('.select').click(function(){
+		Selector.open($(this));
+	});
+
+	$('.select DD').click(function(){
+		Selector.click($(this));
 	});
 });
+
+var Selector = {
+	active: null,
+
+	open: function(select) {
+		var toClose = this.active;
+		var id = $('INPUT', select).attr('name');
+
+		this.close(true);
+
+		if (toClose != id) {
+			var container = $('DL', select);
+			var offset = select.offset();
+
+			offset['top'] = offset['top'] + select.height();
+
+			container
+				.css({left: offset.left, top: offset.top, width: select.width()})
+				.slideDown(100);
+
+			this.active = id;
+		}
+	},
+
+	close: function(slow) {
+		if (this.active != null) {
+			if (slow == undefined)
+				$('[id="' + this.active + '"] DL').hide();
+			else
+				$('[id="' + this.active + '"] DL').slideUp(100);
+
+			this.active = null;
+		}
+	},
+
+	click: function(option) {
+		var parent = option.parent().parent();
+		$('> INPUT', parent).val($('INPUT', option).val());
+		$('.title', parent).text($('DIV', option).text());
+	}
+}
 </script>
 
 <div class="g_12">
@@ -85,66 +116,70 @@ $(document).ready(function(){
 			<div class="clear"></div>
 			
 			<div class="g_3">
-				Location
-				<br/>
-				<div>
-					<select name="" style="width: 100%; margin-left: 10px;" size="10">
-						<option>Choose ...</option>
-						<option>Choose ...</option>
-						<option>Choose ...</option>
-					</select>
-				</div>
+				<fieldset>
+					Location
+					<br/>
+					<div>
+						<select name="" style="width: 100%; margin-left: 10px;" size="10">
+							<option>Choose ...</option>
+							<option>Choose ...</option>
+							<option>Choose ...</option>
+						</select>
+					</div>
+				</fieldset>
 			</div>
 			<div class="g_1 alpha omega">&nbsp;</div>
-			<div class="g_3 fields">
-				Property type<br/>
-				<div class="select">
-					<input type="text" readonly name="type[1]" value="Choose..."/>
-					<ul id="type[1]_options" style="position: absolute">
-						<li class="option" id="id1"><div>Choose property type...</div></li>
-						<li class="option" id="id1"><div>Choose property type...</div></li>
-						<li class="option" id="id1"><div>Choose property type...</div></li>
-						<li class="option" id="id1"><div>Choose property type...</div></li>
-						<li class="option" id="id1"><div>Choose property type...</div></li>
-					</ul>
+			<div class="g_3">
+				<div class="g_3 fields alpha omega">
+
+					<fieldset id="propertyType">
+						<label for="peopertyType">Property type</label>
+						<div class="select">
+							<input type="hidden" name="propertyType" value=""/>
+							<div class="title">Choose...</div>
+							<dl>
+								<dd><input type="hidden" value="0"/><div>Choose...</div></dd>
+	<?php
+		foreach ($propertyTypeList as $type) {
+	?>
+								<dd><input type="hidden" value="<?=$type->getId()?>"/><div><?=$type->getName()?></div></dd>
+	<?php
+		}
+	?>
+							</dl>
+						</div>
+					</fieldset>
 				</div>
-				Property type<br/>
-				<div class="select">
-					<input type="text" readonly name="type[2]" value="Choose..."/>
-					<ul id="type[2]_options" style="position: absolute">
-						<li class="option" id="id1"><div>Choose property type...</div></li>
-						<li class="option" id="id1"><div>Choose property type...</div></li>
-						<li class="option" id="id1"><div>Choose property type...</div></li>
-						<li class="option" id="id1"><div>Choose property type...</div></li>
-						<li class="option" id="id1"><div>Choose property type...</div></li>
-					</ul>
+
+				<div class="clear"></div>
+
+				<div class="g_1 fields alpha">
+					<fieldset id="type[<?=FeatureType::BEDROOMS?>]">
+						<label for="type[<?=FeatureType::BEDROOMS?>]">Bedrooms</label>
+						<div class="select">
+							<input type="hidden" name="type[<?=FeatureType::BEDROOMS?>]" value=""/>
+							<div class="title">Any</div>
+							<dl>
+								<dd><input type="hidden" value="0"/><div>Any</div></dd>
+	<?php
+		foreach (array(1, 2, 3, 4, 5) as $number) {
+	?>
+								<dd><input type="hidden" value="<?=$number?>"/><div><?=$number?> +</div></dd>
+	<?php
+		}
+	?>
+							</dl>
+						</div>
+					</fieldset>
 				</div>
-				<!--div>
-					<select name="">
-						<option>Choose ...</option>
-					</select>
+				<div class="g_2 fields omega">
+					<fieldset id="type[<?=FeatureType::AREA?>]">
+						<label for="type[<?=FeatureType::AREA?>]">Area</label>
+						<div class="input">
+							<input type="text" name="type[<?=FeatureType::AREA?>]" value="0" class="area"/>
+						</div>
+					</fieldset>
 				</div>
-				
-				Bedrooms<br/>
-				<div>
-					<select name="">
-						<option>Choose ...</option>
-					</select>
-				</div>
-				
-				Price from<br/>
-				<div>
-					<select name="">
-						<option>Choose ...</option>
-					</select>
-				</div>
-				
-				Price to<br/>
-				<div>
-					<select name="">
-						<option>Choose ...</option>
-					</select>
-				</div-->
 			</div>
 			<div class="clear"></div>
 			<br />

@@ -36,11 +36,18 @@ final class controllerMain extends MethodMappedController
 	public function actionIndex(HttpRequest $request)
 	{
 		$model = Model::create();
-		
+
+		$this->attachCollections($model);
+
 		$mav = ModelAndView::create()->
 			setModel($model);
-		
+
 		return $mav;
 	}
-	
+
+	private function attachCollections(Model $model)
+	{
+		$model->set('propertyTypeList', EnumHelper::getPlainList('PropertyType'));
+		return $this;
+	}
 }
