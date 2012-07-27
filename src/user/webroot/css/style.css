@@ -14,8 +14,8 @@ BODY {
 }
 
 .block {
-	background: url(/i/block.png) repeat-x;
-	padding-top: 20px;
+/*	background: url(/i/block.png) repeat-x;
+	padding-top: 20px;*/
 }
 
 H1, H2, H3 {
@@ -59,8 +59,7 @@ INPUT, SELECT, TEXTAREA {
 
 .select {
 	border: 1px #FFCD6C solid;
-	background: url("/i/arr_down.png") no-repeat #FFF;
-	background-position: 95% 50%;
+	background: url("/i/bg_arr.png") no-repeat #FFF right;
 }
 
 .input {
@@ -103,4 +102,12 @@ INPUT, SELECT, TEXTAREA {
 .area {
 	background: url("/i/m2.png") no-repeat #FFF;
 	background-position: 95% 50%;
+}
+
+.error {
+	border-color: #F00;
+}
+
+fieldset {
+	margin-top: 10px;
 }

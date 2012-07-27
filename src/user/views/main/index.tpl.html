@@ -66,7 +66,7 @@ var Selector = {
 
 			container
 				.css({left: offset.left, top: offset.top, width: select.width()})
-				.slideDown(100);
+				.slideDown(200);
 
 			this.active = id;
 		}
@@ -85,13 +85,29 @@ var Selector = {
 
 	click: function(option) {
 		var parent = option.parent().parent();
+		var input = $('> INPUT', parent);
 		$('> INPUT', parent).val($('INPUT', option).val());
 		$('.title', parent).text($('DIV', option).text());
+
+		if (edge = input.attr('name').match(/\[(min|max)\]/)) {
+			var mini = $('[name="' + input.attr('name').replace('[max]', '[min]') + '"]');
+			var maxi = $('[name="' + input.attr('name').replace('[min]', '[max]') + '"]');
+
+			mini.parent().removeClass('error');
+			maxi.parent().removeClass('error');
+			
+			if (
+				mini.val() != 0
+				&& maxi.val() != 0
+				&& mini.val() >= maxi.val()
+			) {
+				parent.addClass('error');
+			}
+		}
 	}
 }
 </script>
 
-<div class="g_24">
 	<div class="g_9">
 		<div id="mapDiv" style="background: url(/i/map_bg350.png) no-repeat; background-position-y: 220px">
 		<div id="chooseDiv" style="background: url(/i/map_bg350.png) no-repeat; background-position-y: 220px">
@@ -107,21 +123,31 @@ var Selector = {
 		</div>
 	</div>
 
-	<div class="g_1 alpha omega">&nbsp;</div>
+	<div class="g_1">&nbsp;</div>
+	
 	<div class="g_14">
-		<div style="background: url(/i/bg_search.png) repeat-x;">
+
+		<form>
+
+		<!-- search tabs -->
+		<div class="g_14 alpha omega">
 			<ul class="searchTab">
 				<li class="buy">buy</li>
 				<li class="rent">rent</li>
 			</ul>
 			<div class="clear"></div>
-			
-			<div class="g_6">
+		</div>
+		<div class="clear"></div>
+
+		<!-- search form -->
+		<div class="g_14 alpha omega">
+
+			<div class="g_5 alpha">
 				<fieldset>
 					Location
 					<br/>
 					<div>
-						<select name="" style="width: 100%; margin-left: 10px;" size="10">
+						<select name="" style="width: 100%;" size="10">
 							<option>Choose ...</option>
 							<option>Choose ...</option>
 							<option>Choose ...</option>
@@ -129,9 +155,8 @@ var Selector = {
 					</div>
 				</fieldset>
 			</div>
-			<div class="g_1 alpha omega">&nbsp;</div>
-			<div class="g_7">
-				<div class="g_7 fields alpha omega">
+			<div class="g_6">
+				<div class="g_6 fields alpha omega">
 
 					<fieldset id="propertyType">
 						<label for="peopertyType">Property type</label>
@@ -140,13 +165,13 @@ var Selector = {
 							<div class="title">Choose...</div>
 							<dl>
 								<dd><input type="hidden" value="0"/><div>Choose...</div></dd>
-	<?php
-		foreach ($propertyTypeList as $type) {
-	?>
+<?php
+	foreach ($propertyTypeList as $type) {
+?>
 								<dd><input type="hidden" value="<?=$type->getId()?>"/><div><?=$type->getName()?></div></dd>
-	<?php
-		}
-	?>
+<?php
+	}
+?>
 							</dl>
 						</div>
 					</fieldset>
@@ -154,7 +179,7 @@ var Selector = {
 
 				<div class="clear"></div>
 
-				<div class="g_3 fields alpha">
+				<div class="g_3 alpha">
 					<fieldset id="type[<?=FeatureType::BEDROOMS?>]">
 						<label for="type[<?=FeatureType::BEDROOMS?>]">Bedrooms</label>
 						<div class="select">
@@ -162,41 +187,82 @@ var Selector = {
 							<div class="title">Any</div>
 							<dl>
 								<dd><input type="hidden" value="0"/><div>Any</div></dd>
-	<?php
-		foreach (array(1, 2, 3, 4, 5) as $number) {
-	?>
+<?php
+	for ($number = 1; $number < 5; $number ++) {
+?>
 								<dd><input type="hidden" value="<?=$number?>"/><div><?=$number?> +</div></dd>
-	<?php
-		}
-	?>
+<?php
+	}
+?>
 							</dl>
 						</div>
 					</fieldset>
 				</div>
-				<div class="g_4 fields omega">
+				<div class="g_3 fields omega">
 					<fieldset id="type[<?=FeatureType::AREA?>]">
 						<label for="type[<?=FeatureType::AREA?>]">Area</label>
 						<div class="input">
-							<input type="text" name="type[<?=FeatureType::AREA?>]" value="0" class="area"/>
+							<input type="text" name="type[<?=FeatureType::AREA?>]" value="" class="area"/>
 						</div>
 					</fieldset>
 				</div>
+
+				<div class="clear"></div>
+
+				<div class="g_3 fields alpha">
+					<fieldset id="type[<?=FeatureType::PRICE?>][min]">
+						<label for="type[<?=FeatureType::PRICE?>][min]">Min price</label>
+						<div class="select">
+							<input type="hidden" name="type[<?=FeatureType::PRICE?>][min]" value=""/>
+							<div class="title">Any</div>
+							<dl>
+								<dd><input type="hidden" value="0"/><div>Any</div></dd>
+<?php
+	for ($number = 100000; $number < 500000; $number += 100000) {
+?>
+								<dd><input type="hidden" value="<?=$number?>"/><div><?=number_format($number, 0, '.', '`')?></div></dd>
+<?php
+	}
+?>
+							</dl>
+						</div>
+					</fieldset>
+				</div>
+
+				<div class="g_3 fields omega">
+					<fieldset id="type[<?=FeatureType::PRICE?>][max]">
+						<label for="type[<?=FeatureType::PRICE?>][max]">Max price</label>
+						<div class="select">
+							<input type="hidden" name="type[<?=FeatureType::PRICE?>][max]" value=""/>
+							<div class="title">Any</div>
+							<dl>
+								<dd><input type="hidden" value="0"/><div>Any</div></dd>
+<?php
+	for ($number = 100000; $number < 600000; $number += 100000) {
+?>
+								<dd><input type="hidden" value="<?=$number?>"/><div><?=number_format($number, 0, '.', '`')?></div></dd>
+<?php
+	}
+?>
+							</dl>
+						</div>
+					</fieldset>
+				</div>
+
+			</div>
+
+			<!-- search button -->
+			<div class="g_2 s_1 omega">
+					<fieldset id="submit">
+						<label for="submit">&nbsp;</label>
+						<input type="submit" value=">>" style="height: 150" />
+					</fieldset>
 			</div>
 			<div class="clear"></div>
-			<br />
-			<br />
-			<br />
-			<br />
-			<br />
-			<br />
-			<br />
-			<br />
-			<br />
-			<br />
-			<br />
+
 		</div>
 		
+		</form>
+		
 	</div>
-	
-</div>
 	
