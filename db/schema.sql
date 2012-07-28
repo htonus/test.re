@@ -5,6 +5,16 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 
+CREATE SEQUENCE city_id
+    START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
+CREATE TABLE "city" (
+    id 			BIGINT PRIMARY KEY DEFAULT nextval('city_id'::regclass) NOT NULL,
+    name 		VARCHAR(64) NOT NULL,
+	latitude 	NUMERIC(10,4) NULL,
+	longitude 	NUMERIC(10,4) NULL,
+	parent_id 	BIGINT NULL REFERENCES city(id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
 CREATE SEQUENCE user_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 CREATE TABLE "user" (

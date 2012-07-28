@@ -87,7 +87,18 @@
 		</properties>
 		<pattern name="DictionaryClass" />
 	</class>
-
+	
+	<class name="City" type="final">
+		<properties>
+			<identifier name="id" />
+			<property name="name" type="String" size="128" required="true" />
+			<property name="latitude" type="Numeric" size="10,6" required="false" />
+			<property name="longitude" type="Numeric" size="10,6" required="false" />
+			<property name="parent" type="City" relation="OneToOne" required="false" fetch="lazy" />
+		</properties>
+		<pattern name="DictionaryClass" />
+	</class>
+	
 	<class name="Property" type="final">
 		<properties>
 			<identifier name="id" />
