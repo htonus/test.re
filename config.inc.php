@@ -17,11 +17,11 @@
 	define('PATH_SOURCE', PATH_BASE.'src'.DIRECTORY_SEPARATOR.PATH_SOURCE_DIR);
 	define('PATH_WEB', 'http://www.'.DOMAIN.'/');
 	define('PATH_WEB_ADMIN', 'http://admin.'.DOMAIN.'/');
-	define('PATH_WEB_PIX', '/pix/');
-	define('PATH_WEB_IMG', '/img/');
-	define('PATH_WEB_JS', '/js/');
-	define('PATH_WEB_CSS', '/css/');
-
+	define('PATH_WEB_PIX', '/pix/'); // dynamic stuff
+	define('PATH_WEB_IMG', '/i/'); // static stuff
+	define('PATH_WEB_JS', '/js/'); // static stuff
+	define('PATH_WEB_CSS', '/css/'); // static stuff
+	
 	// shared classes
 	define(
 		'PATH_CLASSES',
