@@ -29,7 +29,7 @@ CREATE TABLE offer_type (
 CREATE SEQUENCE property_type_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 CREATE TABLE property_type (
-    id		BIGINT PRIMARY KEY DEFAULT nextval('property_type_id'::regclass) NOT NULL
+    id		BIGINT PRIMARY KEY DEFAULT nextval('property_type_id'::regclass) NOT NULL,
     name	VARCHAR(32) NOT NULL
 );
 
@@ -64,6 +64,7 @@ CREATE TABLE feature_type (
     id			BIGINT PRIMARY KEY DEFAULT nextval('feature_type_id'::regclass) NOT NULL,
     name 		VARCHAR(32) NOT NULL,
 	required 	BOOLEAN NOT NULL DEFAULT true,
+    priority	INTEGER NOT NULL DEFAULT '1',
     unit_id bigint NULL REFERENCES unit(id) ON UPDATE CASCADE ON DELETE SET NULL
 );
 CREATE INDEX feature_type_unit_id_idx ON feature_type USING btree (unit_id);
