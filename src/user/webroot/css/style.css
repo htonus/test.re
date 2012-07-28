@@ -57,7 +57,7 @@ INPUT, SELECT, TEXTAREA {
 }
 
 
-.select {
+.select, .multiselect  {
 	border: 1px #FFCD6C solid;
 	background: url("/i/bg_arr.png") no-repeat #FFF right;
 }
@@ -75,18 +75,25 @@ INPUT, SELECT, TEXTAREA {
 	max-height: 200px;
 	background-color: #FFF;
 	border: 1px #FFCD6C solid;
-/*	padding-top: 5px;*/
 }
 
-.select DD {
+.multiselect DL {
+	display: block;
+	overflow: auto;
+	overflow-x: hidden;
+	height: 150px;
+	background-color: #FFF;
+}
+
+.select DD, .multiselect DD {
 	cursor: pointer;
 	white-space: nowrap;
 	padding: 5px 10px;
-	margin: 0;
+	margin: 1px;
 	background-color: white;
 }
 
-.select DD DIV {
+.select DD DIV, .multiselect DD DIV {
 	width: 100%;
 }
 
@@ -95,7 +102,7 @@ INPUT, SELECT, TEXTAREA {
 	cursor: pointer;
 }
 
-.select DD:hover {
+.select DD:hover, .multiselect DD:hover {
 	background-color: #FFF9E9;
 }
 
@@ -110,4 +117,8 @@ INPUT, SELECT, TEXTAREA {
 
 fieldset {
 	margin-top: 10px;
+}
+
+.checked {
+	background-color: #FFCD6C !important;
 }

@@ -47,6 +47,10 @@ $(document).ready(function(){
 	$('.select DD').click(function(){
 		Selector.click($(this));
 	});
+
+	$('.multiselect DD').click(function(){
+		Selector.multiclick($(this));
+	});
 });
 
 var Selector = {
@@ -54,7 +58,7 @@ var Selector = {
 
 	open: function(select) {
 		var toClose = this.active;
-		var id = $('INPUT', select).attr('name');
+		var id = $(select).parents('FIELDSET').attr('id');
 
 		this.close(true);
 
@@ -84,17 +88,19 @@ var Selector = {
 	},
 
 	click: function(option) {
+		var input = $('INPUT', option);
 		var parent = option.parent().parent();
-		var input = $('> INPUT', parent);
-		$('> INPUT', parent).val($('INPUT', option).val());
+		
 		$('.title', parent).text($('DIV', option).text());
+		$('INPUT', option.parent()).removeAttr('checked');
+		input.attr('checked', 'checked');
 
 		if (edge = input.attr('name').match(/\[(min|max)\]/)) {
-			var mini = $('[name="' + input.attr('name').replace('[max]', '[min]') + '"]');
-			var maxi = $('[name="' + input.attr('name').replace('[min]', '[max]') + '"]');
+			var mini = $('[name="' + input.attr('name').replace('[max]', '[min]') + '"]:checked');
+			var maxi = $('[name="' + input.attr('name').replace('[min]', '[max]') + '"]:checked');
 
-			mini.parent().removeClass('error');
-			maxi.parent().removeClass('error');
+			mini.parents('.select').removeClass('error');
+			maxi.parents('.select').removeClass('error');
 			
 			if (
 				mini.val() != 0
@@ -103,6 +109,18 @@ var Selector = {
 			) {
 				parent.addClass('error');
 			}
+		}
+	},
+	
+	multiclick: function(option) {
+		var input = $('INPUT', option);
+		
+		if (input.attr('checked')) {
+			input.removeAttr('checked');
+			option.removeClass('checked')
+		} else {
+			input.attr('checked', 'checked');
+			option.addClass('checked')
 		}
 	}
 }
@@ -127,7 +145,7 @@ var Selector = {
 	
 	<div class="g_14">
 
-		<form>
+		<form name="searchForm" id="searchForm">
 
 		<!-- search tabs -->
 		<div class="g_14 alpha omega">
@@ -143,17 +161,23 @@ var Selector = {
 		<div class="g_14 alpha omega">
 
 			<div class="g_5 alpha">
-				<fieldset>
-					Location
-					<br/>
-					<div>
-						<select name="" style="width: 100%;" size="10">
-							<option>Choose ...</option>
-							<option>Choose ...</option>
-							<option>Choose ...</option>
-						</select>
-					</div>
-				</fieldset>
+					<fieldset id="location">
+						<label for="location">Location</label>
+						<div class="multiselect">
+							<dl>
+<?php
+	foreach (array(
+		1=>'Nicosia', 2=>'Larnaka', 3=>'Limassol', 4=>'Paphos',
+		5=>'Nicosia', 6=>'Larnaka', 7=>'Limassol', 8=>'Paphos',
+	) as $id => $name) {
+?>
+								<dd><input type="checkbox" name="location[]" style="display: none" value="<?=$id?>"/><div><?=$name?></div></dd>
+<?php
+	}
+?>
+							</dl>
+						</div>
+					</fieldset>
 			</div>
 			<div class="g_6">
 				<div class="g_6 fields alpha omega">
@@ -161,14 +185,13 @@ var Selector = {
 					<fieldset id="propertyType">
 						<label for="peopertyType">Property type</label>
 						<div class="select">
-							<input type="hidden" name="propertyType" value=""/>
 							<div class="title">Choose...</div>
 							<dl>
 								<dd><input type="hidden" value="0"/><div>Choose...</div></dd>
 <?php
 	foreach ($propertyTypeList as $type) {
 ?>
-								<dd><input type="hidden" value="<?=$type->getId()?>"/><div><?=$type->getName()?></div></dd>
+								<dd><input type="radio" name="propertyType" style="display: none" value="<?=$type->getId()?>"/><div><?=$type->getName()?></div></dd>
 <?php
 	}
 ?>
@@ -183,14 +206,13 @@ var Selector = {
 					<fieldset id="type[<?=FeatureType::BEDROOMS?>]">
 						<label for="type[<?=FeatureType::BEDROOMS?>]">Bedrooms</label>
 						<div class="select">
-							<input type="hidden" name="type[<?=FeatureType::BEDROOMS?>]" value=""/>
 							<div class="title">Any</div>
 							<dl>
 								<dd><input type="hidden" value="0"/><div>Any</div></dd>
 <?php
 	for ($number = 1; $number < 5; $number ++) {
 ?>
-								<dd><input type="hidden" value="<?=$number?>"/><div><?=$number?> +</div></dd>
+								<dd><input type="radio" name="type[<?=FeatureType::BEDROOMS?>]" style="display: none" value="<?=$number?>"/><div><?=$number?> +</div></dd>
 <?php
 	}
 ?>
@@ -213,14 +235,13 @@ var Selector = {
 					<fieldset id="type[<?=FeatureType::PRICE?>][min]">
 						<label for="type[<?=FeatureType::PRICE?>][min]">Min price</label>
 						<div class="select">
-							<input type="hidden" name="type[<?=FeatureType::PRICE?>][min]" value=""/>
 							<div class="title">Any</div>
 							<dl>
 								<dd><input type="hidden" value="0"/><div>Any</div></dd>
 <?php
 	for ($number = 100000; $number < 500000; $number += 100000) {
 ?>
-								<dd><input type="hidden" value="<?=$number?>"/><div><?=number_format($number, 0, '.', '`')?></div></dd>
+								<dd><input type="radio" name="type[<?=FeatureType::PRICE?>][min]" style="display: none" value="<?=$number?>"/><div><?=number_format($number, 0, '.', '`')?></div></dd>
 <?php
 	}
 ?>
@@ -233,14 +254,13 @@ var Selector = {
 					<fieldset id="type[<?=FeatureType::PRICE?>][max]">
 						<label for="type[<?=FeatureType::PRICE?>][max]">Max price</label>
 						<div class="select">
-							<input type="hidden" name="type[<?=FeatureType::PRICE?>][max]" value=""/>
 							<div class="title">Any</div>
 							<dl>
 								<dd><input type="hidden" value="0"/><div>Any</div></dd>
 <?php
 	for ($number = 100000; $number < 600000; $number += 100000) {
 ?>
-								<dd><input type="hidden" value="<?=$number?>"/><div><?=number_format($number, 0, '.', '`')?></div></dd>
+								<dd><input type="radio" name="type[<?=FeatureType::PRICE?>][max]" style="display: none" value="<?=$number?>"/><div><?=number_format($number, 0, '.', '`')?></div></dd>
 <?php
 	}
 ?>
