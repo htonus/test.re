@@ -5,6 +5,16 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 
+CREATE SEQUENCE city_id
+    START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
+CREATE TABLE "city" (
+    id 			BIGINT PRIMARY KEY DEFAULT nextval('city_id'::regclass) NOT NULL,
+    name 		VARCHAR(64) NOT NULL,
+	latitude 	NUMERIC(10,4) NULL,
+	longitude 	NUMERIC(10,4) NULL,
+	parent_id 	BIGINT NULL REFERENCES city(id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
 CREATE SEQUENCE user_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 CREATE TABLE "user" (
@@ -29,7 +39,7 @@ CREATE TABLE offer_type (
 CREATE SEQUENCE property_type_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 CREATE TABLE property_type (
-    id		BIGINT PRIMARY KEY DEFAULT nextval('property_type_id'::regclass) NOT NULL
+    id		BIGINT PRIMARY KEY DEFAULT nextval('property_type_id'::regclass) NOT NULL,
     name	VARCHAR(32) NOT NULL
 );
 
@@ -64,6 +74,7 @@ CREATE TABLE feature_type (
     id			BIGINT PRIMARY KEY DEFAULT nextval('feature_type_id'::regclass) NOT NULL,
     name 		VARCHAR(32) NOT NULL,
 	required 	BOOLEAN NOT NULL DEFAULT true,
+    priority	INTEGER NOT NULL DEFAULT '1',
     unit_id bigint NULL REFERENCES unit(id) ON UPDATE CASCADE ON DELETE SET NULL
 );
 CREATE INDEX feature_type_unit_id_idx ON feature_type USING btree (unit_id);
