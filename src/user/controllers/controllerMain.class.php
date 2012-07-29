@@ -28,7 +28,7 @@ final class controllerMain extends MethodMappedController
 	{
 		$mav = parent::handleRequest($request);
 
-		$request->setAttachedVar('layout', 'default');
+//		$request->setAttachedVar('layout', 'default');
 
 		return $mav;
 	}
@@ -47,7 +47,10 @@ final class controllerMain extends MethodMappedController
 
 	private function attachCollections(Model $model)
 	{
-		$model->set('propertyTypeList', EnumHelper::getPlainList('PropertyType'));
+		$model->
+			set('propertyTypeList', EnumHelper::getPlainList('PropertyType'))->
+			set('cityList', City::dao()->getCityList());
+		
 		return $this;
 	}
 }

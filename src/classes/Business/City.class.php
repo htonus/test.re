@@ -31,6 +31,11 @@
 			return Singleton::getInstance('ProtoCity');
 		}
 		
-		// your brilliant stuff goes here
+		const NICOSIA	= 1;
+		const LARNAKA	= 2;
+		const LIMASSOL	= 3;
+		const PAPHOS	= 4;
+		const AYANAPA	= 5;
+		
 	}
 ?>

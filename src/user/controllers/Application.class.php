@@ -15,6 +15,7 @@ final class Application
 	private $allowedAreas = array(
 		'main',
 		'search',
+		'get'
 	);
 	
 	public static function create()
@@ -37,15 +38,21 @@ final class Application
 		
 		$area = $this->getArea($request);
 		$controller = 'controller'.ucfirst($area);
+		$chain = null;
 		
 		switch ($area) {
+//			case 'get':
+//				if (!$this->isAjax()) {
+//					throw new SecurityException('error:404');
+//				}
+//				break;
 			default:
 				$chain = new $controller;
 				break;
 		}
 		
 		$this->attachResolver($request);
-		
+
 		$mav = $chain->handleRequest($request);
 		
 		$this->render($mav, $request);
@@ -118,5 +125,14 @@ final class Application
 		$request->setAttachedVar('urlMapper', UrlMapper::create(PATH_WEB_ADMIN));
 		
 		return $this;
+	}
+	
+	private function isAjax()
+	{
+		return
+			true;
+			isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+			&& strtolower($_SERVER['HTTP_X_REQUESTED_WITH'])
+				=== 'xmlhttprequest';
 	}
 }

@@ -16,6 +16,7 @@ final class Application
 		'main',
 		'user',
 		'unit',
+		'city',
 		'featureType',
 		'property',
 	);

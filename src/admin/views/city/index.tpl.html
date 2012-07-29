@@ -16,7 +16,7 @@
 ?>
 	<tr>
 		<td><?=$item->getName()?></td>
-		<td><?=$item->getValue()?></td>
+		<td><?=$item->getParent() ? $item->getParent()->getName() : 'District'?></td>
 		<td>
 			<a href="<?=$urlMapper->getObjectUrl($item, 'edit')?>">edit</a> |
 			<a href="<?=$urlMapper->getObjectUrl($item, 'drop')?>">drop</a>

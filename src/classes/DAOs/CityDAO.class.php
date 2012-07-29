@@ -7,6 +7,16 @@
 
 	final class CityDAO extends AutoCityDAO
 	{
-		// last chance for customization
+		public function getCityList(City $parent = null)
+		{
+			$criteria = Criteria::create($this);
+			
+			if ($parent)
+				$criteria->add(
+					Expression::eqId('parent', $parent)
+				);
+			
+			return $criteria->getList();
+		}
 	}
 ?>

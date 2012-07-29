@@ -15,46 +15,103 @@ $(document).ready(function(){
 			if ($(e.target).parents('.select').size() == 0)
 				Selector.close();
 		});
-
-	$('.mapArea')
-		.mouseover(function(){
-			$('#mapDiv').css(
-				'background-position-y',
-				-220 * $(this).attr('id').match(/\d+/).toString() + 'px'
-			);
-		})
-		.mouseout(function(){
-			if (clicked)
-				$('#mapDiv').css('background-position-y', -220 * clicked.toString() + 'px');
-			else
-				$('#mapDiv').css('background-position-y', '220px');
-		})
-		.click(function(){
-			var id = $(this).attr('id').match(/\d+/).toString();
-			if (clicked == id) {
-				clicked = null;
-				$('#chooseDiv').css('background-position-y', '220px');
-			} else {
-				clicked = id;
-				$('#chooseDiv').css('background-position-y', -220 * clicked.toString() + 'px');
-			}
-		});
-
-	$('.select').click(function(){
-		Selector.open($(this));
-	});
-
-	$('.select DD').click(function(){
-		Selector.click($(this));
-	});
-
-	$('.multiselect DD').click(function(){
-		Selector.multiclick($(this));
+		
+	Map.init();
+	Selector.init();
+	
+	$('.searchTab LI').click(function(){
+		$('.searchTab DIV').removeClass('active');
+		$('DIV', this).addClass('active');
+		$('INPUT[name=offerType]')
+			.val($(this).hasClass('buy') ? <?=OfferType::BUY?> : <?=OfferType::RENT?>);
 	});
 });
 
+var Map = {
+	active: null,
+	mapping:
+	'<map>\
+		<city id="<?=City::NICOSIA?>" layer="0"/>\
+		<city id="<?=City::LARNAKA?>" layer="1"/>\
+		<city id="<?=City::LIMASSOL?>" layer="2"/>\
+		<city id="<?=City::PAPHOS?>" layer="3"/>\
+		<city id="<?=City::AYANAPA?>" layer="4"/>\
+	</map>',
+	
+	init: function(){
+		$('.mapArea')
+			.mouseover(function(){
+				Map.over(Map.getLayer(this));
+			})
+			.mouseout(function(){
+				Map.out(Map.getLayer(this));
+			})
+			.click(function(){
+				Map.click(Map.getLayer(this));
+			});
+	},
+	
+	over: function(layer){
+		$('#mapDiv').css('background-position-y', -220 * layer + 'px');
+	},
+	
+	out: function(layer){
+		$('#mapDiv').css('background-position-y', '220px');
+	},
+	
+	click: function(layer){
+		var id = null;
+		
+		if (this.active == layer) {
+			this.active = null;
+			$('#chooseDiv').css('background-position-y', '220px');
+		} else {
+			this.active = layer;
+			$('#chooseDiv').css('background-position-y', -220 * layer + 'px');
+			id = $('[layer=' + layer + ']', Map.mapping).attr('id');
+		}
+		
+		$.getJSON(
+			'<?=PATH_WEB?>get/cities',
+			{parent: id},
+			function(data){
+				$('#location DD').remove();
+				$.each(data.list, function(index, city){
+					$('#location DL').append(
+						'<dd><input type="checkbox" name="city[]" value="'
+						+ city['id'] + '"/><div>' + city['name'] + ' '
+						+ (city['parent_id'] ? '' : 'area') + '</div></dd>'
+					);
+				});
+			
+				$('#location DD').click(function(){
+					Selector.multiclick($(this));
+				});
+			}
+		)
+	},
+	
+	getLayer: function(dd){
+		return parseInt($(dd).attr('id').match(/\d+/).toString());
+	}
+};
+
 var Selector = {
 	active: null,
+	
+	init: function(){
+		$('.select').click(function(){
+			Selector.open($(this));
+		});
+
+		$('.select DD').click(function(){
+			Selector.click($(this));
+		});
+
+		$('.multiselect DD').click(function(){
+			Selector.multiclick($(this));
+		});
+	},
 
 	open: function(select) {
 		var toClose = this.active;
@@ -91,9 +148,11 @@ var Selector = {
 		var input = $('INPUT', option);
 		var parent = option.parent().parent();
 		
+		$('DD', parent).removeClass('checked');
 		$('.title', parent).text($('DIV', option).text());
 		$('INPUT', option.parent()).removeAttr('checked');
 		input.attr('checked', 'checked');
+		option.addClass('checked')
 
 		if (edge = input.attr('name').match(/\[(min|max)\]/)) {
 			var mini = $('[name="' + input.attr('name').replace('[max]', '[min]') + '"]:checked');
@@ -126,32 +185,32 @@ var Selector = {
 }
 </script>
 
-	<div class="g_9">
-		<div id="mapDiv" style="background: url(/i/map_bg350.png) no-repeat; background-position-y: 220px">
-		<div id="chooseDiv" style="background: url(/i/map_bg350.png) no-repeat; background-position-y: 220px">
-			<img src="<?=PATH_WEB_IMG?>map350.png" width="350" height="220" usemap="mapMap" />
-			<map id="mapMap" name="mapMap">
-				<area href="javascript:void(null)" class="mapArea" id="NCS_0" shape="poly" coords="105,85,179,90,188,79,199,84,202,99,200,105,204,112,195,115,191,125,195,134,192,140,142,151,137,157,124,155,113,141,98,147,84,141,78,150,74,149,69,154,66,149,63,131,46,102" />
-				<area href="javascript:void(null)" class="mapArea" id="LRN_1" shape="poly" coords="196,115,211,111,219,124,252,139,249,144,159,188,159,175,137,158,143,153,193,141,196,134,192,124" />
-				<area href="javascript:void(null)" class="mapArea" id="LMS_2" shape="poly" coords="60,198,61,188,74,180,71,173,82,159,79,150,85,142,98,148,114,142,123,156,137,158,158,175,158,188,134,190,118,217,103,217,100,199,68,202" />
-				<area href="javascript:void(null)" class="mapArea" id="PHS_3" shape="poly" coords="45,103,62,131,65,151,68,155,74,151,78,151,80,157,70,173,72,179,72,179,60,187,58,198,24,180,11,153,0,117" />
-				<area href="javascript:void(null)" class="mapArea" id="FMS_4" shape="poly" coords="200,81,233,57,350,3,350,9,277,70,265,71,255,87,256,102,282,139,254,138,220,123,212,110,206,111,201,105,204,100" />
-			</map>
-		</div>
+	<div class="p_1 g_9">
+		<div style="padding: 10px 0px;"> 
+			<div id="mapDiv" style="background: url(<?=PATH_WEB_IMG?>map_bg350.png) no-repeat; background-position-y: 220px">
+				<div id="chooseDiv" style="background: url(<?=PATH_WEB_IMG?>map_bg350.png) no-repeat; background-position-y: 220px">
+					<img src="<?=PATH_WEB_IMG?>map350.png" width="350" height="220" usemap="mapMap" />
+					<map id="mapMap" name="mapMap">
+						<area href="javascript:void(null)" class="mapArea" id="NCS_0" shape="poly" coords="105,85,179,90,188,79,199,84,202,99,200,105,204,112,195,115,191,125,195,134,192,140,142,151,137,157,124,155,113,141,98,147,84,141,78,150,74,149,69,154,66,149,63,131,46,102" />
+						<area href="javascript:void(null)" class="mapArea" id="LRN_1" shape="poly" coords="196,115,211,111,219,124,252,139,249,144,159,188,159,175,137,158,143,153,193,141,196,134,192,124" />
+						<area href="javascript:void(null)" class="mapArea" id="LMS_2" shape="poly" coords="60,198,61,188,74,180,71,173,82,159,79,150,85,142,98,148,114,142,123,156,137,158,158,175,158,188,134,190,118,217,103,217,100,199,68,202" />
+						<area href="javascript:void(null)" class="mapArea" id="PHS_3" shape="poly" coords="45,103,62,131,65,151,68,155,74,151,78,151,80,157,70,173,72,179,72,179,60,187,58,198,24,180,11,153,0,117" />
+						<area href="javascript:void(null)" class="mapArea" id="FMS_4" shape="poly" coords="200,81,233,57,350,3,350,9,277,70,265,71,255,87,256,102,282,139,254,138,220,123,212,110,206,111,201,105,204,100" />
+					</map>
+				</div>
+			</div>
 		</div>
 	</div>
 
-	<div class="g_1">&nbsp;</div>
-	
 	<div class="g_14">
 
-		<form name="searchForm" id="searchForm">
-
+		<form name="searchForm" id="searchForm" action="<?=PATH_WEB?>list">
+			<input type="hidden" name="offerType" value="<?=OfferType::BUY?>"/>
 		<!-- search tabs -->
 		<div class="g_14 alpha omega">
 			<ul class="searchTab">
-				<li class="buy">buy</li>
-				<li class="rent">rent</li>
+				<li class="buy"><div class="active">buy</div></li>
+				<li class="rent"><div>rent</div></li>
 			</ul>
 			<div class="clear"></div>
 		</div>
@@ -166,12 +225,9 @@ var Selector = {
 						<div class="multiselect">
 							<dl>
 <?php
-	foreach (array(
-		1=>'Nicosia', 2=>'Larnaka', 3=>'Limassol', 4=>'Paphos',
-		5=>'Nicosia', 6=>'Larnaka', 7=>'Limassol', 8=>'Paphos',
-	) as $id => $name) {
+	foreach ($cityList as $city) {
 ?>
-								<dd><input type="checkbox" name="location[]" style="display: none" value="<?=$id?>"/><div><?=$name?></div></dd>
+								<dd><input type="checkbox" name="city[]" value="<?=$city->getId()?>"/><div><?=$city->getName()?><?=$city->getParent() ? null : ' area'?></div></dd>
 <?php
 	}
 ?>
@@ -191,7 +247,7 @@ var Selector = {
 <?php
 	foreach ($propertyTypeList as $type) {
 ?>
-								<dd><input type="radio" name="propertyType" style="display: none" value="<?=$type->getId()?>"/><div><?=$type->getName()?></div></dd>
+								<dd><input type="radio" name="propertyType" value="<?=$type->getId()?>"/><div><?=$type->getName()?></div></dd>
 <?php
 	}
 ?>
@@ -212,7 +268,7 @@ var Selector = {
 <?php
 	for ($number = 1; $number < 5; $number ++) {
 ?>
-								<dd><input type="radio" name="type[<?=FeatureType::BEDROOMS?>]" style="display: none" value="<?=$number?>"/><div><?=$number?> +</div></dd>
+								<dd><input type="radio" name="type[<?=FeatureType::BEDROOMS?>]" alue="<?=$number?>"/><div><?=$number?> +</div></dd>
 <?php
 	}
 ?>
@@ -241,7 +297,7 @@ var Selector = {
 <?php
 	for ($number = 100000; $number < 500000; $number += 100000) {
 ?>
-								<dd><input type="radio" name="type[<?=FeatureType::PRICE?>][min]" style="display: none" value="<?=$number?>"/><div><?=number_format($number, 0, '.', '`')?></div></dd>
+								<dd><input type="radio" name="type[<?=FeatureType::PRICE?>][min]" value="<?=$number?>"/><div><?=number_format($number, 0, '.', '`')?></div></dd>
 <?php
 	}
 ?>
@@ -275,7 +331,7 @@ var Selector = {
 			<div class="g_2 s_1 omega">
 					<fieldset id="submit">
 						<label for="submit">&nbsp;</label>
-						<input type="submit" value=">>" style="height: 150" />
+						<input type="submit" value=">>" style="height: 150px; border: 1px #FFCD6C solid;" />
 					</fieldset>
 			</div>
 			<div class="clear"></div>

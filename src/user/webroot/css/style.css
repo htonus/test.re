@@ -29,18 +29,23 @@ H1, H2, H3 {
 .searchTab LI {
 	float: left;
 	width: 50%;
+}
+.searchTab LI DIV {
 	padding: 5px 0px;
 	text-align: center;
 	font: bold 18px sans-serif;
 	text-transform: uppercase;
+	color: #FFCD6C;
+	border-top: 2px #FFE6B6 solid;
+	border-left: 2px #FFCD6C solid;
+	border-bottom: 2px #FFCD6C solid;
+	cursor: pointer;
 }
-.buy {
-	background-color: #FFCD6C;
+
+.searchTab LI DIV.active {
+	border-top: 2px #FFCD6C solid;
+	border-bottom: 2px #FFE6B6 solid;
 	color: #FFF;
-}
-.rent {
-	background-color: #FFE6B6;
-	color: #999;
 }
 
 INPUT, SELECT, TEXTAREA {
@@ -49,6 +54,7 @@ INPUT, SELECT, TEXTAREA {
 	border: none;
 	outline: none;
 	padding: 5px;
+	cursor: pointer
 }
 .fields > DIV {
 	border: 1px #FFCD6C solid;
@@ -121,4 +127,8 @@ fieldset {
 
 .checked {
 	background-color: #FFCD6C !important;
+}
+
+.select DD INPUT, .multiselect DD INPUT {
+	display: none;
 }
