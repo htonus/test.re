@@ -49,3 +49,9 @@ insert into image_type (id, name) values (14, 'iff');
 insert into image_type (id, name) values (15, 'bmp');
 insert into image_type (id, name) values (16, 'xbm');
 insert into image_type (id, name) values (100, 'jpeg');
+
+insert into city (id, name) values (1, 'Nicosia');
+insert into city (id, name) values (2, 'Larnaka');
+insert into city (id, name) values (3, 'Limasssol');
+insert into city (id, name) values (4, 'Paphos');
+insert into city (id, name) values (5, 'Ayanapa');
