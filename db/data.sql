@@ -50,6 +50,12 @@ insert into image_type (id, name) values (15, 'bmp');
 insert into image_type (id, name) values (16, 'xbm');
 insert into image_type (id, name) values (100, 'jpeg');
 
+insert into city (id, name) values (1, 'Nicosia');
+insert into city (id, name) values (2, 'Larnaka');
+insert into city (id, name) values (3, 'Limasssol');
+insert into city (id, name) values (4, 'Paphos');
+insert into city (id, name) values (5, 'Ayanapa');
+
 COPY property (id, name, description, user_id, property_type_id, offer_type_id, image_id) FROM stdin;
 1	House 1	\N	2	4	1	\N
 2	House 	\N	2	4	1	\N
