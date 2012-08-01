@@ -80,42 +80,47 @@ class CommonEditor extends PrototypedEditor
 					array(MetaRelation::ONE_TO_ONE, MetaRelation::ONE_TO_MANY)
 				)
 			) {
-				switch($field->getType()) {
-					case 'identifier':
-						$dao = call_user_func(array($field->getClassName(), 'dao'));
-						$total = $dao->getTotalCount();
-						$model->set($name.'Total', $total);
+				try {
+					switch($field->getType()) {
+						case 'identifier':
+						case 'integerIdentifier':
+							$dao = call_user_func(array($field->getClassName(), 'dao'));
+							$total = $dao->getTotalCount();
+							$model->set($name.'Total', $total);
 
-						if ($total < 50)
-							$model->set($name.'List', $dao->getPlainList());
-						else
-							$model->set($name.'Lookup', $field->getClassName());
+							if ($total < 50)
+								$model->set($name.'List', $dao->getPlainList());
+							else
+								$model->set($name.'Lookup', $field->getClassName());
 
-						break;
-					case 'identifierList':
-						if ($this->getForm()->getValue('id')) {
-							$dao = $this->getForm()->getValue('id')->
-								{$field->getGetter()}();
+							break;
+						case 'identifierList':
+							if ($this->getForm()->getValue('id')) {
+								$dao = $this->getForm()->getValue('id')->
+									{$field->getGetter()}();
 
-							$model->set($name.'List', $dao->getList());
-							$model->set($name.'Total', $dao->getCount());
-						} else {
-							$model->set($name.'List', array());
-							$model->set($name.'Total', 0);
-						}
+								$model->set($name.'List', $dao->getList());
+								$model->set($name.'Total', $dao->getCount());
+							} else {
+								$model->set($name.'List', array());
+								$model->set($name.'Total', 0);
+							}
 
-						break;
+							break;
 
-					case 'enumeration':
-						$className = $field->getClassName();
-						$class = new $className(
-							call_user_func(array($className, 'getAnyId'))
-						);
-						$model->set($name.'List', $class->getObjectList());
-						$model->set($name.'Total', count($model->get($name.'List')));
+						case 'enumeration':
+							$className = $field->getClassName();
+							$class = new $className(
+								call_user_func(array($className, 'getAnyId'))
+							);
+							$model->set($name.'List', $class->getObjectList());
+							$model->set($name.'Total', count($model->get($name.'List')));
 
 
-						break;
+							break;
+					}
+				} catch (ObjectNotFoundException $e) {
+					$model->set($name.'List', array());
 				}
 			}
 		}

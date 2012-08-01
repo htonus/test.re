@@ -18,5 +18,15 @@
 			self::RENT	=> 'rent',
 			self::LEASE	=> 'lease',
 		);
+		
+		/**
+		 * Return object by Id
+		 * @param integer $id
+		 * @return $object OfferType
+		 */
+		public static function create($id)
+		{
+			return new self($id);
+		}
 	}
 ?>

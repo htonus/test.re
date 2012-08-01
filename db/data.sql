@@ -49,3 +49,55 @@ insert into image_type (id, name) values (14, 'iff');
 insert into image_type (id, name) values (15, 'bmp');
 insert into image_type (id, name) values (16, 'xbm');
 insert into image_type (id, name) values (100, 'jpeg');
+
+COPY property (id, name, description, user_id, property_type_id, offer_type_id, image_id) FROM stdin;
+1	House 1	\N	2	4	1	\N
+2	House 	\N	2	4	1	\N
+3	House 3	\N	2	4	1	\N
+4	House 4	\N	2	4	1	\N
+5	House 5	\N	2	4	1	\N
+6	House 6	\N	2	4	1	\N
+7	House 7	\N	2	4	1	\N
+8	House 8	\N	2	4	1	\N
+9	House 9	\N	2	4	1	\N
+\.
+
+COPY feature (id, content, value, type_id, property_id) FROM stdin;
+1		100	10	1
+2		100000	20	1
+4		2	40	1
+13	\N	2	40	2
+18	\N	2	30	3
+20	\N	100	10	3
+21	\N	2	40	4
+23	\N	100000	20	4
+24	\N	100	10	4
+26	\N	2	30	5
+32	\N	100	10	6
+33	\N	2	40	7
+34	\N	2	30	7
+37	\N	2	40	8
+38	\N	2	30	8
+40	\N	100	10	8
+42	\N	2	30	9
+43	\N	100000	20	9
+44	\N	100	10	9
+19	\N	200000	20	3
+27	\N	200000	20	5
+35	\N	200000	20	7
+15	\N	150000	20	2
+14	\N	3	30	2
+22	\N	3	30	4
+30	\N	3	30	6
+17	\N	1	40	3
+25	\N	1	40	5
+29	\N	1	40	6
+16	\N	200	10	2
+28	\N	200	10	5
+36	\N	200	10	7
+39	\N	250000	20	8
+31	\N	300000	20	6
+41	\N	3	40	9
+3		3	30	1
+\.
+

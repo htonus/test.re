@@ -12,6 +12,8 @@
  */
 final class controllerSearch extends MethodMappedController
 {
+	const PER_PAGE = 10;
+	
 	public function __construct()
 	{
 		
@@ -19,6 +21,8 @@ final class controllerSearch extends MethodMappedController
 			setMethodMappingList(
 				array(
 					'index'	=> 'actionIndex',
+					'buy'	=> 'actionBuy',
+					'rent'	=> 'actionRent',
 				)
 			)->
 			setDefaultAction('index');
@@ -28,34 +32,52 @@ final class controllerSearch extends MethodMappedController
 	{
 		$mav = parent::handleRequest($request);
 
-		$request->setAttachedVar('layout', 'default');
+		$request->setAttachedVar('layout', 'main');
 
 		return $mav;
 	}
-
-	public function actionIndex(HttpRequest $request)
+	
+	protected function actionBuy(HttpRequest $request)
 	{
+		return $this->getListMav(OfferType::create(OfferType::BUY), $request);
+	}
+
+	protected function actionRent(HttpRequest $request)
+	{
+		return $this->getListMav(OfferType::create(OfferType::RENT), $request);
+	}
+
+	private function getListMav(OfferType $offerType, HttpRequest $request)
+	{
+		$propertyTypes = array_flip(EnumHelper::getNames('PropertyType'));
+		
 		$form = Form::create()->
 			add(
-				Primitive::set('type')
+				Primitive::set('type')->
+				optional()
 			)->
 			add(
-				Primitive::choice('offerType')->
-				setList(EnumHelper::getNames('OfferType'))->
-				required()
+				Primitive::choice('property')->
+				setList($propertyTypes)->
+				optional()
 			)->
 			add(
-				Primitive::choice('propertyType')->
-				setList(EnumHelper::getNames('PropertyType'))->
-				required()
+				Primitive::integer('page')->
+					setMin(1)->
+					setDefault(1)
 			)->
-			import($request->getPost());
-		
-		if ($form->getErrors()) {
-			// Really weird
-		}
-		
+			import($request->getGet())->
+			importMore($request->getPost());
+
 		$filters = $form->getValue('type');
+		$filters = array(
+			FeatureType::PRICE	=> array(
+				'min'	=> 100000,
+//				'max'	=> 150000,
+			),
+			FeatureType::BEDROOMS => 2,
+			FeatureType::TOYLETS => 1,
+		);
 		$typeCasts = FeatureType::proto()->getCasts();
 		
 		$orLogic = Expression::orBlock();
@@ -64,26 +86,31 @@ final class controllerSearch extends MethodMappedController
 			if (!empty($filters[$typeId])) {
 				$andBlock = Expression::andBlock()->
 					expAnd(
-						Expression::eq('type', $typeId)
+						Expression::eq('features.type', $typeId)
 					);
 				
 				switch ($castId) {
 					case ProtoFeatureType::BOOLEAN:
 						$andBlock->expAnd(
-							Expression::eq('value', 1)
+							Expression::eq('features.value', 1)
 						);
 						break;
 					case ProtoFeatureType::INTEGER:
 						$andBlock->expAnd(
-							Expression::eq('value', $filters[$typeId])
+							Expression::eq('features.value', $filters[$typeId])
 						);
 						break;
 					case ProtoFeatureType::INT_RANGE:
-						$start = $filters[$typeId];
+						if (!empty($filters[$typeId]['min']))
+							$andBlock->expAnd(
+								Expression::gtEq ('features.value', $filters[$typeId]['min'])
+							);
+							
+						if (!empty($filters[$typeId]['max']))
+							$andBlock->expAnd(
+								Expression::ltEq ('features.value', $filters[$typeId]['max'])
+							);
 						
-						$andBlock->expAnd(
-							Expression::between('value', ($start - 1) * 100000, $start * 100000)
-						);
 						break;
 				}
 				
@@ -93,56 +120,68 @@ final class controllerSearch extends MethodMappedController
 		}
 		
 		$logic = Expression::chain()->
-				expAnd(
-					Expression::eq(
-						'property.propertyType', $form->getValue('propertyType')
-					)
-				)->
-				expAnd(
-					Expression::eq(
-						'property.offerType', $form->getValue('offerType')
-					)
-				);
-		
-		if ($orLogic->getSize())
-			$logic->expAnd($orLogic);
-		
-		$criteria = Criteria::create(Feature::dao())->
-			setProjection(
-				Projection::chain()->
-				add(
-					Projection::count('id', 'relevance')
-				)->
-				add(
-					Projection::property('property', 'id')
-				)->
-				add(
-					Projection::group('property')
-				)->
-				add(	// Remove me n case of neighbores search
-					Projection::having(
-						Expression::eq(
-							SQLFunction::create(
-								'count',
-								DBField::create('id', Feature::dao()->getTable())
-							),
-							$filterNumber
-						)
-					)
-				)
+			expAnd(
+				Expression::eq("propertyType", $propertyTypes[$form->getValue('property')])
 			)->
-			add($logic)->
-			addOrder(
-				OrderBy::create('relevance')->desc()
+			expAnd(
+				Expression::eqId("offerType", $offerType)
 			);
 		
+		if ($orLogic->getSize()) {
+			$logic->expAnd($orLogic);
+		}
+		
+		$criteria = Criteria::create(Property::dao())->
+			setProjection(
+				Projection::chain()->
+					add(
+						Projection::count('features.id', 'relevance')
+					)->
+					add(
+						Projection::property('id')
+					)->
+					add(
+						Projection::group('id')
+//					)->
+//					add(	// Remove me in case of neighbores search
+//						Projection::having(
+//							Expression::eq(
+//								SQLFunction::create(
+//									'count',
+//									'features.id'
+//								),
+//								$filterNumber
+//							)
+//						)
+					)
+			)->
+			add($logic);
+//				setLimit(self::PER_PAGE)->
+//				addOrder(
+//					OrderBy::create('relevance')->desc()
+//				)->
+//				setOffset(
+//					($form->getActualValue('page') - 1) * self::PER_PAGE
+//				);
+
+//		StringHelper::dump($criteria->toString());
+//		exit;
+		$relevance = ArrayHelper::toKeyValueArray(
+			$criteria->getCustomList(), 'id', 'relevance'
+		);
+		
+		arsort($relevance);
+		
+		$logic = Expression::in('id', array_keys($relevance));
+		
 		// Need pager here
-		$relevance = ArrayHelper::toKeyValueArray($criteria->getCustomList(), 'id', 'relevance');
-		$list = Property::dao()->getListByIds(array_keys($relevance));
+		
+		$list = ArrayUtils::convertObjectList(Property::dao()->getListByLogic($logic));
 		
 		$model = Model::create()->
 			set('relevance', $relevance)->
-			set('list', $list);
+			set('list', $list)->
+			set('page', $form->getActualValue('page'));
 		
 		return ModelAndView::create()->
 			setModel($model);

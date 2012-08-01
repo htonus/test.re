@@ -111,6 +111,7 @@
 			<property name="features" type="Feature" relation="OneToMany" required="false" />
 			<property name="image" type="Picture" relation="OneToOne" required="false" />
 			<property name="pictures" type="Picture" relation="OneToMany" required="false" />
+			<property name="location" type="City" relation="OneToOne" required="true" fetch="lazy" />
 		</properties>
 		<pattern name="DictionaryClass" />
 	</class>

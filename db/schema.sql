@@ -23,7 +23,7 @@ CREATE TABLE "user" (
     surname		VARCHAR(64) NOT NULL,
     email		VARCHAR(128) NOT NULL,
     username	VARCHAR(64) NOT NULL,
-    password	VARCHAR(32) NOT NULL
+    password	VARCHAR(40) NOT NULL
 );
 
 
@@ -52,11 +52,13 @@ CREATE TABLE property (
     description VARCHAR(512),
     user_id				BIGINT NOT NULL REFERENCES "user"(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     property_type_id	BIGINT NOT NULL REFERENCES property_type(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    offer_type_id		BIGINT NOT NULL REFERENCES offer_type(id) ON UPDATE CASCADE ON DELETE RESTRICT
+    offer_type_id		BIGINT NOT NULL REFERENCES offer_type(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    city_id				BIGINT NOT NULL REFERENCES city(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 CREATE INDEX property_user_id_idx ON property USING btree (user_id);
 CREATE INDEX property_type_id_idx ON property USING btree (property_type_id);
 CREATE INDEX property_offer_id_idx ON property USING btree (offer_type_id);
+CREATE INDEX property_city_id_idx ON property USING btree (city_id);
 
 
 CREATE SEQUENCE unit_id
