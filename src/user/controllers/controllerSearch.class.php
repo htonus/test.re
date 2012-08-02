@@ -121,12 +121,16 @@ final class controllerSearch extends MethodMappedController
 		
 		$logic = Expression::chain()->
 			expAnd(
-				Expression::eq("propertyType", $propertyTypes[$form->getValue('property')])
-			)->
-			expAnd(
 				Expression::eqId("offerType", $offerType)
 			);
-		
+
+		if ($property = $form->getValue('property')) {
+			$logic->
+				expAnd(
+					Expression::eq("propertyType", $property)
+				);
+		}
+
 		if ($orLogic->getSize()) {
 			$logic->expAnd($orLogic);
 		}

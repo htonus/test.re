@@ -9,13 +9,13 @@
 	defined('MODE') || define('MODE', 'user');
 	defined('PATH_SOURCE_DIR') || define('PATH_SOURCE_DIR', MODE.DIRECTORY_SEPARATOR);
 	
-	define('DOMAIN', 're.pro');
+	define('DOMAIN', $_SERVER['HTTP_HOST']);
 	define('COOKIE_DOMAIN', '.'.DOMAIN);
 	
 	// paths
 	define('PATH_BASE', dirname(__FILE__).DIRECTORY_SEPARATOR);
 	define('PATH_SOURCE', PATH_BASE.'src'.DIRECTORY_SEPARATOR.PATH_SOURCE_DIR);
-	define('PATH_WEB', 'http://www.'.DOMAIN.'/');
+	define('PATH_WEB', 'http://'.DOMAIN.'/');	//	'http://www.'.DOMAIN.'/'
 	define('PATH_WEB_ADMIN', 'http://admin.'.DOMAIN.'/');
 	define('PATH_WEB_PIX', '/pix/');
 	define('PATH_WEB_IMG', '/img/');

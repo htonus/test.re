@@ -9,29 +9,32 @@
 
 
 	// TODO: add to object builder fetch collection and store in interanl array
-	StringHelper::dump($relevance);
-?>	
-	<table width="100%">
-		<tr>
-			<th>Title</th>
-			<th>Price</th>
-			<th>Area</th>
-			<th>Beds</th>
-			<th>Baths</th>
-		</tr>
+?>
+	<div class="g_6">&nbsp;</div>
+
+	<div class="g_18">
+		<table width="100%">
+			<tr>
+				<th>Title</th>
+				<th>Price</th>
+				<th>Area</th>
+				<th>Beds</th>
+				<th>Baths</th>
+			</tr>
 <?php
 	foreach ($relevance as $id => $relevance) {
 		$item = $list[$id];
 		$features = $item->getFeatures()->getList();
 ?>
-		<tr>
-			<td><?=$item->getName()?></td>
-			<td><?=$features[FeatureType::PRICE]->getValue()?></td>
-			<td><?=$features[FeatureType::AREA]->getValue()?></td>
-			<td><?=$features[FeatureType::BEDROOMS]->getValue()?></td>
-			<td><?=$features[FeatureType::TOYLETS]->getValue()?></td>
-		</tr>
+			<tr>
+				<td><?=$item->getName()?></td>
+				<td><?=$features[FeatureType::PRICE]->getValue()?></td>
+				<td><?=$features[FeatureType::AREA]->getValue()?></td>
+				<td><?=$features[FeatureType::BEDROOMS]->getValue()?></td>
+				<td><?=$features[FeatureType::TOYLETS]->getValue()?></td>
+			</tr>
 <?
 	}
 ?>
-	</table>
+		</table>
+	</div>
