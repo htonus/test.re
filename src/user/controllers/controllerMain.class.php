@@ -14,7 +14,6 @@ final class controllerMain extends MethodMappedController
 {
 	public function __construct()
 	{
-		
 		$this->
 			setMethodMappingList(
 				array(
@@ -24,31 +23,25 @@ final class controllerMain extends MethodMappedController
 			setDefaultAction('index');
 	}
 
-	public function handleRequest(HttpRequest $request)
-	{
-		$mav = parent::handleRequest($request);
-
-//		$request->setAttachedVar('layout', 'default');
-
-		return $mav;
-	}
-
 	public function actionIndex(HttpRequest $request)
 	{
 		$model = Model::create();
-
+		
 		$this->attachCollections($model);
 
 		$mav = ModelAndView::create()->
 			setModel($model);
-
+		
 		return $mav;
 	}
 
 	private function attachCollections(Model $model)
 	{
 		$model->
-			set('propertyTypeList', EnumHelper::getPlainList('PropertyType'))->
+			set(
+				'propertyTypeList',
+				EnumHelper::getAnyObject('PropertyType')->getDisplayNames()
+			)->
 			set('cityList', City::dao()->getCityList());
 		
 		return $this;

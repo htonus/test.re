@@ -22,16 +22,26 @@
 				<th>Baths</th>
 			</tr>
 <?php
+	$typesList = array(
+		FeatureType::PRICE,
+		FeatureType::AREA,
+		FeatureType::BEDROOMS,
+		FeatureType::TOYLETS,
+	);
+	
 	foreach ($relevance as $id => $relevance) {
 		$item = $list[$id];
 		$features = $item->getFeatures()->getList();
 ?>
 			<tr>
 				<td><?=$item->getName()?></td>
-				<td><?=$features[FeatureType::PRICE]->getValue()?></td>
-				<td><?=$features[FeatureType::AREA]->getValue()?></td>
-				<td><?=$features[FeatureType::BEDROOMS]->getValue()?></td>
-				<td><?=$features[FeatureType::TOYLETS]->getValue()?></td>
+<?php
+		foreach ($typesList as $typeId) {
+?>
+				<td><?=empty($features[$typeId]) ? '-' : $features[$typeId]->getValue()?></td>
+<?php
+		}
+?>
 			</tr>
 <?
 	}

@@ -20,12 +20,12 @@ final class controllerSearch extends MethodMappedController
 		$this->
 			setMethodMappingList(
 				array(
-					'index'	=> 'actionIndex',
+//					'index'	=> 'actionIndex',
 					'buy'	=> 'actionBuy',
 					'rent'	=> 'actionRent',
 				)
 			)->
-			setDefaultAction('index');
+			setDefaultAction('buy');
 	}
 
 	public function handleRequest(HttpRequest $request)
@@ -39,12 +39,12 @@ final class controllerSearch extends MethodMappedController
 	
 	protected function actionBuy(HttpRequest $request)
 	{
-		return $this->getListMav(OfferType::create(OfferType::BUY), $request);
+		return $this->getListMav(OfferType::buy(), $request);
 	}
 
 	protected function actionRent(HttpRequest $request)
 	{
-		return $this->getListMav(OfferType::create(OfferType::RENT), $request);
+		return $this->getListMav(OfferType::rent(), $request);
 	}
 
 	private function getListMav(OfferType $offerType, HttpRequest $request)
@@ -57,9 +57,9 @@ final class controllerSearch extends MethodMappedController
 				optional()
 			)->
 			add(
-				Primitive::choice('property')->
-				setList($propertyTypes)->
-				optional()
+				Primitive::enumerationByValue('property')->
+				of('PropertyType')->
+				setDefault(PropertyType::property())
 			)->
 			add(
 				Primitive::integer('page')->
@@ -70,15 +70,15 @@ final class controllerSearch extends MethodMappedController
 			importMore($request->getPost());
 
 		$filters = $form->getValue('type');
-		$filters = array(
-			FeatureType::PRICE	=> array(
-				'min'	=> 100000,
-//				'max'	=> 150000,
-			),
-			FeatureType::BEDROOMS => 2,
-			FeatureType::TOYLETS => 1,
-		);
-		$typeCasts = FeatureType::proto()->getCasts();
+//		$filters = array(
+//			FeatureType::PRICE	=> array(
+//				'min'	=> 100000,
+////				'max'	=> 150000,
+//			),
+//			FeatureType::BEDROOMS => 2,
+//			FeatureType::TOYLETS => 1,
+//		);
+		$typeCasts = FeatureType::getCasts();
 		
 		$orLogic = Expression::orBlock();
 		$filterNumber = 0;
@@ -124,7 +124,10 @@ final class controllerSearch extends MethodMappedController
 				Expression::eqId("offerType", $offerType)
 			);
 
-		if ($property = $form->getValue('property')) {
+		if (
+			($property = $form->getValue('property'))
+			&& ($property->getId() != PropertyType::PROPERTY)
+		) {
 			$logic->
 				expAnd(
 					Expression::eq("propertyType", $property)

@@ -1,7 +1,13 @@
-insert into property_type (id, name) values (1, 'room');
-insert into property_type (id, name) values (2, 'flat');
-insert into property_type (id, name) values (3, 'appartment');
-insert into property_type (id, name) values (4, 'house');
+insert into property_type (id, name) values (1, 'house');
+insert into property_type (id, name) values (2, 'appartment');
+insert into property_type (id, name) values (3, 'towmhouse');
+insert into property_type (id, name) values (4, 'villa');
+insert into property_type (id, name) values (5, 'land');
+insert into property_type (id, name) values (6, 'acreage');
+insert into property_type (id, name) values (7, 'rural');
+insert into property_type (id, name) values (8, 'unit');
+insert into property_type (id, name) values (9, 'unitsblock');
+insert into property_type (id, name) values (10, 'property');
 
 insert into offer_type (id, name) values (1, 'buy');
 insert into offer_type (id, name) values (2, 'sell');

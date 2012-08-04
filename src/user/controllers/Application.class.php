@@ -36,6 +36,14 @@ final class Application
 			setServer($_SERVER)->
 			setSession($_SESSION);
 		
+		$urlMapper = UrlMapper::create(PATH_WEB);
+		
+		if ($urlMapper->resolveRequest($request)) {
+			return $this->render($urlMapper->getRedirectMav($request), $request);
+		}
+		
+		$request->setAttachedVar('urlMapper', $urlMapper);
+		
 		$area = $this->getArea($request);
 		$controller = 'controller'.ucfirst($area);
 		$chain = null;
@@ -55,7 +63,7 @@ final class Application
 
 		$mav = $chain->handleRequest($request);
 		
-		$this->render($mav, $request);
+		return $this->render($mav, $request);
 	}
 	
 	private function getArea(HttpRequest $request)
@@ -108,10 +116,12 @@ final class Application
 			
 //			$model->set('action', $request->getAttachedVar('action'));
 		} else {
-			$view = RedirectView::create(PATH_WEB_ADMIN.'error/404');
+			$view = RedirectView::create(PATH_WEB.'error/404');
 		}
 		
 		$view->render($model);
+		
+		return $this;
 	}
 	
 	private function attachResolver(HttpRequest $request)
@@ -122,7 +132,6 @@ final class Application
 			addPrefix(PATH_TEMPLATES);
 		
 		$request->setAttachedVar('resolver', $resolver);
-		$request->setAttachedVar('urlMapper', UrlMapper::create(PATH_WEB_ADMIN));
 		
 		return $this;
 	}

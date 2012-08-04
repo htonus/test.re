@@ -7,16 +7,57 @@
 
 	final class PropertyType extends Enumeration
 	{
-		const ROOM			= 1;
-		const FLAT			= 2;
-		const APPARTMENT	= 3;
-		const HOUSE			= 4;
+		const HOUSE			= 1;
+		const APARTMENT		= 2;
+		const TOWNHOUSE		= 3;
+		const VILLA			= 4;
+		const LAND			= 5;
+		const ACREAGE		= 6;
+		const RURAL			= 7;
+		const UNIT			= 8;
+		const UNITS_BLOCK	= 9;
+		const PROPERTY		= 10;	// Generic, means all of properties
+		
 
 		protected $names = array(
-			self::ROOM			=> 'room',
-			self::FLAT			=> 'flat',
-			self::APPARTMENT	=> 'appartment',
 			self::HOUSE			=> 'house',
+			self::APARTMENT		=> 'appartment',
+			self::TOWNHOUSE		=> 'towmhouse',
+			self::VILLA			=> 'villa',
+			self::LAND			=> 'land',
+			self::ACREAGE		=> 'acreage',
+			self::RURAL			=> 'rural',
+			self::UNIT			=> 'unit',
+			self::UNITS_BLOCK	=> 'unitsblock',
+			self::PROPERTY		=> 'property',
 		);
+		
+		protected $displayNames = array(
+			self::HOUSE			=> 'House',
+			self::APARTMENT		=> 'Apartment',
+			self::TOWNHOUSE		=> 'Towmhouse',
+			self::VILLA			=> 'Villa',
+			self::LAND			=> 'Land',
+			self::ACREAGE		=> 'Acreage',
+			self::RURAL			=> 'Rural',
+			self::UNIT			=> 'Unit',
+			self::UNITS_BLOCK	=> 'Block of Units',
+			self::PROPERTY		=> 'Property',
+		);
+		
+		public function getDisplayNames()
+		{
+			return $this->displayNames;
+		}
+		
+		public function getDisplayName()
+		{
+			return $this->displayNames[$this->id];
+		}
+		
+		public static function property()
+		{
+			return new self(self::PROPERTY);
+		}
 	}
 ?>

@@ -3,12 +3,22 @@
 	final class EnumHelper extends StaticFactory
 	{
 		/**
-		 * @return \OfferType 
+		 * @return $object Enumeration
 		 */
 		public static function getAnyObject($enumName)
 		{
-			
-			return new $enumName(call_user_func(array($enumName, 'getAnyId')));
+			return EnumHelper::getObject(
+				$enumName,
+				call_user_func(array($enumName, 'getAnyId'))
+			);
+		}
+		
+		/**
+		 * @return $object Enumeration
+		 */
+		public static function getObject($enumName, $id)
+		{
+			return new $enumName($id);
 		}
 		
 		/**
@@ -26,5 +36,10 @@
 		{
 			return EnumHelper::getAnyObject($enumName)->getObjectList();
 		}
+		
+		public static function getName($enumName, $id)
+		{
+			return EnumHelper::getObject($enumName, $id)->
+				getName();
+		}
 	}
-?>

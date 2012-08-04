@@ -6,15 +6,18 @@
 	setlocale(LC_CTYPE, "ru_RU.UTF8");
 	setlocale(LC_TIME, "ru_RU.UTF8");
 
+	define('DS', DIRECTORY_SEPARATOR);
+	define('PS', PATH_SEPARATOR);
+	
 	defined('MODE') || define('MODE', 'user');
-	defined('PATH_SOURCE_DIR') || define('PATH_SOURCE_DIR', MODE.DIRECTORY_SEPARATOR);
+	defined('PATH_SOURCE_DIR') || define('PATH_SOURCE_DIR', MODE.DS);
 	
 	define('DOMAIN', $_SERVER['HTTP_HOST']);
 	define('COOKIE_DOMAIN', '.'.DOMAIN);
 	
 	// paths
-	define('PATH_BASE', dirname(__FILE__).DIRECTORY_SEPARATOR);
-	define('PATH_SOURCE', PATH_BASE.'src'.DIRECTORY_SEPARATOR.PATH_SOURCE_DIR);
+	define('PATH_BASE', dirname(__FILE__).DS);
+	define('PATH_SOURCE', PATH_BASE.'src'.DS.PATH_SOURCE_DIR);
 	define('PATH_WEB', 'http://'.DOMAIN.'/');	//	'http://www.'.DOMAIN.'/'
 	define('PATH_WEB_ADMIN', 'http://admin.'.DOMAIN.'/');
 	define('PATH_WEB_PIX', '/pix/');
@@ -23,18 +26,12 @@
 	define('PATH_WEB_CSS', '/css/');
 
 	// shared classes
-	define(
-		'PATH_CLASSES',
-		PATH_BASE.'src'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR
-	);
-	define('PATH_CONTROLLERS', PATH_SOURCE.'controllers'.DIRECTORY_SEPARATOR);
-	define('PATH_TEMPLATES', PATH_SOURCE.'views'.DIRECTORY_SEPARATOR);
+	define('PATH_CLASSES', PATH_BASE.'src'.DS.'classes'.DS);
+	define('PATH_CONTROLLERS', PATH_SOURCE.'controllers'.DS);
+	define('PATH_TEMPLATES', PATH_SOURCE.'views'.DS);
 	
 	// onPHP init
-	define(
-		'ONPHP_TEMP_PATH',
-		PATH_BASE.'..'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR
-	);
+	define('ONPHP_TEMP_PATH', PATH_BASE.'..'.DS.'tmp'.DS);
 	require PATH_BASE.'../onphp/global.inc.php.tpl';
 	
 	// everything else
@@ -52,18 +49,18 @@
 	);
 	
 	ini_set(
-		'include_path', get_include_path().PATH_SEPARATOR
-		.PATH_CLASSES.PATH_SEPARATOR
-		.PATH_CONTROLLERS.PATH_SEPARATOR
-		.PATH_CLASSES.'DAOs'.PATH_SEPARATOR
-		.PATH_CLASSES.'Flow'.PATH_SEPARATOR
-		.PATH_CLASSES.'Business'.PATH_SEPARATOR
-		.PATH_CLASSES.'Proto'.PATH_SEPARATOR
-		.PATH_CLASSES.'Helpers'.PATH_SEPARATOR
+		'include_path', get_include_path().PS
+		.PATH_CLASSES.PS
+		.PATH_CONTROLLERS.PS
+		.PATH_CLASSES.'DAOs'.PS
+		.PATH_CLASSES.'Flow'.PS
+		.PATH_CLASSES.'Business'.PS
+		.PATH_CLASSES.'Proto'.PS
+		.PATH_CLASSES.'Helpers'.PS
 		
-		.PATH_CLASSES.'Auto'.DIRECTORY_SEPARATOR.'Business'.PATH_SEPARATOR
-		.PATH_CLASSES.'Auto'.DIRECTORY_SEPARATOR.'Proto'.PATH_SEPARATOR
-		.PATH_CLASSES.'Auto'.DIRECTORY_SEPARATOR.'DAOs'.PATH_SEPARATOR
+		.PATH_CLASSES.'Auto'.DS.'Business'.PS
+		.PATH_CLASSES.'Auto'.DS.'Proto'.PS
+		.PATH_CLASSES.'Auto'.DS.'DAOs'.PS
 	);
 	
 	// magic_quotes_gpc must be off

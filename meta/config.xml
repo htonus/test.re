@@ -35,7 +35,7 @@
 			<property name="required" type="Boolean" required="true" default="true" />
 			<property name="unit" type="Unit" relation="OneToOne" required="false" fetch="lazy" />
 		</properties>
-		<pattern name="DictionaryClass" />
+		<pattern name="EnumerationClass" />
 	</class>
 
 	<class name="Feature" type="final">

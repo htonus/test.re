@@ -9,14 +9,14 @@
 			return $string;
 		}
 
-		public static function dump($object, $echo = true)
+		public static function dump($object, $echo = true, $safe = false)
 		{
 			if ($echo) {
 				echo '<pre>';
-				print_r($object);
+				$safe ? print_r($object) : var_dump($object);
 				echo '</pre>';
 			} else
-				return print_r($object, true);
+				return $safe ? print_r($object, true) : var_export($object, true);
 		}
 	}
 ?>

@@ -19,14 +19,14 @@
 			self::LEASE	=> 'lease',
 		);
 		
-		/**
-		 * Return object by Id
-		 * @param integer $id
-		 * @return $object OfferType
-		 */
-		public static function create($id)
+		public static function buy()
 		{
-			return new self($id);
+			return new self(self::BUY);
+		}
+		
+		public static function rent()
+		{
+			return new self(self::RENT);
 		}
 	}
 ?>

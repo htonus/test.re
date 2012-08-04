@@ -204,8 +204,8 @@ var Selector = {
 
 	<div class="g_14">
 
-		<form name="searchForm" id="searchForm" action="<?=PATH_WEB?>">
-			<input type="hidden" name="offerType" value="<?=OfferType::BUY?>"/>
+		<form name="searchForm" id="searchForm" action="<?=PATH_WEB?>" method="POST">
+			<input type="hidden" name="status" value="<?=OfferType::BUY?>"/>
 		<!-- search tabs -->
 		<div class="g_14 alpha omega">
 			<ul class="searchTab">
@@ -245,9 +245,11 @@ var Selector = {
 							<dl>
 								<dd><input type="hidden" value="0"/><div>Choose...</div></dd>
 <?php
-	foreach ($propertyTypeList as $type) {
+	foreach ($propertyTypeList as $typeId => $name) {
+		if ($typeId == PropertyType::PROPERTY)
+			continue;
 ?>
-								<dd><input type="radio" name="propertyType" value="<?=$type->getId()?>"/><div><?=$type->getName()?></div></dd>
+								<dd><input type="radio" name="property" value="<?=$typeId?>"/><div><?=$name?></div></dd>
 <?php
 	}
 ?>
@@ -259,8 +261,8 @@ var Selector = {
 				<div class="clear"></div>
 
 				<div class="g_3 alpha">
-					<fieldset id="type[<?=FeatureType::BEDROOMS?>]">
-						<label for="type[<?=FeatureType::BEDROOMS?>]">Bedrooms</label>
+					<fieldset id="type[<?=FeatureType::BEDROOMS?>][min]">
+						<label for="type[<?=FeatureType::BEDROOMS?>][min]">Bedrooms</label>
 						<div class="select">
 							<div class="title">Any</div>
 							<dl>
@@ -268,7 +270,7 @@ var Selector = {
 <?php
 	for ($number = 1; $number < 5; $number ++) {
 ?>
-								<dd><input type="radio" name="type[<?=FeatureType::BEDROOMS?>]" alue="<?=$number?>"/><div><?=$number?> +</div></dd>
+								<dd><input type="radio" name="type[<?=FeatureType::BEDROOMS?>][min]" value="<?=$number?>"/><div><?=$number?> +</div></dd>
 <?php
 	}
 ?>
@@ -276,14 +278,33 @@ var Selector = {
 						</div>
 					</fieldset>
 				</div>
-				<div class="g_3 fields omega">
+				
+				<div class="g_3 omega">
+					<fieldset id="type[<?=FeatureType::BEDROOMS?>][max]">
+						<label for="type[<?=FeatureType::BEDROOMS?>][max]">Bedrooms</label>
+						<div class="select">
+							<div class="title">Any</div>
+							<dl>
+								<dd><input type="hidden" value="0"/><div>Any</div></dd>
+<?php
+	for ($number = 1; $number < 5; $number ++) {
+?>
+								<dd><input type="radio" name="type[<?=FeatureType::BEDROOMS?>][max]" value="<?=$number?>"/><div><?=$number?> +</div></dd>
+<?php
+	}
+?>
+							</dl>
+						</div>
+					</fieldset>
+				</div>
+				<!-- div class="g_3 fields omega">
 					<fieldset id="type[<?=FeatureType::AREA?>]">
 						<label for="type[<?=FeatureType::AREA?>]">Area</label>
 						<div class="input">
 							<input type="text" name="type[<?=FeatureType::AREA?>]" value="" class="area"/>
 						</div>
 					</fieldset>
-				</div>
+				</div-->
 
 				<div class="clear"></div>
 
