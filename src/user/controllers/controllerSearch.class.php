@@ -177,14 +177,18 @@ final class controllerSearch extends MethodMappedController
 			$criteria->getCustomList(), 'id', 'relevance'
 		);
 		
-		arsort($relevance);
+		$list = array();
+
+		if (!empty($relevance)) {
+			arsort($relevance);
+
+			$logic = Expression::in('id', array_keys($relevance));
 		
-		$logic = Expression::in('id', array_keys($relevance));
+			// Need pager here
 		
-		// Need pager here
-		
-		$list = ArrayUtils::convertObjectList(Property::dao()->getListByLogic($logic));
-		
+			$list = ArrayUtils::convertObjectList(Property::dao()->getListByLogic($logic));
+		}
+
 		$model = Model::create()->
 			set('relevance', $relevance)->
 			set('list', $list)->
