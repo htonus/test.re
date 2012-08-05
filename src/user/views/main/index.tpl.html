@@ -2,7 +2,11 @@
 /*
  * $Id$
  */
+
+	$partViewer->view('_parts/js', Model::create()->set('name', 'selector'));
+	$partViewer->view('_parts/js', Model::create()->set('name', 'map'));
 ?>
+<div class="container_24 block" style="background-color: #FFE6B6">
 
 <script type="text/javascript">
 var clicked = null;
@@ -27,162 +31,6 @@ $(document).ready(function(){
 	});
 });
 
-var Map = {
-	active: null,
-	mapping:
-	'<map>\
-		<city id="<?=City::NICOSIA?>" layer="0"/>\
-		<city id="<?=City::LARNAKA?>" layer="1"/>\
-		<city id="<?=City::LIMASSOL?>" layer="2"/>\
-		<city id="<?=City::PAPHOS?>" layer="3"/>\
-		<city id="<?=City::AYANAPA?>" layer="4"/>\
-	</map>',
-	
-	init: function(){
-		$('.mapArea')
-			.mouseover(function(){
-				Map.over(Map.getLayer(this));
-			})
-			.mouseout(function(){
-				Map.out(Map.getLayer(this));
-			})
-			.click(function(){
-				Map.click(Map.getLayer(this));
-			});
-	},
-	
-	over: function(layer){
-		$('#mapDiv').css('background-position-y', -220 * layer + 'px');
-	},
-	
-	out: function(layer){
-		$('#mapDiv').css('background-position-y', '220px');
-	},
-	
-	click: function(layer){
-		var id = null;
-		
-		if (this.active == layer) {
-			this.active = null;
-			$('#chooseDiv').css('background-position-y', '220px');
-		} else {
-			this.active = layer;
-			$('#chooseDiv').css('background-position-y', -220 * layer + 'px');
-			id = $('[layer=' + layer + ']', Map.mapping).attr('id');
-		}
-		
-		$.getJSON(
-			'<?=PATH_WEB?>get/cities',
-			{parent: id},
-			function(data){
-				$('#location DD').remove();
-				$.each(data.list, function(index, city){
-					$('#location DL').append(
-						'<dd><input type="checkbox" name="city[]" value="'
-						+ city['id'] + '"/><div>' + city['name'] + ' '
-						+ (city['parent_id'] ? '' : 'area') + '</div></dd>'
-					);
-				});
-			
-				$('#location DD').click(function(){
-					Selector.multiclick($(this));
-				});
-			}
-		)
-	},
-	
-	getLayer: function(dd){
-		return parseInt($(dd).attr('id').match(/\d+/).toString());
-	}
-};
-
-var Selector = {
-	active: null,
-	
-	init: function(){
-		$('.select').click(function(){
-			Selector.open($(this));
-		});
-
-		$('.select DD').click(function(){
-			Selector.click($(this));
-		});
-
-		$('.multiselect DD').click(function(){
-			Selector.multiclick($(this));
-		});
-	},
-
-	open: function(select) {
-		var toClose = this.active;
-		var id = $(select).parents('FIELDSET').attr('id');
-
-		this.close(true);
-
-		if (toClose != id) {
-			var container = $('DL', select);
-			var offset = select.offset();
-
-			offset['top'] = offset['top'] + select.height();
-
-			container
-				.css({left: offset.left, top: offset.top, width: select.width()})
-				.slideDown(200);
-
-			this.active = id;
-		}
-	},
-
-	close: function(slow) {
-		if (this.active != null) {
-			if (slow == undefined)
-				$('[id="' + this.active + '"] DL').hide();
-			else
-				$('[id="' + this.active + '"] DL').slideUp(100);
-
-			this.active = null;
-		}
-	},
-
-	click: function(option) {
-		var input = $('INPUT', option);
-		var parent = option.parent().parent();
-		
-		$('DD', parent).removeClass('checked');
-		$('.title', parent).text($('DIV', option).text());
-		$('INPUT', option.parent()).removeAttr('checked');
-		input.attr('checked', 'checked');
-		option.addClass('checked')
-		
-		if (edge = input.attr('name').match(/\[(min|max)\]/)) {
-			var mini = $('[name="' + input.attr('name').replace('[max]', '[min]') + '"]:checked');
-			var maxi = $('[name="' + input.attr('name').replace('[min]', '[max]') + '"]:checked');
-
-			mini.parents('.select').removeClass('error');
-			maxi.parents('.select').removeClass('error');
-			
-			if (
-				mini.val() != 0
-				&& maxi.val() != 0
-				&& mini.val() >= maxi.val()
-			) {
-				parent.addClass('error');
-			}
-		}
-	},
-	
-	multiclick: function(option) {
-		var input = $('INPUT', option);
-		
-		if (input.attr('checked')) {
-			input.removeAttr('checked');
-			option.removeClass('checked')
-		} else {
-			input.attr('checked', 'checked');
-			option.addClass('checked')
-		}
-	}
-}
 </script>
 
 	<div class="p_1 g_9">
@@ -237,65 +85,54 @@ var Selector = {
 			</div>
 			<div class="g_6">
 				<div class="g_6 fields alpha omega">
-
-					<fieldset id="propertyType">
-						<label for="peopertyType">Property type</label>
-						<div class="select">
-							<div class="title">Choose...</div>
-							<dl>
-								<dd><input type="hidden" value="0"/><div>Choose...</div></dd>
 <?php
-	foreach ($propertyTypeList as $typeId => $name) {
-		if ($typeId == PropertyType::PROPERTY)
-			continue;
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'property',
+				'label'	=> "Property type",
+				'list'	=> $propertyTypeList,
+				'value'	=> PropertyType::PROPERTY,
+			))
+	);
 ?>
-								<dd><input type="radio" name="property" value="<?=$typeId?>"/><div><?=$name?></div></dd>
-<?php
-	}
-?>
-							</dl>
-						</div>
-					</fieldset>
 				</div>
 
 				<div class="clear"></div>
 
 				<div class="g_3 alpha">
-					<fieldset id="type[<?=FeatureType::BEDROOMS?>][min]">
-						<label for="type[<?=FeatureType::BEDROOMS?>][min]">Bedrooms</label>
-						<div class="select">
-							<div class="title">Any</div>
-							<dl>
-								<dd><input type="hidden" value="0"/><div>Any</div></dd>
 <?php
-	for ($number = 1; $number < 5; $number ++) {
+	$bedsList = array();
+	for ($number = 1; $number < 5; $number ++)
+		$bedsList[$number] = $number;
+	
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::BEDROOMS.'][min]',
+				'label'	=> "Min Bedrooms",
+				'list'	=> $bedsList,
+				'topOption'	=> 'Any',
+			))
+	);
 ?>
-								<dd><input type="radio" name="type[<?=FeatureType::BEDROOMS?>][min]" value="<?=$number?>"/><div><?=$number?> +</div></dd>
-<?php
-	}
-?>
-							</dl>
-						</div>
-					</fieldset>
 				</div>
 				
 				<div class="g_3 omega">
-					<fieldset id="type[<?=FeatureType::BEDROOMS?>][max]">
-						<label for="type[<?=FeatureType::BEDROOMS?>][max]">Bedrooms</label>
-						<div class="select">
-							<div class="title">Any</div>
-							<dl>
-								<dd><input type="hidden" value="0"/><div>Any</div></dd>
 <?php
-	for ($number = 1; $number < 5; $number ++) {
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::BEDROOMS.'][max]',
+				'label'	=> "Max Bedrooms",
+				'list'	=> $bedsList,
+				'topOption'	=> 'Any',
+			))
+	);
 ?>
-								<dd><input type="radio" name="type[<?=FeatureType::BEDROOMS?>][max]" value="<?=$number?>"/><div><?=$number?> +</div></dd>
-<?php
-	}
-?>
-							</dl>
-						</div>
-					</fieldset>
 				</div>
 				<!-- div class="g_3 fields omega">
 					<fieldset id="type[<?=FeatureType::AREA?>]">
@@ -309,41 +146,41 @@ var Selector = {
 				<div class="clear"></div>
 
 				<div class="g_3 fields alpha">
-					<fieldset id="type[<?=FeatureType::PRICE?>][min]">
-						<label for="type[<?=FeatureType::PRICE?>][min]">Min price</label>
-						<div class="select">
-							<div class="title">Any</div>
-							<dl>
-								<dd><input type="hidden" value="0"/><div>Any</div></dd>
 <?php
-	for ($number = 100000; $number < 500000; $number += 100000) {
+	$priceList = array();
+	for ($number = 100000; $number < 500000; $number += 100000)
+		$priceList[$number] = $number;
+	
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::PRICE.'][min]',
+				'label'	=> "Min Price",
+				'list'	=> $priceList,
+				'topOption'	=> 'Any',
+			))
+	);
 ?>
-								<dd><input type="radio" name="type[<?=FeatureType::PRICE?>][min]" value="<?=$number?>"/><div><?=number_format($number, 0, '.', '`')?></div></dd>
-<?php
-	}
-?>
-							</dl>
-						</div>
-					</fieldset>
 				</div>
 
 				<div class="g_3 fields omega">
-					<fieldset id="type[<?=FeatureType::PRICE?>][max]">
-						<label for="type[<?=FeatureType::PRICE?>][max]">Max price</label>
-						<div class="select">
-							<div class="title">Any</div>
-							<dl>
-								<dd><input type="hidden" value="0"/><div>Any</div></dd>
 <?php
-	for ($number = 100000; $number < 600000; $number += 100000) {
+	$priceList = array();
+	for ($number = 100000; $number < 500000; $number += 100000)
+		$priceList[$number] = $number;
+	
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::PRICE.'][max]',
+				'label'	=> "Max Price",
+				'list'	=> $priceList,
+				'topOption'	=> 'Any',
+			))
+	);
 ?>
-								<dd><input type="radio" name="type[<?=FeatureType::PRICE?>][max]" style="display: none" value="<?=$number?>"/><div><?=number_format($number, 0, '.', '`')?></div></dd>
-<?php
-	}
-?>
-							</dl>
-						</div>
-					</fieldset>
 				</div>
 
 			</div>
@@ -363,3 +200,4 @@ var Selector = {
 		
 	</div>
 	
+</div>

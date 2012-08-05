@@ -10,17 +10,16 @@
  *
  * @author htonus
  */
-final class controllerMain extends MethodMappedController
+class controllerMain extends MethodMappedController
 {
 	public function __construct()
 	{
-		$this->
-			setMethodMappingList(
-				array(
-					'index'	=> 'actionIndex',
-				)
-			)->
-			setDefaultAction('index');
+		parent::setMethodMappingList(
+			array(
+				'index'	=> 'actionIndex',
+			)
+		)->
+		setDefaultAction('index');
 	}
 
 	public function actionIndex(HttpRequest $request)
@@ -35,7 +34,7 @@ final class controllerMain extends MethodMappedController
 		return $mav;
 	}
 
-	private function attachCollections(Model $model)
+	protected function attachCollections(Model $model)
 	{
 		$model->
 			set(

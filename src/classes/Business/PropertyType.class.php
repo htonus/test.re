@@ -7,19 +7,20 @@
 
 	final class PropertyType extends Enumeration
 	{
-		const HOUSE			= 1;
-		const APARTMENT		= 2;
-		const TOWNHOUSE		= 3;
-		const VILLA			= 4;
-		const LAND			= 5;
-		const ACREAGE		= 6;
-		const RURAL			= 7;
-		const UNIT			= 8;
-		const UNITS_BLOCK	= 9;
-		const PROPERTY		= 10;	// Generic, means all of properties
+		const PROPERTY		= 1;	// Generic, means all of properties
+		const HOUSE			= 2;
+		const APARTMENT		= 3;
+		const TOWNHOUSE		= 4;
+		const VILLA			= 5;
+		const LAND			= 6;
+		const ACREAGE		= 7;
+		const RURAL			= 8;
+		const UNIT			= 9;
+		const UNITS_BLOCK	= 10;
 		
 
 		protected $names = array(
+			self::PROPERTY		=> 'property',
 			self::HOUSE			=> 'house',
 			self::APARTMENT		=> 'appartment',
 			self::TOWNHOUSE		=> 'towmhouse',
@@ -29,10 +30,10 @@
 			self::RURAL			=> 'rural',
 			self::UNIT			=> 'unit',
 			self::UNITS_BLOCK	=> 'unitsblock',
-			self::PROPERTY		=> 'property',
 		);
 		
 		protected $displayNames = array(
+			self::PROPERTY		=> 'Any Property',
 			self::HOUSE			=> 'House',
 			self::APARTMENT		=> 'Apartment',
 			self::TOWNHOUSE		=> 'Towmhouse',
@@ -42,7 +43,6 @@
 			self::RURAL			=> 'Rural',
 			self::UNIT			=> 'Unit',
 			self::UNITS_BLOCK	=> 'Block of Units',
-			self::PROPERTY		=> 'Property',
 		);
 		
 		public function getDisplayNames()

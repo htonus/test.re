@@ -10,22 +10,20 @@
  *
  * @author htonus
  */
-final class controllerSearch extends MethodMappedController
+final class controllerSearch extends controllerMain
 {
 	const PER_PAGE = 10;
 	
 	public function __construct()
 	{
-		
-		$this->
-			setMethodMappingList(
-				array(
+		parent::setMethodMappingList(
+			array(
 //					'index'	=> 'actionIndex',
-					'buy'	=> 'actionBuy',
-					'rent'	=> 'actionRent',
-				)
-			)->
-			setDefaultAction('buy');
+				'buy'	=> 'actionBuy',
+				'rent'	=> 'actionRent',
+			)
+		)->
+		setDefaultAction('buy');
 	}
 
 	public function handleRequest(HttpRequest $request)
@@ -39,12 +37,19 @@ final class controllerSearch extends MethodMappedController
 	
 	protected function actionBuy(HttpRequest $request)
 	{
-		return $this->getListMav(OfferType::buy(), $request);
+		$mav = $this->getListMav(OfferType::buy(), $request);
+		
+		$this->attachCollections($mav->getModel());
+		
+		return $mav;
 	}
 
 	protected function actionRent(HttpRequest $request)
 	{
-		return $this->getListMav(OfferType::rent(), $request);
+		$mav = $this->getListMav(OfferType::rent(), $request);
+		$this->attachCollections($mav->getModel());
+		
+		return $mav;
 	}
 
 	private function getListMav(OfferType $offerType, HttpRequest $request)
@@ -70,14 +75,6 @@ final class controllerSearch extends MethodMappedController
 			importMore($request->getPost());
 
 		$filters = $form->getValue('type');
-//		$filters = array(
-//			FeatureType::PRICE	=> array(
-//				'min'	=> 100000,
-////				'max'	=> 150000,
-//			),
-//			FeatureType::BEDROOMS => 2,
-//			FeatureType::TOYLETS => 1,
-//		);
 		$typeCasts = FeatureType::getCasts();
 		
 		$orLogic = Expression::orBlock();
@@ -162,14 +159,14 @@ final class controllerSearch extends MethodMappedController
 //						)
 					)
 			)->
-			add($logic);
-//				setLimit(self::PER_PAGE)->
-//				addOrder(
-//					OrderBy::create('relevance')->desc()
-//				)->
-//				setOffset(
-//					($form->getActualValue('page') - 1) * self::PER_PAGE
-//				);
+			add($logic)->
+			setLimit(self::PER_PAGE)->
+			addOrder(
+				OrderBy::create(DBField::create('relevance'))->desc()
+			)->
+			setOffset(
+				($form->getActualValue('page') - 1) * self::PER_PAGE
+			);
 
 //		StringHelper::dump($criteria->toString());
 //		exit;
@@ -191,6 +188,9 @@ final class controllerSearch extends MethodMappedController
 
 		$model = Model::create()->
 			set('relevance', $relevance)->
+			set('property', $property)->
+			set('status', $offerType)->
+			set('filters', $filters)->
 			set('list', $list)->
 			set('page', $form->getActualValue('page'));
 		

@@ -1,119 +1,96 @@
 var Selector = {
 	active: null,
-
-	init: function() {
-		$('SELECT.decorate').each(function(){
-			Selector.attach(this);
+	
+	init: function(){
+		$('.select').click(function(){
+			Selector.open($(this));
 		});
 
-//		$('.select INPUT').click(function(){
-//			Selector.open($(this).attr('name'));
-//		});
-//
-//		$('.selector LI').click(function(){
-//			var option = $(this).attr('id').split('#');
-//			$('INPUT[name="' + option[0] + '"]').val(option[1]);
-//			Selector.close();
-//		});
-//
-//		$(window).resize(function(){
-//
-//		});
-	},
-
-	attach: function(select){
-		$(select).hide();
-		var name = $(select).attr('name');
-
-		$(select).insertAfter('\
-			<div class="select" id="' + name + '">\
-				<div class="title"></div>\
-				<ul></ul>\
-			</div>\
-		');
-		var ul = $('DIV[id=["' + name + '"] UL');
-
-		$('OPTION', select).each(function(index, option){
-			ul.append('<li class="option" rel="' + index + '"><div>' + $(option).text() + '</div></li>');
+		$('.select DD').click(function(){
+			Selector.click($(this));
 		});
 
-//		if ($(select).attr('multiple') != undefined) {
-//			size = 5;
-//			if ($(select).attr('size') != undefined)
-//				size = $(select).attr('size');
-//		}
+		$('.multiselect DD').click(function(){
+			Selector.multiclick($(this));
+		});
 	},
 
-	open: function(id) {
+	open: function(select) {
 		var toClose = this.active;
-		var parent = $('[id="' + id + '"]').parent();
+		var id = $(select).parents('FIELDSET').attr('id');
 
 		this.close(true);
 
 		if (toClose != id) {
-			var select = $('UL', parent);
-			var offset = parent.offset();
+			var container = $('DL', select);
+			var offset = select.offset();
 
-			offset['top'] = offset['top'] + parent.height();
+			offset['top'] = offset['top'] + select.height();
 
-			select
-				.css({left: offset.left, top: offset.top, width: parent.width()})
-				.slideDown(100);
+			container
+				.css({left: offset.left, top: offset.top, width: select.width()})
+				.slideDown(200);
 
 			this.active = id;
 		}
 	},
 
 	close: function(slow) {
-		if (slow == undefined)
-			$('[id="' + this.active + '"]').hide();
-		else
-			$('[id="' + this.active + '"]').slideUp(100);
+		if (this.active != null) {
+			if (slow == undefined)
+				$('[id="' + this.active + '"] DL').hide();
+			else
+				$('[id="' + this.active + '"] DL').slideUp(100);
 
-		this.active = null;
+			this.active = null;
+		}
+	},
+
+	click: function(option) {
+		this.select(option);
+		this.validate(option);
+	},
+	
+	select: function(option) {
+		var parent = option.parent().parent();
+		
+		$('DD', parent).removeClass('checked');
+		$('.title', parent).text($('DIV', option).text());
+		$('INPUT', option.parent()).removeAttr('checked');
+		$('INPUT', option).attr('checked', 'checked');
+		option.addClass('checked')
+	},
+	
+	validate: function(option) {
+		var name = $('INPUT', option).attr('name');
+		if (edge = name.match(/\[(min|max)\]/)) {
+			var mini = $('[name="' + name.replace('[max]', '[min]') + '"]:checked');
+			var maxi = $('[name="' + name.replace('[min]', '[max]') + '"]:checked');
+
+			mini.parents('.select').removeClass('error');
+			maxi.parents('.select').removeClass('error');
+			
+			if (
+				mini.val() != 0
+				&& maxi.val() != 0
+				&& mini.val() > maxi.val()
+			) {
+				this.select($('[value="' + maxi.val() + '"]', mini.parent().parent()).parent());
+				this.select($('[value="' + mini.val() + '"]', maxi.parent().parent()).parent());
+			}
+			
+		}
+	},
+	
+	multiclick: function(option) {
+		var input = $('INPUT', option);
+		
+		if (input.attr('checked')) {
+			input.removeAttr('checked');
+			option.removeClass('checked')
+		} else {
+			input.attr('checked', 'checked');
+			option.addClass('checked')
+		}
 	}
 }
-
-// SELECTOR view
-//				<div class="select">
-//					<div id="type[1]" class="title"></div>
-//					<ul id="type[1]" style="position: absolute">
-//						<li class="option" rel="1"><div>Type 1</div></li>
-//						<li class="option" rel="2"><div>Type 2</div></li>
-//						<li class="option" rel="3"><div>Type 2</div></li>
-//						<li class="option" rel="4"><div>Type 2</div></li>
-//						<li class="option" rel="5"><div>Type 2</div></li>
-//					</ul>
-//				</div>
-
-
-// AND CSS
-//.select .title {
-//	background: url("/i/arr_down.png") no-repeat;
-//	background-position: 95% 50%;
-//	cursor: pointer;
-//}
-//
-//OPTION, .option {
-//	padding: 5px;
-//	cursor: pointer;
-//}
-//
-//OPTION, .option DIV {
-//	font: normal 13px sans-serif;
-//	color: #666;
-//}
-//.option DIV {
-//	width: 100%;
-//	display: block;
-//}
-//
-//.select UL {
-//	display: none;
-//	background-color: #FFF;
-//	border: 1px #FFCD6C solid;
-//}
-//.option:hover {
-//	color: #FFF !important;
-//	background-color: #FFE6B6;
-//}
