@@ -2,11 +2,11 @@ var Map = {
 	active: null,
 	mapping:
 	'<map>\
-		<city id="<?=City::NICOSIA?>" layer="0"/>\
-		<city id="<?=City::LARNAKA?>" layer="1"/>\
-		<city id="<?=City::LIMASSOL?>" layer="2"/>\
-		<city id="<?=City::PAPHOS?>" layer="3"/>\
-		<city id="<?=City::AYANAPA?>" layer="4"/>\
+		<city id="1" name="NICOSIA" layer="0"/>\
+		<city id="2" name="LARNAKA" layer="1"/>\
+		<city id="3" name="LIMASSOL" layer="2"/>\
+		<city id="4" name="PAPHOS" layer="3"/>\
+		<city id="5" name="AYANAPA" layer="4"/>\
 	</map>',
 	
 	init: function(){
@@ -43,7 +43,7 @@ var Map = {
 		}
 		
 		$.getJSON(
-			'<?=PATH_WEB?>get/cities',
+			'/get/cities',
 			{parent: id},
 			function(data){
 				$('#location DD').remove();
