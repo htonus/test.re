@@ -114,15 +114,17 @@
 		 */
 		public function resolveRequest(HttpRequest $request)
 		{
-			// dont need to parse URL, because this is POST to GET redirect
-			if (count($request->getPost()))
-				return true;
+			$query = null;
 			
+			if ($request->hasGetVar('query'))
+				$query = trim($request->getGetVar('query'));
+			
+			// dont need to parse URL, because this is POST to GET redirect
 			if (
-				!$request->hasGetVar('query')
-				|| !($query = trim($request->getGetVar('query')))
+				count($request->getPost())
+				&& !$query
 			)
-				return false;
+				return true;
 			
 			$rega = '!^(buy|rent)(-(\d)-?(\d)?-bedrooms)?(-(\d+)-?(\d+)?-area)?'
 				.'-('.implode('|', EnumHelper::getNames('PropertyType')).')'
@@ -150,6 +152,11 @@
 					$request->setGetVar("type[$typeId][min]", $m[10]);
 					$request->setGetVar("type[$typeId][max]", $m[11]);
 				}
+			}
+			
+			if (preg_match('!^(add|get)/([^/]+)!', $query, $m)) {
+				$request->setGetVar('area', $m[1]);
+				$request->setGetVar('action', $m[2]);
 			}
 			
 			return false;
