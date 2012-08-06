@@ -5,6 +5,14 @@
 
 	$partViewer->view('_parts/js', Model::create()->set('name', 'selector'));
 	$partViewer->view('_parts/js', Model::create()->set('name', 'map'));
+
+	$bedsList = array();
+	for ($number = 1; $number < 5; $number ++)
+		$bedsList[$number] = $number;
+	
+	$priceList = array();
+	for ($number = 100000; $number < 500000; $number += 100000)
+		$priceList[$number] = $number;
 ?>
 <div class="container_24 block" style="background-color: #FFE6B6">
 
@@ -103,10 +111,6 @@ $(document).ready(function(){
 
 				<div class="g_3 alpha">
 <?php
-	$bedsList = array();
-	for ($number = 1; $number < 5; $number ++)
-		$bedsList[$number] = $number;
-	
 	$partViewer->view(
 		'_parts/form/select',
 		Model::create()->
@@ -147,10 +151,6 @@ $(document).ready(function(){
 
 				<div class="g_3 fields alpha">
 <?php
-	$priceList = array();
-	for ($number = 100000; $number < 500000; $number += 100000)
-		$priceList[$number] = $number;
-	
 	$partViewer->view(
 		'_parts/form/select',
 		Model::create()->
@@ -166,10 +166,6 @@ $(document).ready(function(){
 
 				<div class="g_3 fields omega">
 <?php
-	$priceList = array();
-	for ($number = 100000; $number < 500000; $number += 100000)
-		$priceList[$number] = $number;
-	
 	$partViewer->view(
 		'_parts/form/select',
 		Model::create()->
