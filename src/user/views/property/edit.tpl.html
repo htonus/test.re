@@ -5,9 +5,13 @@
 
 	$partViewer->view('_parts/js', Model::create()->set('name', 'selector'));
 
-?>
-<!-- Put your HTML content here -->
-<?php
+	$bedsList = array();
+	for ($number = 1; $number < 6; $number ++)
+		$bedsList[$number] = $number;
+
+	$priceList = array();
+	for ($number = 100000; $number < 500000; $number += 100000)
+		$priceList[$number] = $number;
 
 ?>
 
@@ -19,14 +23,32 @@
 		<form action="/property/<?=$form->getValue('id') ? 'save' : 'add'?>/<?=$form->getActualValue('offer')->getName()?>" method="POST">
 
 		<div class="g_10 alpha">
-			<fieldset id="title">
-				<label for="title">Title</label>
-				<div class="input">
-					<input type="text" name="name" value="<?=$form->getValue('name')?>" />
-				</div>
-			</fieldset>
+<?php
+	$partViewer->view(
+		'_parts/form/input',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'name',
+				'label'	=> "Title",
+			))
+	);
+?>
 		</div>
 		<div class="g_6 omega">
+<?php
+	$partViewer->view(
+		'_parts/form/input',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'city',
+				'label'	=> "Location",
+			))
+	);
+?>
+		</div>
+		<div class="clear"></div>
+
+		<div class="g_4 alpha">
 <?php
 	$partViewer->view(
 		'_parts/form/select',
@@ -40,49 +62,69 @@
 	);
 ?>
 		</div>
+		<div class="g_3">
+<?php
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::BEDROOMS.']',
+				'label'	=> "Bedrooms",
+				'list'	=> $bedsList,
+				'topOption'	=> 'Choose...',
+			))
+	);
+?>
+		</div>
+		<div class="g_3">
+<?php
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::TOYLETS.']',
+				'label'	=> "Toylets",
+				'list'	=> $bedsList,
+				'topOption'	=> 'Choose...',
+			))
+	);
+?>
+		</div>
+		<div class="g_3">
+<?php
+	$partViewer->view(
+		'_parts/form/input',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::AREA.']',
+				'label'	=> "Area",
+				'class'	=> 'area'
+			))
+	);
+?>
+		</div>
+		<div class="g_3 omega">
+<?php
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::PARKING.']',
+				'label'	=> "Parking places",
+				'list'	=> $bedsList,
+				'topOption'	=> 'Choose...',
+			))
+	);
+?>
+		</div>
 		<div class="clear"></div>
 
-		<div class="g_4 alpha">
-			<fieldset id="title">
-				<label for="title">Bedrooms</label>
-				<div class="input">
-					<input type="text" name="name" value="<?=$form->getValue('name')?>" />
-				</div>
+		<div class="g_16 alpha omega">
+			<fieldset id="images">
+				<label for="images">Property Images (drag & drop in the field below or <a href="#">press here</a> to add)</label>
+				<div class="input" style="height: 200px">&nbsp;</div>
 			</fieldset>
 		</div>
-		<div class="g_4">
-			<fieldset id="title">
-				<label for="title">Toylets</label>
-				<div class="input">
-					<input type="text" name="name" value="<?=$form->getValue('name')?>" />
-				</div>
-			</fieldset>
-		</div>
-		<div class="g_4">
-			<fieldset id="title">
-				<label for="title">Area</label>
-				<div class="input">
-					<input type="text" name="name" value="<?=$form->getValue('name')?>" />
-				</div>
-			</fieldset>
-		</div>
-		<div class="g_4 omega">
-			<fieldset id="title">
-				<label for="title">Parking places</label>
-				<div class="input">
-					<input type="text" name="name" value="<?=$form->getValue('name')?>" />
-				</div>
-			</fieldset>
-		</div>
-		<div class="clear"></div>
-
-
-
-
-
-
-
-		
 
 		</form>
 	</div>
