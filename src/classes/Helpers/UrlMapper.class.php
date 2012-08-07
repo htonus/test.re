@@ -154,11 +154,17 @@
 				}
 			}
 			
-			if (preg_match('!^(add|get)/([^/]+)!', $query, $m)) {
+			if (preg_match('!^(get)/([^/]+)!', $query, $m)) {
 				$request->setGetVar('area', $m[1]);
 				$request->setGetVar('action', $m[2]);
 			}
 			
+			if (preg_match('!^(property)/([^\/]+)/([^\/]+)!', $query, $m)) {
+				$request->setGetVar('area', $m[1]);
+				$request->setGetVar('action', $m[2]);
+				$request->setGetVar('offer', $m[3]);
+			}
+
 			return false;
 		}
 	}

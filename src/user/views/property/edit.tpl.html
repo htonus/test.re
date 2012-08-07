@@ -1,0 +1,95 @@
+<?php
+/*
+ * $Id$
+ */
+
+	$partViewer->view('_parts/js', Model::create()->set('name', 'selector'));
+
+?>
+<!-- Put your HTML content here -->
+<?php
+
+?>
+
+<div class="container_24">
+
+	<!-- Main Form -->
+	<div class="g_16">
+
+		<form action="/property/<?=$form->getValue('id') ? 'save' : 'add'?>/<?=$form->getActualValue('offer')->getName()?>" method="POST">
+
+		<div class="g_10 alpha">
+			<fieldset id="title">
+				<label for="title">Title</label>
+				<div class="input">
+					<input type="text" name="name" value="<?=$form->getValue('name')?>" />
+				</div>
+			</fieldset>
+		</div>
+		<div class="g_6 omega">
+<?php
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'property',
+				'label'	=> "Property type",
+				'list'	=> $propertyTypeList,
+				'value'	=> PropertyType::PROPERTY,
+			))
+	);
+?>
+		</div>
+		<div class="clear"></div>
+
+		<div class="g_4 alpha">
+			<fieldset id="title">
+				<label for="title">Bedrooms</label>
+				<div class="input">
+					<input type="text" name="name" value="<?=$form->getValue('name')?>" />
+				</div>
+			</fieldset>
+		</div>
+		<div class="g_4">
+			<fieldset id="title">
+				<label for="title">Toylets</label>
+				<div class="input">
+					<input type="text" name="name" value="<?=$form->getValue('name')?>" />
+				</div>
+			</fieldset>
+		</div>
+		<div class="g_4">
+			<fieldset id="title">
+				<label for="title">Area</label>
+				<div class="input">
+					<input type="text" name="name" value="<?=$form->getValue('name')?>" />
+				</div>
+			</fieldset>
+		</div>
+		<div class="g_4 omega">
+			<fieldset id="title">
+				<label for="title">Parking places</label>
+				<div class="input">
+					<input type="text" name="name" value="<?=$form->getValue('name')?>" />
+				</div>
+			</fieldset>
+		</div>
+		<div class="clear"></div>
+
+
+
+
+
+
+
+		
+
+		</form>
+	</div>
+
+	<!-- Useful Hints -->
+	<div class="g_10">
+
+	</div>
+
+</div>

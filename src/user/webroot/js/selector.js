@@ -94,3 +94,16 @@ var Selector = {
 		}
 	}
 }
+
+$(document).ready(function(){
+	$(window)
+		.resize(function(){
+			Selector.close();
+		})
+		.click(function(e){
+			if ($(e.target).parents('.select').size() == 0)
+				Selector.close();
+		});
+
+	Selector.init();
+});

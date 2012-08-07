@@ -17,20 +17,9 @@
 <div class="container_24 block" style="background-color: #FFE6B6">
 
 <script type="text/javascript">
-var clicked = null;
 $(document).ready(function(){
-	$(window)
-		.resize(function(){
-			Selector.close();
-		})
-		.click(function(e){
-			if ($(e.target).parents('.select').size() == 0)
-				Selector.close();
-		});
-		
 	Map.init();
-	Selector.init();
-	
+
 	$('.searchTab LI').click(function(){
 		$('.searchTab DIV').removeClass('active');
 		$('DIV', this).addClass('active');

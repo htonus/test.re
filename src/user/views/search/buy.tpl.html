@@ -15,20 +15,6 @@
 
 	// TODO: add to object builder fetch collection and store in interanl array
 ?>
-<script type="text/javascript">
-	$(document).ready(function(){
-		$(window)
-		.resize(function(){
-			Selector.close();
-		})
-		.click(function(e){
-			if ($(e.target).parents('.select').size() == 0)
-				Selector.close();
-		});
-		
-	Selector.init();
-});
-</script>
 
 	<div class="g_6 fields" style="background-acolor: #FFE6B6">
 		<form name="searchForm" id="searchForm" action="<?=PATH_WEB?>" method="POST">

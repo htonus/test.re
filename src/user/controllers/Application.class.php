@@ -16,7 +16,7 @@ final class Application
 		'main',
 		'search',
 		'get',
-		'add'
+		'property'
 	);
 	
 	public static function create()
@@ -80,7 +80,7 @@ final class Application
 			getActualValue('area');
 		
 		if (!in_array($area, $this->allowedAreas))
-			throw new SecurityException('error:404');
+			throw new SecurityException('Area not allowed: '.$area);
 		
 		$request->setAttachedVar('area', $area);
 		
