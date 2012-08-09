@@ -50,4 +50,36 @@ final class controllerProperty extends PrototypedEditor
 
 		return $this;
 	}
+
+	private function storeFeatures(Property $object)
+	{
+//		if (!($list = $this->getForm()->getValue('featureList'))) {
+//			throw new WrongArgumentException('Do not have featureList to store');
+//		}
+
+		$featureList = $object->getFeatures()->getList();
+		foreach ($list as $typeId => $row) {
+			if (
+				empty($row['value'])
+				&& empty($row['comment'])
+			) {
+				if (!empty($row['id']))
+					Feature::dao ()->dropById($row['id']);
+			} else {
+				$feature = Feature::create()->
+					setPropertyId($object->getId())->
+					setTypeId($typeId)->
+					setValue($row['value'])->
+					setContent($row['content']);
+
+				if (!empty($row['id']))
+					$feature->setId($row['id']);
+
+				$feature->dao()->take($feature);
+			}
+		}
+
+		return $object;
+
+	}
 }
