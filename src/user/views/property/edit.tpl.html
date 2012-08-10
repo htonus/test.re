@@ -3,6 +3,7 @@
  * $Id$
  */
 
+
 	$partViewer->view('_parts/js', Model::create()->set('name', 'selector'));
 
 	$bedsList = array();
@@ -13,6 +14,27 @@
 	for ($number = 100000; $number < 500000; $number += 100000)
 		$priceList[$number] = $number;
 
+//	$partViewer->view('_parts/css', Model::create()->set('name', 'bootstrap.min'));
+//	$partViewer->view('_parts/css', Model::create()->set('name', 'bootstrap-ie6.min')->set('ie', 'lt IE 7'));
+//	$partViewer->view('_parts/css', Model::create()->set('name', 'bootstrap-responsive.min'));
+//	$partViewer->view('_parts/css', Model::create()->set('name', 'bootstrap-image-gallery.min'));
+//
+//	$partViewer->view('_parts/js',  Model::create()->set('name', 'html5-non-ie9')->set('ie', 'lt IE 9'));
+//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/ui.widget'));
+//	$partViewer->view('_parts/js',  Model::create()->set('name', 'tmpl.min'));
+//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/load-image.min'));
+//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/canvas-to-blob.min'));
+//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/bootstrap.min'));
+//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/bootstrap-image-gallery.min'));
+//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/iframe-transport.js'));
+//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/fileupload'));
+//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/fileupload-fp.js'));
+//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/fileupload-ui.js'));
+//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/locale'));
+
+	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/ui.widget'));
+	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/iframe-transport.js'));
+	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/fileupload'));
 ?>
 
 <div class="container_24">
@@ -121,9 +143,11 @@
 
 		<div class="g_16 alpha omega">
 			<fieldset id="images">
-				<input type="file" name="file" id="fileButton" multiple="true" style="display: none;"/>
+				<input id="fileupload" type="file" name="files[]" data-url="server/php/" multiple>
+
+				<input type="file" name="files[]" id="fileupload" multiple="true" style="display: none;" data-url="/property/upload"/>
 				<label for="images">Property Images (drag & drop in the field below or <span id="fileTrigger">press here</span> to add)</label>
-				<div class="input" id="fileContainer" style="height: 200px"><ul id="fileList"></ul></div>
+				<div class="input" id="fuDropZone" style="height: 200px"><ul id="fileList"></ul></div>
 			</fieldset>
 		</div>
 
@@ -138,86 +162,69 @@
 </div>
 
 <script type="text/javascript">
-	$(document).ready(function(){
-		ImageLoader.init();
+$(document).ready(function(){
+	$(document).bind('drop dragover', function (e) {
+		e.preventDefault();
+		return false;
 	});
+	$('#fileupload').fileupload({
+		url:		'/property/upload',
+		namespace:	'fuDropZone',
+		dataType: 'json',
+		done: function (e, data) {
+			$.each(data.result, function (index, file) {
+				$('<p/>').text(file.name).appendTo(document.body);
+			});
+		}
+	});
+//	$('#fileupload').fileupload({
+//		progress: function (e, data) {
+//			var progress = parseInt(data.loaded / data.total * 100, 10);
+//			$('#progress .bar').css(
+//				'width',
+//				progress + '%'
+//			);
+//		},
+//		progressall: function (e, data) {
+//			var progress = parseInt(data.loaded / data.total * 100, 10);
+//			$('#progress .bar').css(
+//				'width',
+//				progress + '%'
+//			);
+//		}
+//	});
+});
 
-var ImageLoader = {
-	trigger:	null,
-	button:		null,
-	container:	null,
-	list:		null,
-
-	init: function(){
-		this.button = $('#fileButton');
-		this.trigger = $('#fileTrigger');
-		this.container = $('#fileContainer');
-		this.list = $('#fileList');
-
-		this.trigger.click(function(){
-			ImageLoader.button.click();
-		});
-
-		this.container.bind({
-			dragenter: function(){
-				ImageLoader.container.addClass('highlite')
-				return false;
-			},
-			dragover: function(){
-				return false;
-			},
-			dragleave: function(){
-				ImageLoader.container.removeClass('highlite')
-				return false;
-			},
-			drop: function(e){
-				var dt = e.originalEvent.dataTransfer;
-				ImageLoader.container.removeClass('highlite')
-				ImageLoader.displayFiles(dt.files);
-				return false;
-			}
-		});
-	},
-
-	displayFiles: function(files){
-		var self = this;
-
-		$.each(files, function(i, file) {
-			if (!file.type.match(/image.*/))
-				return true;
-
-			var li = $('<li><div class="image"><img/></div><div class="progress">0%</div></li>')
-				.attr('file', file)
-				.appendTo(self.list);
-
-			var reader = new FileReader();
-			reader.onload = (function(image) {
-				return function(e) {
-					image.attr('src', e.target.result);
-					
-					image.load(function(e){
-						var img = $(this);
-							if (img[0].width > img[0].height) {
-								img.width(120);
-							} else {
-								img.height(120);
-							}
-						img.parent().parent().show();
-					});
-				};
-			})($('IMG', li));
-
-			reader.readAsDataURL(file);
-		});
-	},
-
-	upload: function(){
-		
-	},
-	
-	uploadFile: function(){
-		
-	}
-
-}
+//	$('#fileupload').fileupload();
+//    $('#fileupload').fileupload(
+//        'option',
+//        'redirect',
+//        window.location.href.replace(
+//            /\/[^\/]*$/,
+//            '/result.html?%s'
+//        )
+//    );
+//
+//	$('#fileupload').fileupload('option', {
+//		url: '/property/image/upload',
+//		maxFileSize: 5000000,
+//		acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+//		process: [
+//			{
+//				action: 'load',
+//				fileTypes: /^image\/(gif|jpeg|png)$/,
+//				maxFileSize: 20000000 // 20MB
+//			},
+//			{
+//				action: 'resize',
+//				maxWidth: 1440,
+//				maxHeight: 900
+//			},
+//			{
+//				action: 'save'
+//			}
+//		]
+//	});
+//
+//});
 </script>

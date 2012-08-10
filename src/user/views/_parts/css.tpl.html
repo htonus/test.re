@@ -8,6 +8,6 @@
 	if (file_exists($file)) {
 		$time = filemtime($file);
 ?>
-	<link rel="stylesheet" type="text/css" href="<?=PATH_WEB_CSS.$name?>.css?<?=$time?>" />
+	<?=isset($ie) ? '<!--[if '.$ie.']>' : null?><link rel="stylesheet" type="text/css" href="<?=PATH_WEB_CSS.$name?>.css?<?=$time?>" /><?=isset($ie) ? '<![endif]-->' : null?>
 <?php
 	}
