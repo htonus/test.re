@@ -135,6 +135,11 @@ fieldset {
 
 
 
+#fileContainer {
+	height: 220px;
+	overflow: hidden;
+}
+
 #fileTrigger {
 	text-decoration: underline;
 	cursor: pointer;
@@ -142,33 +147,31 @@ fieldset {
 fieldset .highlite {
 	border: 1px darkorange solid !important;
 }
-#fileList LI {
-	width: 120px;
-	height: 160px;
-	background-color: #FFF9E9;
-	display: none;
+.file {
 	float: left;
-	margin: 10px 0 0 10px;
-	padding: 10px;
+	width: 180px;
+	height: 180px;
+	background-color: #FFF9E9;
+	margin: 20px 0 0 20px;
+	font: 12px sans-serif;
 }
 
-#fileList DIV.image {
-	background-color: #ccc;
-	border: 1px #ccc solid;
-	width: 120px;
-	height: 120px;
+.file .name {
+	width: 140px;
+	float: left;
+	padding: 5px 5px;
+	height: 15px;
+	overflow: hidden;
 }
-
-#fileList IMG {
-	margin: auto;
-}
-
-#fileList DIV.progress {
-	width: 120px;
-	border: 1px #888 solid;
-	height: 20px;
+.file .drop {
+	width: 20px;
+	float: left;
 	text-align: center;
-	background-image: url('/i/progress.png');
-	background-repeat: no-repeat;
-	background-position: -150px center;
+	padding: 5px 5px;
+	height: 15px;
+	cursor: pointer;
+}
+
+.button:hover {
+	background-color: #FFE6B6;
 }

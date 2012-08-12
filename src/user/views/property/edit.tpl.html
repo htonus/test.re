@@ -5,6 +5,13 @@
 
 
 	$partViewer->view('_parts/js', Model::create()->set('name', 'selector'));
+	$partViewer->view('_parts/js', Model::create()->set('name', 'jquery/ui-widget.min'));
+	$partViewer->view('_parts/js', Model::create()->set('name', 'tmpl'));
+	$partViewer->view('_parts/js', Model::create()->set('name', 'jquery/load-image.min'));
+	$partViewer->view('_parts/js', Model::create()->set('name', 'jquery/canvas-to-blob.min'));
+	$partViewer->view('_parts/js', Model::create()->set('name', 'jquery/iframe-transport.min'));
+	$partViewer->view('_parts/js', Model::create()->set('name', 'jquery/fileupload.min'));
+//	$partViewer->view('_parts/js', Model::create()->set('name', '/get/js/locale'));
 
 	$bedsList = array();
 	for ($number = 1; $number < 6; $number ++)
@@ -14,27 +21,6 @@
 	for ($number = 100000; $number < 500000; $number += 100000)
 		$priceList[$number] = $number;
 
-//	$partViewer->view('_parts/css', Model::create()->set('name', 'bootstrap.min'));
-//	$partViewer->view('_parts/css', Model::create()->set('name', 'bootstrap-ie6.min')->set('ie', 'lt IE 7'));
-//	$partViewer->view('_parts/css', Model::create()->set('name', 'bootstrap-responsive.min'));
-//	$partViewer->view('_parts/css', Model::create()->set('name', 'bootstrap-image-gallery.min'));
-//
-//	$partViewer->view('_parts/js',  Model::create()->set('name', 'html5-non-ie9')->set('ie', 'lt IE 9'));
-//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/ui.widget'));
-//	$partViewer->view('_parts/js',  Model::create()->set('name', 'tmpl.min'));
-//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/load-image.min'));
-//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/canvas-to-blob.min'));
-//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/bootstrap.min'));
-//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/bootstrap-image-gallery.min'));
-//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/iframe-transport.js'));
-//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/fileupload'));
-//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/fileupload-fp.js'));
-//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/fileupload-ui.js'));
-//	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/locale'));
-
-	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/ui.widget'));
-	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/iframe-transport.js'));
-	$partViewer->view('_parts/js',  Model::create()->set('name', 'jquery/fileupload'));
 ?>
 
 <div class="container_24">
@@ -42,7 +28,12 @@
 	<!-- Main Form -->
 	<div class="g_16">
 
-		<form action="/property/<?=$form->getValue('id') ? 'save' : 'add'?>/<?=$form->getActualValue('offer')->getName()?>" method="POST">
+		<form
+			action="/property/<?=$form->getValue('id') ? 'save' : 'add'?>/<?=$form->getActualValue('offer')->getName()?>"
+			id="fileupload"
+			method="POST"
+			enctype="multipart/form-data"
+		>
 
 		<div class="g_10 alpha">
 <?php
@@ -143,11 +134,9 @@
 
 		<div class="g_16 alpha omega">
 			<fieldset id="images">
-				<input id="fileupload" type="file" name="files[]" data-url="server/php/" multiple>
-
-				<input type="file" name="files[]" id="fileupload" multiple="true" style="display: none;" data-url="/property/upload"/>
+				<input type="file" name="file" id="fileButton" multiple="true" style="display: none;"/>
 				<label for="images">Property Images (drag & drop in the field below or <span id="fileTrigger">press here</span> to add)</label>
-				<div class="input" id="fuDropZone" style="height: 200px"><ul id="fileList"></ul></div>
+				<ul class="input" id="fileContainer"></ul>
 			</fieldset>
 		</div>
 
@@ -162,69 +151,138 @@
 </div>
 
 <script type="text/javascript">
+	
 $(document).ready(function(){
-	$(document).bind('drop dragover', function (e) {
-		e.preventDefault();
-		return false;
-	});
-	$('#fileupload').fileupload({
-		url:		'/property/upload',
-		namespace:	'fuDropZone',
-		dataType: 'json',
-		done: function (e, data) {
-			$.each(data.result, function (index, file) {
-				$('<p/>').text(file.name).appendTo(document.body);
-			});
-		}
-	});
-//	$('#fileupload').fileupload({
-//		progress: function (e, data) {
-//			var progress = parseInt(data.loaded / data.total * 100, 10);
-//			$('#progress .bar').css(
-//				'width',
-//				progress + '%'
-//			);
-//		},
-//		progressall: function (e, data) {
-//			var progress = parseInt(data.loaded / data.total * 100, 10);
-//			$('#progress .bar').css(
-//				'width',
-//				progress + '%'
-//			);
-//		}
-//	});
+	ImageLoader.init();
 });
 
-//	$('#fileupload').fileupload();
-//    $('#fileupload').fileupload(
-//        'option',
-//        'redirect',
-//        window.location.href.replace(
-//            /\/[^\/]*$/,
-//            '/result.html?%s'
-//        )
-//    );
-//
-//	$('#fileupload').fileupload('option', {
-//		url: '/property/image/upload',
-//		maxFileSize: 5000000,
-//		acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-//		process: [
-//			{
-//				action: 'load',
-//				fileTypes: /^image\/(gif|jpeg|png)$/,
-//				maxFileSize: 20000000 // 20MB
-//			},
-//			{
-//				action: 'resize',
-//				maxWidth: 1440,
-//				maxHeight: 900
-//			},
-//			{
-//				action: 'save'
-//			}
-//		]
-//	});
-//
-//});
+var ImageLoader = {
+	trigger:	'#fileTrigger',
+	button:		'#fileButton',
+	container:	'#fileContainer',
+	form:		'#fileupload',
+	
+	previewWidth:	180,
+	previewHeight:	120,
+	
+	fileList:	[],
+
+	init: function(){
+		$(ImageLoader.trigger).click(function(){
+			$(ImageLoader.button).click();
+		});
+
+		$(ImageLoader.container).bind({
+			dragenter: function(){
+				$(ImageLoader.container).addClass('highlite')
+				return false;
+			},
+			dragover: function(){
+				return false;
+			},
+			dragleave: function(){
+				$(ImageLoader.container).removeClass('highlite')
+				return false;
+			},
+			drop: function(e){
+				var dt = e.originalEvent.dataTransfer;
+				$(ImageLoader.container).removeClass('highlite')
+				$.each(dt.files, function(i, file){
+					ImageLoader.addFile(file);
+				});
+				return false;
+			}
+		});
+		
+		$(ImageLoader.form).fileupload({
+			progress: function (e, data) {
+				var progress = parseInt(data.loaded / data.total * 100, 10);
+				$('.uploadFile .bar').css(
+					'width',
+					progress + '%'
+				);
+			},
+			add: function (e, data) {
+				$.each(data.files, function(i, file){
+					if (file.type.match(/^image.*/)) {
+						ImageLoader.addFile(file);
+					}
+				});
+			},
+
+			done: function (e, data) {
+				alert('done');
+			}
+		});
+
+	},
+
+	addFile: function(file){
+		file.id = ImageLoader.fileList.length;
+		ImageLoader.fileList[file.id] = file;
+		
+		window.loadImage(
+			file,
+			function (img) {
+				var div = $(tmpl('tmplUpload', {'file': file})).appendTo(ImageLoader.container)
+				$('.preview', div)
+					.css({
+						'padding': ''
+							+ parseInt((ImageLoader.previewHeight - img.height) / 2) + ' '
+							+ parseInt((ImageLoader.previewWidth - img.width) / 2)
+					})
+					.html(img);
+				$('.drop', div).click(function(){
+					ImageLoader.fileList = $.grep(ImageLoader.fileList, function(_file){
+						return _file.id != file.id;
+					});
+					div.remove();
+					ImageLoader.update();
+				});
+				ImageLoader.update();
+			},
+			{
+				maxWidth:	ImageLoader.previewWidth,
+				maxHeight:	ImageLoader.previewHeight
+			}
+		);
+	},
+
+	update: function(){
+		if ($(ImageLoader.fileList).size() > 3) {
+			$('#fileContainer').height(420);
+			
+			if ($(ImageLoader.fileList).size() > 6) {
+				$('#fileContainer').css('overflow-y', 'scroll');
+			} else {
+				$('#fileContainer').css('overflow', 'hidden');
+			}
+		} else {
+			$('#fileContainer').animate({height: 220});
+		}
+	},
+	
+	upload: function(){
+		
+	},
+	
+	uploadFile: function(){
+		
+	}
+
+}
+</script>
+
+<script type="text/x-tmpl" id="tmplUpload">
+<li class="file" id="file_{%='' + o.file.id%}">
+	<div class="name">{%=o.file.name%} ({%=o.file.size >> 10%} kB)</div>
+	<div class="button drop"><b>x</b></div>
+	<div class="clear"></div>
+	
+	<div class="preview"></div>
+	<div class="input">
+		<input type="text" name="city" value="">
+	</div>
+	
+</li>
 </script>
