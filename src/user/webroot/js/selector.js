@@ -13,6 +13,15 @@ var Selector = {
 		$('.multiselect DD').click(function(){
 			Selector.multiclick($(this));
 		});
+		
+		$(window)
+			.resize(function(){
+				Selector.close();
+			})
+			.click(function(e){
+				if ($(e.target).parents('.select').size() == 0)
+					Selector.close();
+			});
 	},
 
 	open: function(select) {
@@ -96,14 +105,5 @@ var Selector = {
 }
 
 $(document).ready(function(){
-	$(window)
-		.resize(function(){
-			Selector.close();
-		})
-		.click(function(e){
-			if ($(e.target).parents('.select').size() == 0)
-				Selector.close();
-		});
-
 	Selector.init();
 });

@@ -1,0 +1,204 @@
+
+========== BEGIN AUTO ASSIGN ACCOIUNTS ===========
+
+### AUTO ASSIGN ACCOUNT: Array
+(
+    [id] => 100779db-b792-d270-ac80-4ff1c0350822
+    [email] => marcelorgil@yahoo.com.br
+    [country] => BR
+    [lang] => -blank-
+    [status] => funded
+)
+
+ALLOCATED TO AGENT: Array
+(
+    [id] => abe76ba6-f4bf-f1c9-5613-4da56a02ee2c
+    [code] => 1-01-01-0014
+    [email] => k.reilly@fxpro.com
+)
+
+
+
+
+
+### AUTO ASSIGN ACCOUNT: Array
+(
+    [id] => 10108c4e-b3b4-9672-0e57-4c5fbcfc0165
+    [email] => xhxhxhzhd@163.com
+    [country] => CN
+    [lang] => cn
+    [status] => funded
+)
+
+ALLOCATED TO AGENT: Array
+(
+    [id] => bd0fc9f1-498a-149d-5306-4e674da08b00
+    [code] => 1-01-01-0017
+    [email] => z.honglei@fxpro.com
+)
+
+
+
+
+
+### AUTO ASSIGN ACCOUNT: Array
+(
+    [id] => 1021a431-73b9-bed9-7b48-4ee255227233
+    [email] => csontoszsolt@vipmail.hu
+    [country] => HU
+    [lang] => -blank-
+    [status] => funded
+)
+
+ALLOCATED TO AGENT: Array
+(
+    [id] => abe76ba6-f4bf-f1c9-5613-4da56a02ee2c
+    [code] => 1-01-01-0014
+    [email] => k.reilly@fxpro.com
+)
+
+
+
+
+
+### AUTO ASSIGN ACCOUNT: Array
+(
+    [id] => 1026a266-1e52-a654-9153-4eb7bfe80347
+    [email] => fvassilia@yahoo.gr
+    [country] => GR
+    [lang] => en
+    [status] => funded
+)
+
+ALLOCATED TO AGENT: Array
+(
+    [id] => abe76ba6-f4bf-f1c9-5613-4da56a02ee2c
+    [code] => 1-01-01-0014
+    [email] => k.reilly@fxpro.com
+)
+
+
+
+
+
+### AUTO ASSIGN ACCOUNT: Array
+(
+    [id] => 1029c797-9684-c20b-fab9-4f945b5fb30e
+    [email] => otk11@ic.ac.uk
+    [country] => DE
+    [lang] => en
+    [status] => funded
+)
+
+ALLOCATED TO AGENT: Array
+(
+    [id] => 61400b82-c4c3-3081-52ff-4b1900610993
+    [code] => 1-01-01-0010
+    [email] => t.boedi@fxpro.com
+)
+
+
+
+
+
+### AUTO ASSIGN ACCOUNT: Array
+(
+    [id] => 102aa534-8036-96c9-8e71-4feb80a99366
+    [email] => etsolive@gmail.com
+    [country] => CI
+    [lang] => fr
+    [status] => funded
+)
+
+ALLOCATED TO AGENT: Array
+(
+    [id] => 41bccda7-f62a-c4ad-efda-4ff1a5924b25
+    [code] => 1-01-01-0024
+    [email] => e.rayess@fxpro.com
+)
+
+
+
+
+
+### AUTO ASSIGN ACCOUNT: Array
+(
+    [id] => 102add14-4b9e-9c8b-cdc0-4d2596102c85
+    [email] => joe0528@hotmail.com
+    [country] => TW
+    [lang] => en
+    [status] => funded
+)
+
+ALLOCATED TO AGENT: Array
+(
+    [id] => abe76ba6-f4bf-f1c9-5613-4da56a02ee2c
+    [code] => 1-01-01-0014
+    [email] => k.reilly@fxpro.com
+)
+
+
+
+
+
+### AUTO ASSIGN ACCOUNT: Array
+(
+    [id] => 102e01ee-531a-94c5-d071-4ce2b4664cce
+    [email] => tamas.mohr@gmail.com
+    [country] => HU
+    [lang] => -blank-
+    [status] => funded
+)
+
+ALLOCATED TO AGENT: Array
+(
+    [id] => abe76ba6-f4bf-f1c9-5613-4da56a02ee2c
+    [code] => 1-01-01-0014
+    [email] => k.reilly@fxpro.com
+)
+
+
+
+
+
+### AUTO ASSIGN ACCOUNT: Array
+(
+    [id] => 1034dc18-36c4-3dd8-6e30-4fb06625e3fa
+    [email] => jonas-meusel@gmx.net
+    [country] => DE
+    [lang] => de
+    [status] => funded
+)
+
+ALLOCATED TO AGENT: Array
+(
+    [id] => 61400b82-c4c3-3081-52ff-4b1900610993
+    [code] => 1-01-01-0010
+    [email] => t.boedi@fxpro.com
+)
+
+
+
+
+
+### AUTO ASSIGN ACCOUNT: Array
+(
+    [id] => 1049a51e-a069-c560-4903-4d8b06b475bd
+    [email] => wqfwqf@139.com
+    [country] => CN
+    [lang] => en
+    [status] => funded
+)
+
+ALLOCATED TO AGENT: Array
+(
+    [id] => abe76ba6-f4bf-f1c9-5613-4da56a02ee2c
+    [code] => 1-01-01-0014
+    [email] => k.reilly@fxpro.com
+)
+
+
+
+
+
+========== FINISH AUTO ASSIGN: took: 0.4172 sec ===========
