@@ -6,7 +6,7 @@
 
 	$partViewer->view('_parts/js', Model::create()->set('name', 'selector'));
 	$partViewer->view('_parts/js', Model::create()->set('name', 'jquery/ui-widget.min'));
-	$partViewer->view('_parts/js', Model::create()->set('name', 'tmpl'));
+	$partViewer->view('_parts/js', Model::create()->set('name', 'tmpl.min'));
 	$partViewer->view('_parts/js', Model::create()->set('name', 'jquery/load-image.min'));
 	$partViewer->view('_parts/js', Model::create()->set('name', 'jquery/canvas-to-blob.min'));
 	$partViewer->view('_parts/js', Model::create()->set('name', 'jquery/iframe-transport.min'));
@@ -275,7 +275,7 @@ var ImageLoader = {
 
 <script type="text/x-tmpl" id="tmplUpload">
 <li class="file" id="file_{%='' + o.file.id%}">
-	<div class="name">{%=o.file.name%} ({%=o.file.size >> 10%} kB)</div>
+	<div class="name">{%=o.file.name%} ({% if (o.file.size >> 20 > 0) print((o.file.size >> 20) + 'Mb'); else print((o.file.size >> 10) + 'kb'); %})</div>
 	<div class="button drop"><b>x</b></div>
 	<div class="clear"></div>
 	
