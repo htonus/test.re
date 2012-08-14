@@ -157,27 +157,43 @@ $(document).ready(function(){
 	$('INPUT#city').auto_complete()
 });
 
-(function(jq){
-	jq.fn.auto_complete = function(options){
+(function($){
+	$.fn.auto_complete = function(options){
 		var self = this;
+		var size = 0;
 
-		var options = jQuery.extend({
-			url:	'/',
-			tmpl:	'#auto_complete'
+		var options = $.extend({
+			url:	'/get/cities',
+			tmpl:	'auto_complete'
 		},options);
 
-		this.change(function(){
+		this.keyup(function(){
 			var input = this;
-			var text = jq(this).get(0).tagName.toLowerCase() == 'input'
-				? jq(this).val()
-				: jq(this).text();
+			var text = $(this).get(0).tagName.toLowerCase() == 'input'
+				? $(this).val()
+				: $(this).text();
 
-			jQuery.getJSON(self.url, {sample: text}, function(data){
-				tmpl(self.template, data);
-				jq.each(data.cityList, function(i, city){
-					jq(input).selector('detach');
-					jq(input).selector('attach', data.list);
-				});
+			if (text.length == size)
+				return true;
+
+			size = text.length;
+			$('#citySelector DL')
+			$.getJSON(options.url, {sample: text}, function(data){
+				switch ($(data.list).size()) {
+					case 0:
+						break;
+					case 1:
+						self.val(data.list[0].name);
+						break;
+					default:
+						$(tmpl(options.tmpl, data)).appendTo(self.parent());
+						$('#citySelector DL').height(150).show();
+						break;
+				}
+//				$.each(data.cityList, function(i, city){
+//					jq(input).selector('detach');
+//					jq(input).selector('attach', data.list);
+//				});
 			});
 		});
 	}
@@ -185,16 +201,12 @@ $(document).ready(function(){
 
 </script>
 
-<script type="text/x-tmpl" id="tmplUpload">
-<li class="file" id="file_{%='' + o.file.id%}">
-	<div class="name">{%=o.file.name%} ({% if (o.file.size >> 20 > 0) print((o.file.size >> 20) + 'Mb'); else print((o.file.size >> 10) + 'kb'); %})</div>
-	<div class="button drop"><b>x</b></div>
-	<div class="clear"></div>
-	
-	<div class="preview"></div>
-	<div class="input">
-		<input type="text" name="city" value="">
+<script type="text/x-tmpl" id="auto_complete">
+	<div class="select" id="citySelector">
+		<dl>
+{% for(i in o.list) { %}
+			<dd><input type="radio" name="cityChoice" value="{%=o.list[i].id%}"/><div>{%=o.list[i].name%}</div></dd>
+{% } %}
+		</dl>
 	</div>
-	
-</li>
 </script>

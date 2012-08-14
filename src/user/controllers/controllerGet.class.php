@@ -40,7 +40,14 @@ final class controllerGet extends MethodMappedController
 					of('City')->
 					optional()
 			)->
-			import($request->getGet());
+			add(
+				Primitive::string('sample')->
+					addImportFilter(Filter::trim())->
+					addImportFilter(Filter::lowerCase())->
+					optional()
+			)->
+			import($request->getGet())->
+			importMore($request->getPost());
 		
 		$criteria = Criteria::create(City::dao())->
 			setProjection(
@@ -66,6 +73,12 @@ final class controllerGet extends MethodMappedController
 		} else {
 			$criteria->add(
 				Expression::isNull('parent')
+			);
+		}
+
+		if ($sample = $form->getValue('sample')) {
+			$criteria->add(
+				Expression::ilike('name', $sample.'%')
 			);
 		}
 		
