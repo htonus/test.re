@@ -1,0 +1,53 @@
+<?php
+/*
+ * $Id$
+ */
+	extract($params);
+
+	if (!isset($value))
+		$value = 0;
+	
+	if (isset($topOption)) {
+		array_merge(array($value => $topOption), $list);
+	} else {
+		if (empty($value)) {
+			reset($list);
+			$value = key($list);
+		}
+		
+		$item = $list[$value];
+		
+		$topOption = $item instanceof NamedObject
+			? $item->getDisplayName()
+			: $item;
+	}
+	
+	$selectedName = isset($value) && !empty($value)
+		? $list[$value]
+		: $topOption;
+?>
+					<fieldset id="<?=$name?>">
+						<label for="<?=$name?>"><?=$label?></label>
+						<div class="select">
+<?php
+	if (isset($topOption)) {
+?>
+							<input type="text" name="edit_<?=$name?>" id="edit_<?=$name?>" class="title" value="<?=$selectedName?>" style="background-color: transparent;" autocomplete="off"/>
+<?php
+	}
+?>
+							<dl>
+<?php
+	foreach ($list as $index => $option) {
+		if ($option instanceof NamedObject) {
+			$index = $option->getId();
+			$option =  $option->getDisplayName();
+		}
+?>
+								<dd><input type="radio" name="<?=$name?>" value="<?=$index?>"/><div><?=$option?></div></dd>
+<?php
+	}
+?>
+							</dl>
+						</div>
+					</fieldset>

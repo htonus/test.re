@@ -37,5 +37,9 @@
 		const PAPHOS	= 4;
 		const AYANAPA	= 5;
 		
+		public function getDisplayName()
+		{
+			return $this->getName();
+		}
 	}
 ?>

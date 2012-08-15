@@ -62,9 +62,13 @@ var Selector = {
 	
 	select: function(option) {
 		var parent = option.parent().parent();
+		var title = $('.title', parent);
 		
+		if (title.get(0).tagName.match(/input/i))
+			title.val($('DIV', option).text());
+		else
+			title.text($('DIV', option).text());
 		$('DD', parent).removeClass('checked');
-		$('.title', parent).text($('DIV', option).text());
 		$('INPUT', option.parent()).removeAttr('checked');
 		$('INPUT', option).attr('checked', 'checked');
 		option.addClass('checked')
@@ -103,7 +107,3 @@ var Selector = {
 		}
 	}
 }
-
-$(document).ready(function(){
-	Selector.init();
-});

@@ -105,7 +105,7 @@ var ImageLoader = {
 	},
 	
 	upload: function(){
-		
+		$(ImageLoader.form).fileupload('send', {files: ImageLoader.fileList})
 	},
 	
 	uploadFile: function(){
