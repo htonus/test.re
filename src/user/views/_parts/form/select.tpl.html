@@ -4,6 +4,9 @@
  */
 	extract($params);
 
+	if (empty($type))
+		$type = 'select';
+	
 	if (!isset($value))
 		$value = 0;
 	
@@ -28,9 +31,9 @@
 ?>
 					<fieldset id="<?=$name?>">
 						<label for="<?=$name?>"><?=$label?></label>
-						<div class="select">
+						<div class="<?=$type?>">
 <?php
-	if (isset($topOption)) {
+	if (isset($topOption) && $type == 'select') {
 ?>
 							<div class="title"><?=$selectedName?></div>
 <?php
@@ -43,9 +46,16 @@
 			$index = $option->getId();
 			$option =  $option->getDisplayName();
 		}
+
+		if ($type == 'select') {
 ?>
 								<dd><input type="radio" name="<?=$name?>" value="<?=$index?>"/><div><?=$option?></div></dd>
 <?php
+		} else {
+?>
+								<dd><input type="checkbox" name="<?=$name?>[]" value="<?=$index?>"/><div><?=$option?></div></dd>
+<?php
+		}
 	}
 ?>
 							</dl>

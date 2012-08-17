@@ -64,7 +64,8 @@
 		</div>
 		<div class="clear"></div>
 
-		<div class="g_4 alpha">
+		<div class="g_6 alpha">
+			<div class="g_6 alpha omega">
 <?php
 	$partViewer->view(
 		'_parts/form/select',
@@ -77,8 +78,36 @@
 			))
 	);
 ?>
-		</div>
-		<div class="g_3">
+			</div>
+			<div class="clear"></div>
+			<div class="g_3 alpha">
+<?php
+	$partViewer->view(
+		'_parts/form/input',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::PRICE.']',
+				'label'	=> "Price",
+				'class'	=> 'price'
+			))
+	);
+?>
+			</div>
+			<div class="g_3 omega">
+<?php
+	$partViewer->view(
+		'_parts/form/input',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::AREA.']',
+				'label'	=> "Area",
+				'class'	=> 'area'
+			))
+	);
+?>
+			</div>
+			<div class="clear"></div>
+			<div class="g_3 alpha">
 <?php
 	$partViewer->view(
 		'_parts/form/select',
@@ -91,8 +120,8 @@
 			))
 	);
 ?>
-		</div>
-		<div class="g_3">
+			</div>
+			<div class="g_3 omega">
 <?php
 	$partViewer->view(
 		'_parts/form/select',
@@ -105,21 +134,9 @@
 			))
 	);
 ?>
-		</div>
-		<div class="g_3">
-<?php
-	$partViewer->view(
-		'_parts/form/input',
-		Model::create()->
-			set('params', array(
-				'name'	=> 'type['.FeatureType::AREA.']',
-				'label'	=> "Area",
-				'class'	=> 'area'
-			))
-	);
-?>
-		</div>
-		<div class="g_3 omega">
+			</div>
+			<div class="clear"></div>
+			<div class="g_3 alpha">
 <?php
 	$partViewer->view(
 		'_parts/form/select',
@@ -132,6 +149,74 @@
 			))
 	);
 ?>
+			</div>
+		</div>
+
+		<div class="g_5">
+<?php
+	$indoorFeatures = array(
+		1	=> 'Gym',
+		2	=> 'Workshop',
+		3	=> 'Spa',
+		4	=> 'Rumpus room',
+		5	=> 'Floorboards',
+		6	=> 'Broadband internet available',
+		7	=> 'Pay TV access',
+		8	=> 'Open fireplace',
+		9	=> 'Storage heating',
+		10	=> 'Split-system heating',
+		11	=> 'Hydronic heating',
+		12	=> 'Split-system air conditioning',
+		13	=> 'Air conditioning',
+		14	=> 'Gas heating',
+		15	=> 'Reverse cycle air conditioning',
+		16	=> 'Evaporative cooling'
+	);
+
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'indoorFeatures',
+				'label'	=> "Indoor features",
+				'list'	=> $indoorFeatures,
+				'type'	=> 'multiselect'
+			))
+	);
+?>
+		</div>
+
+		<div class="g_5 omega">
+<?php
+	$outdoorFeatures = array(
+		1	=> 'Carport',
+		2	=> 'Garage',
+		3	=> 'Open car spaces',
+		4	=> 'Remote garage',
+		5	=> 'Secure Parking',
+		6	=> 'Swimming pool',
+		7	=> 'Spa',
+		8	=> 'Tennis court',
+		9	=> 'Balcony',
+		10	=> 'Deck',
+		11	=> 'Courtyard',
+		12	=> 'Shed',
+		13	=> 'Fulley fenced',
+		14	=> ''
+	);
+
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'outdoorFeatures',
+				'label'	=> "Outdoor features",
+				'list'	=> $outdoorFeatures,
+				'type'	=> 'multiselect'
+			))
+	);
+?>
+
 		</div>
 		<div class="clear"></div>
 

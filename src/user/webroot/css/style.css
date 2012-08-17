@@ -54,7 +54,8 @@ INPUT, SELECT, TEXTAREA {
 	border: none;
 	outline: none;
 	padding: 5px;
-	cursor: pointer
+	cursor: pointer;
+	margin: 0px;
 }
 .fields > DIV {
 	border: 1px #FFCD6C solid;
@@ -85,7 +86,7 @@ INPUT, SELECT, TEXTAREA {
 
 .multiselect DL {
 	display: block;
-	overflow: auto;
+	overflow-y: auto;
 	overflow-x: hidden;
 	height: 150px;
 	background-color: #FFF;
@@ -97,6 +98,7 @@ INPUT, SELECT, TEXTAREA {
 	padding: 5px 10px;
 	margin: 1px;
 	background-color: white;
+	font: normal 12px sans-serif;
 }
 
 .select DD DIV, .multiselect DD DIV {
@@ -106,6 +108,10 @@ INPUT, SELECT, TEXTAREA {
 .select .title {
 	padding: 5px 10px;
 	cursor: pointer;
+}
+
+.title, .input INPUT {
+	font: normal 12px sans-serif;
 }
 
 .select DD:hover, .multiselect DD:hover {
@@ -126,14 +132,18 @@ fieldset {
 }
 
 .checked {
-	background-color: #FFCD6C !important;
+	background-color: #FFE6B6 !important;
 }
 
 .select DD INPUT, .multiselect DD INPUT {
 	display: none;
 }
 
-
+LABEL {
+	color: #999;
+	font: bold 13px sans-serif;
+	font-variant: small-caps;
+}
 
 #fileContainer {
 	height: 220px;
