@@ -12,7 +12,11 @@
 	defined('MODE') || define('MODE', 'user');
 	defined('PATH_SOURCE_DIR') || define('PATH_SOURCE_DIR', MODE.DS);
 	
-	define('DOMAIN', $_SERVER['HTTP_HOST']);
+	if (isset($_SERVER['HTTP_HOST']))
+		define('DOMAIN', $_SERVER['HTTP_HOST']);
+	else
+		define('DOMAIN', 'realestate.com.cy');
+
 	define('COOKIE_DOMAIN', '.'.DOMAIN);
 	
 	// paths

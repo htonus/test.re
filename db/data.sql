@@ -14,29 +14,51 @@ insert into offer_type (id, name) values (2, 'sell');
 insert into offer_type (id, name) values (3, 'rent');
 insert into offer_type (id, name) values (4, 'lease');
 
-insert into feature_type (id, name) values (10, 'AREA');
-insert into feature_type (id, name) values (20, 'PRICE');
-insert into feature_type (id, name) values (30, 'BEDROOMS');
-insert into feature_type (id, name) values (40, 'TOYLETS');
-insert into feature_type (id, name) values (50, 'BALCONS');
-insert into feature_type (id, name) values (60, 'LEVELS');
-insert into feature_type (id, name) values (70, 'PARKING');
-insert into feature_type (id, name) values (80, 'COVERED_PARKING');
-insert into feature_type (id, name) values (90, 'GARDEN');
-insert into feature_type (id, name) values (100, 'BARBEQUE');
-insert into feature_type (id, name) values (110, 'POOL');
-insert into feature_type (id, name) values (120, 'GARAGE');
-insert into feature_type (id, name) values (130, 'KITCHENS');
-insert into feature_type (id, name) values (150, 'STORAGE');
-insert into feature_type (id, name) values (160, 'LAUNDRY');
-insert into feature_type (id, name) values (170, 'FURNITURE');
-insert into feature_type (id, name) values (180, 'FIREPLACE');
-insert into feature_type (id, name) values (190, 'CELLAR');
-insert into feature_type (id, name) values (200, 'ATTIC');
-insert into feature_type (id, name) values (210, 'ELEVATOR');
-insert into feature_type (id, name) values (220, 'FLOOR');
-insert into feature_type (id, name) values (230, 'SEA_VIEW');
-insert into feature_type (id, name) values (240, 'MOUNTAIN_VIEW');
+insert into feature_type (id, "name") values (1, 'price');
+insert into feature_type (id, "name") values (2, 'area');
+insert into feature_type (id, "name") values (3, 'bedrooms');
+insert into feature_type (id, "name") values (4, 'toylets');
+insert into feature_type (id, "name") values (5, 'Levels');
+insert into feature_type (id, "name") values (6, 'floor');
+insert into feature_type (id, "name") values (7, 'car places');
+-- indoor types
+insert into feature_type (id, "group", "name") values (101, 1, 'alarm system');
+insert into feature_type (id, "group", "name") values (102, 1, 'intercom');
+insert into feature_type (id, "group", "name") values (103, 1, 'ensuite');
+insert into feature_type (id, "group", "name") values (104, 1, 'built-in wardrobes');
+insert into feature_type (id, "group", "name") values (105, 1, 'ducted vacuum system');
+insert into feature_type (id, "group", "name") values (106, 1, 'gym');
+insert into feature_type (id, "group", "name") values (107, 1, 'workshop');
+insert into feature_type (id, "group", "name") values (108, 1, 'indoor SPA');
+insert into feature_type (id, "group", "name") values (109, 1, 'rumpus room', 1); -- play room
+insert into feature_type (id, "group", "name") values (110, 1, 'floorboards', 1); -- wooden floor
+insert into feature_type (id, "group", "name") values (111, 1, 'broadband internet');
+insert into feature_type (id, "group", "name") values (112, 1, 'pay TV access');
+insert into feature_type (id, "group", "name") values (101, 1, 'open fireplace');
+insert into feature_type (id, "group", "name") values (114, 1, 'ducted cooling');
+insert into feature_type (id, "group", "name") values (115, 1, 'air conditioning');
+insert into feature_type (id, "group", "name") values (116, 1, 'split-system air conditioning');
+insert into feature_type (id, "group", "name") values (117, 1, 'ducted heating');
+insert into feature_type (id, "group", "name") values (118, 1, 'storage heaters');
+insert into feature_type (id, "group", "name") values (119, 1, 'split-system heating');
+insert into feature_type (id, "group", "name") values (120, 1, 'hydronic heating');
+insert into feature_type (id, "group", "name") values (121, 1, 'gas heating');
+-- indoor types
+insert into feature_type (id, "group", "name") values (201, 2, 'carport');
+insert into feature_type (id, "group", "name") values (202, 2, 'garage');
+insert into feature_type (id, "group", "name") values (203, 2, 'open car spaces');
+insert into feature_type (id, "group", "name") values (204, 2, 'remote garage');
+insert into feature_type (id, "group", "name") values (205, 2, 'secure Parking');
+insert into feature_type (id, "group", "name") values (206, 2,'swimming pool');
+insert into feature_type (id, "group", "name") values (207, 2, 'outside SPA');
+insert into feature_type (id, "group", "name") values (208, 2, 'tennis court');
+insert into feature_type (id, "group", "name") values (209, 2, 'balcony');
+insert into feature_type (id, "group", "name") values (210, 2, 'deck');
+insert into feature_type (id, "group", "name") values (211, 2, 'courtyard');
+insert into feature_type (id, "group", "name") values (212, 2, 'playground');
+insert into feature_type (id, "group", "name") values (213, 2, 'shed');
+insert into feature_type (id, "group", "name") values (214, 2, 'fully fenced');
+
 
 insert into image_type (id, name) values (1, 'gif');
 insert into image_type (id, name) values (2, 'jpeg');
