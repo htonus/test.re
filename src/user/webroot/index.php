@@ -25,6 +25,7 @@
 		echo '<pre>';
 		echo "Exception: $extensionClass\n";
 		echo 'Message: '.$e->getMessage()."\n";
+		echo 'Location: '.$e->getFile().':'.$e->getLine()."\n";
 		
 		if ($extensionClass == 'ClassNotFoundException') {
 			$className = 'unknown';

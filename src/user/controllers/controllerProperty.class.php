@@ -17,24 +17,48 @@ final class controllerProperty extends PrototypedEditor
 		parent::__construct(Property::create());
 
 		$this->getForm()->
+			drop('offerType')->
 			add(
-				Primitive::enumerationByValue('offer')->
+				Primitive::enumerationByValue('offerType')->
 					of('OfferType')->
 					setDefault(OfferType::buy())
+			)->
+			add(
+				Primitive::set('type')->
+				setDefault(array())
 			);
-
-		$this->map->addSource('offer', RequestType::get());
+		
+//		$this->map->addSource('offerType', RequestType::get());
 	}
 
 	public function handleRequest(HttpRequest $request)
 	{
 		$mav = parent::handleRequest($request);
-
-		if (!$mav->viewIsRedirect()) {
+		$model = $mav->getModel();
+		
+		if (
+			$model->has('editorResult')
+			&& $model->has('editorResult') == PrototypedEditor::COMMAND_SUCCEEDED
+			&& $model->has("action")
+			&& $model->get('action') != 'drop'
+		) {
+			$this->storeFeatures($model->get('subject'));
+			$request->setAttachedVar('layout', 'json');
+			
+			$mav->setModel(
+				Model::create()->set(
+					'data',
+					array(
+						'result'	=> PrototypedEditor::COMMAND_SUCCEEDED,
+						'id'		=> $model->get('subject')->getId()
+					)
+				)
+			);
+		} else {
 			$this->attachCollections($mav->getModel());
 			$request->setAttachedVar('layout', 'main');
 		}
-
+		
 		return $mav;
 	}
 
@@ -46,40 +70,40 @@ final class controllerProperty extends PrototypedEditor
 				'propertyTypeList',
 				EnumHelper::getAnyObject('PropertyType')->getDisplayNames()
 			)->
+			set('typeList', FeatureType::dao()->getPlainList())->
 			set('cityList', City::dao()->getCityList());
-
+		
 		return $this;
 	}
 
 	private function storeFeatures(Property $object)
 	{
-//		if (!($list = $this->getForm()->getValue('featureList'))) {
-//			throw new WrongArgumentException('Do not have featureList to store');
-//		}
+		if (!($list = $this->getForm()->getValue('type'))) {
+//			need to drop features
+			$object->getFeatures()->dropList()->save();
+			return $object;
+		}
 
-		$featureList = $object->getFeatures()->getList();
-		foreach ($list as $typeId => $row) {
-			if (
-				empty($row['value'])
-				&& empty($row['comment'])
-			) {
-				if (!empty($row['id']))
-					Feature::dao ()->dropById($row['id']);
+		$features = $object->getFeatures()->fetch()->getList();
+		
+		foreach($features as $typeId => $type) {
+			if (!isset($list[$typeId]))
+				Feature::dao ()->drop($type);
+		}
+		
+		foreach ($list as $typeId => $value) {
+			if (isset($features[$typeId])) {
+				$feature = $features[$typeId]->setValue($value);
 			} else {
 				$feature = Feature::create()->
 					setPropertyId($object->getId())->
 					setTypeId($typeId)->
-					setValue($row['value'])->
-					setContent($row['content']);
-
-				if (!empty($row['id']))
-					$feature->setId($row['id']);
-
-				$feature->dao()->take($feature);
+					setValue($value);
 			}
+			
+			$feature->dao()->take($feature);
 		}
 
 		return $object;
-
 	}
 }

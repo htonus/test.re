@@ -39,10 +39,11 @@
 		const AREA		= 2;
 		const BEDROOMS	= 3;
 		const TOYLETS	= 4;
-//		const LEVELS	= 5;
-//		const FLOOR		= 6;
 		const CAR_PLACES= 7;	// number of parking places
 
-		// your brilliant stuff goes here
+		public function getDisplayName()
+		{
+			return ucwords($this->getName());
+		}
 	}
 ?>

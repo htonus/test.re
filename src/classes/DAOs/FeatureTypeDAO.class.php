@@ -7,6 +7,14 @@
 
 	final class FeatureTypeDAO extends AutoFeatureTypeDAO
 	{
-		// last chance for customization
+		public function getListByGroup($group)
+		{
+			try {
+				$list = $this->getListByLogic(Expression::eq('group', $group));
+			} catch (ObjectNotFoundException $e) {
+				$list = array();
+			}
+			
+			return $list;
+		}
 	}
-?>

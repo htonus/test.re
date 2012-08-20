@@ -48,13 +48,25 @@
 		}
 
 		if ($type == 'select') {
+			if ($value == $index) {
 ?>
-								<dd><input type="radio" name="<?=$name?>" value="<?=$index?>"/><div><?=$option?></div></dd>
+								<dd class="checked"><input type="radio" name="<?=$name?>" value="<?=$index?>" checked="checked" /><div><?=$option?></div></dd>
 <?php
+			} else {
+?>
+								<dd><input type="radio" name="<?=$name?>" value="<?=$index?>" /><div><?=$option?></div></dd>
+<?php
+			}
 		} else {
+			if ($value == $index) {
 ?>
-								<dd><input type="checkbox" name="<?=$name?>[]" value="<?=$index?>"/><div><?=$option?></div></dd>
+								<dd class="checked"><input type="checkbox" name="<?=$name?>[<?=$index?>]" value="1"  checked="checked" /><div><?=$option?></div></dd>
 <?php
+			} else {
+?>
+								<dd><input type="checkbox" name="<?=$name?>[<?=$index?>]" value="1"/><div><?=$option?></div></dd>
+<?php
+			}
 		}
 	}
 ?>

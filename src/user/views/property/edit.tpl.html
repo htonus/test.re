@@ -30,7 +30,7 @@
 	<div class="g_16">
 
 		<form
-			action="/property/<?=$form->getValue('id') ? 'save' : 'add'?>/<?=$form->getActualValue('offer')->getName()?>"
+			action="/property/<?=$form->getValue('id') ? 'save' : 'add'?>/<?=$form->getActualValue('offerType')->getName()?>"
 			id="fileupload"
 			method="POST"
 			enctype="multipart/form-data"
@@ -44,6 +44,7 @@
 			set('params', array(
 				'name'	=> 'name',
 				'label'	=> "Title",
+				'value'	=> 'Beautiful house on the seashore'
 			))
 	);
 ?>
@@ -54,7 +55,7 @@
 		'_parts/form/combo',
 		Model::create()->
 			set('params', array(
-				'name'	=> 'city',
+				'name'	=> 'location',
 				'label'	=> "Location",
 				'list'	=> $cityList,
 				'topOption'	=> '',
@@ -71,10 +72,10 @@
 		'_parts/form/select',
 		Model::create()->
 			set('params', array(
-				'name'	=> 'property',
+				'name'	=> 'propertyType',
 				'label'	=> "Property type",
 				'list'	=> $propertyTypeList,
-				'value'	=> PropertyType::PROPERTY,
+				'value'	=> PropertyType::HOUSE,
 			))
 	);
 ?>
@@ -88,7 +89,8 @@
 			set('params', array(
 				'name'	=> 'type['.FeatureType::PRICE.']',
 				'label'	=> "Price",
-				'class'	=> 'price'
+				'class'	=> 'price',
+				'value'	=> '200000',
 			))
 	);
 ?>
@@ -101,7 +103,8 @@
 			set('params', array(
 				'name'	=> 'type['.FeatureType::AREA.']',
 				'label'	=> "Area",
-				'class'	=> 'area'
+				'class'	=> 'area',
+				'value'	=> 200,
 			))
 	);
 ?>
@@ -117,6 +120,7 @@
 				'label'	=> "Bedrooms",
 				'list'	=> $bedsList,
 				'topOption'	=> 'Choose...',
+				'value'	=> 3,
 			))
 	);
 ?>
@@ -131,6 +135,7 @@
 				'label'	=> "Toylets",
 				'list'	=> $bedsList,
 				'topOption'	=> 'Choose...',
+				'value'	=> 2,
 			))
 	);
 ?>
@@ -146,6 +151,7 @@
 				'label'	=> "Parking places",
 				'list'	=> $bedsList,
 				'topOption'	=> 'Choose...',
+				'value'	=> 2,
 			))
 	);
 ?>
@@ -154,32 +160,13 @@
 
 		<div class="g_5">
 <?php
-	$indoorFeatures = array(
-		1	=> 'Gym',
-		2	=> 'Workshop',
-		3	=> 'Spa',
-		4	=> 'Rumpus room',
-		5	=> 'Floorboards',
-		6	=> 'Broadband internet available',
-		7	=> 'Pay TV access',
-		8	=> 'Open fireplace',
-		9	=> 'Storage heating',
-		10	=> 'Split-system heating',
-		11	=> 'Hydronic heating',
-		12	=> 'Split-system air conditioning',
-		13	=> 'Air conditioning',
-		14	=> 'Gas heating',
-		15	=> 'Reverse cycle air conditioning',
-		16	=> 'Evaporative cooling'
-	);
-
 	$partViewer->view(
 		'_parts/form/select',
 		Model::create()->
 			set('params', array(
-				'name'	=> 'indoorFeatures',
+				'name'	=> 'type',
 				'label'	=> "Indoor features",
-				'list'	=> $indoorFeatures,
+				'list'	=> FeatureType::dao()->getListByGroup(FeatureType::INDOOR),
 				'type'	=> 'multiselect'
 			))
 	);
@@ -188,30 +175,13 @@
 
 		<div class="g_5 omega">
 <?php
-	$outdoorFeatures = array(
-		1	=> 'Carport',
-		2	=> 'Garage',
-		3	=> 'Open car spaces',
-		4	=> 'Remote garage',
-		5	=> 'Secure Parking',
-		6	=> 'Swimming pool',
-		7	=> 'Spa',
-		8	=> 'Tennis court',
-		9	=> 'Balcony',
-		10	=> 'Deck',
-		11	=> 'Courtyard',
-		12	=> 'Shed',
-		13	=> 'Fulley fenced',
-		14	=> ''
-	);
-
 	$partViewer->view(
 		'_parts/form/select',
 		Model::create()->
 			set('params', array(
-				'name'	=> 'outdoorFeatures',
+				'name'	=> 'type',
 				'label'	=> "Outdoor features",
-				'list'	=> $outdoorFeatures,
+				'list'	=> FeatureType::dao()->getListByGroup(FeatureType::OUTDOOR),
 				'type'	=> 'multiselect'
 			))
 	);
@@ -221,10 +191,27 @@
 		<div class="clear"></div>
 
 		<div class="g_16 alpha omega">
+			<fieldset id="content">
+				<label for="content">Property description</label>
+				<div class="input">
+					<textarea rows="5" name="description"></textarea>
+				</div>
+			</fieldset>
+		</div>
+
+		<div class="g_16 alpha omega">
 			<fieldset id="images">
 				<input type="file" name="file" id="fileButton" multiple="true" style="display: none;"/>
 				<label for="images">Property Images (drag & drop in the field below or <span id="fileTrigger">press here</span> to add)</label>
 				<ul class="input" id="fileContainer"></ul>
+			</fieldset>
+		</div>
+
+		<div class="g_16 alpha omega">
+			<fieldset id="submit">
+				<div class="input">
+					<input type="button" value="Send request" id="btnSubmit" />
+				</div>
 			</fieldset>
 		</div>
 
@@ -244,7 +231,49 @@ $(document).ready(function(){
 	ImageLoader.init();
 	Selector.init();
 	
-	$('INPUT#edit_city').auto_grep()
+	$('INPUT#edit_location').auto_grep();
+	$('#btnSubmit').click(function(){
+		var form = $(this).get(0).form;
+		var data = {
+			'user'		: 2,	// FIXME: REAL ONE!!!
+			'name'		: form.name.value,
+//			'location'		: form.city.value,
+			'offerType'		: 'sell', // FIXME: REAL ONE!!!
+			'propertyType'	: form.propertyType.value,
+			'description'	: form.description.value
+		};
+		
+		$('INPUT["name^=type["]:text').each(function(){
+			data[$(this).attr('name')] = $(this).val();
+		});
+		
+		$('INPUT["name^=type["]:checked').each(function(){
+			data[$(this).attr('name')] = $(this).val();
+		});
+		
+		$.post(
+			'/property/<?=$form->getValue('id') ? 'save' : 'add'?>/sell',
+			data,
+			function(data){
+				return;
+				if (data.result == '<?=PrototypedEditor::COMMAND_SUCCEEDED?>') {
+					$('#fileupload').fileupload('send', {
+						files		: ImageLoader.fileList,
+						property	: data.id
+					}, function(data){
+						if (data.result == '<?=PrototypedEditor::COMMAND_SUCCEEDED?>') {
+							// redirect to some place
+							alert('URAH!');
+						} else {
+							// image store error
+						}
+					});
+				} else {
+					// property editor error
+				}
+			}
+		);
+	});
 });
 
 (function($){
