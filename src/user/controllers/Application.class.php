@@ -38,12 +38,14 @@ final class Application
 			setSession($_SESSION);
 		
 		$urlMapper = UrlMapper::create(PATH_WEB);
+		$logger = Logger::create(Logger::DEBUG);
 		
 		if ($urlMapper->resolveRequest($request)) {
 			return $this->render($urlMapper->getRedirectMav($request), $request);
 		}
 		
 		$request->setAttachedVar('urlMapper', $urlMapper);
+		$request->setAttachedVar('logger', $logger);
 		
 		$area = $this->getArea($request);
 		$controller = 'controller'.ucfirst($area);

@@ -22,7 +22,7 @@
 <script src="/js/jquery/canvas-to-blob.min.js"></script>
 <script src="/js/jquery/load-image.min.js"></script>
 <!--script src="/js/jquery/fileupload-fp.min.js"></script-->
-<script src="/js/tmpl.js"></script>
+<script src="/js/tmpl.min.js"></script>
 
 <br>
 <br>
@@ -32,7 +32,7 @@
 <form id="fileupload" method="post" enctype="multipart/form-data">
 	
 <input type="file" multiple id="fff"/></br>
-<input type="button" onclick="$('#fileupload').fileupload('send', {files: fileList});"/>
+<input type="button" value="Submit" onclick="$('#fileupload').fileupload('send', {files: fileList});"/>
 
 <div id="uploadList"></div>
 

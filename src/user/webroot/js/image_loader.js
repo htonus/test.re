@@ -37,6 +37,8 @@ var ImageLoader = {
 		});
 		
 		$(ImageLoader.form).fileupload({
+			url:	'/property/image',
+			
 			progress: function (e, data) {
 				var progress = parseInt(data.loaded / data.total * 100, 10);
 				$('.uploadFile .bar').css(
@@ -50,11 +52,39 @@ var ImageLoader = {
 						ImageLoader.addFile(file);
 					}
 				});
-			},
-
-			done: function (e, data) {
-				alert('done');
 			}
+//
+//			done: function (e, data) {
+//				alert('done');
+//			},
+//            send: function (e, data) {
+//                var that = $(this).data('fileupload');
+//                if (!data.isValidated) {
+//                    if (!data.maxNumberOfFilesAdjusted) {
+//                        that._adjustMaxNumberOfFiles(-data.files.length);
+//                        data.maxNumberOfFilesAdjusted = true;
+//                    }
+//                    if (!that._validate(data.files)) {
+//                        return false;
+//                    }
+//                }
+//                if (data.context && data.dataType &&
+//                        data.dataType.substr(0, 6) === 'iframe') {
+//                    // Iframe Transport does not support progress events.
+//                    // In lack of an indeterminate progress bar, we set
+//                    // the progress to 100%, showing the full animated bar:
+//                    data.context
+//                        .find('.progress').addClass(
+//                            !$.support.transition && 'progress-animated'
+//                        )
+//                        .attr('aria-valuenow', 100)
+//                        .find('.bar').css(
+//                            'width',
+//                            '100%'
+//                        );
+//                }
+//                return that._trigger('sent', e, data);
+//            }
 		});
 
 	},
@@ -79,9 +109,9 @@ var ImageLoader = {
 						return _file.id != file.id;
 					});
 					div.remove();
-					ImageLoader.update();
+					ImageLoader.updateContainer();
 				});
-				ImageLoader.update();
+				ImageLoader.updateContainer();
 			},
 			{
 				maxWidth:	ImageLoader.previewWidth,
@@ -90,7 +120,7 @@ var ImageLoader = {
 		);
 	},
 
-	update: function(){
+	updateContainer: function(){
 		if ($(ImageLoader.fileList).size() > 3) {
 			$('#fileContainer').height(420);
 			
@@ -104,11 +134,14 @@ var ImageLoader = {
 		}
 	},
 	
-	upload: function(){
-		$(ImageLoader.form).fileupload('send', {files: ImageLoader.fileList})
-	},
-	
-	uploadFile: function(){
-		
+	uploadFiles: function(data){
+		$(ImageLoader.form).fileupload('send', {
+			files		: ImageLoader.fileList,
+			formData	: data
+		})
 	}
+//	
+//	uploadFile: function(){
+//		
+//	}
 }

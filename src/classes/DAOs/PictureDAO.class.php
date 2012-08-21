@@ -7,6 +7,70 @@
 
 	final class PictureDAO extends AutoPictureDAO
 	{
-		// last chance for customization
+		public function uploadFiles(Property $property, $file, $options = array())
+		{
+			if (is_array($file['name'])) {
+				foreach($file['name'] as $key => $value) {
+					$this->uploadFile(
+						$property,
+						array(
+							'name'	=> $file['name'][$key],
+							'type'	=> $file['type'][$key],
+							'tmp_name'	=> $file['tmp_name'][$key],
+							'error'	=> $file['error'][$key],
+							'size'	=> $file['size'][$key],
+						),
+						isset($comment[$file['name'][$key]])
+							? $comment[$file['name'][$key]]
+							: null
+					);
+				}
+			} else {
+				$this->uploadFile($property, $file);
+			}
+			
+			return true;
+		}
+		
+		/**
+		 * 
+		 * @param Property $property
+		 * @param type $file
+		 * @param array $options (string comment, bool main)
+		 * @return boolean
+		 */
+		public function uploadFile(Property $property, $file, $options = array())
+		{
+			$image = new Picture();
+			$type = new ImageType($file['type']);
+			
+			$image->
+				setProperty($property)->
+				setType($type);
+			
+			if ($info = getimagesize($file['tmp_name'], $imageinfo)) {
+				$image->
+					setWidth($info[0])->
+					setHeight($imfo[1]);
+			} else {
+				return false;
+			}
+			
+			$db = DBPool::me()->getLink()->begin();
+			
+			try {
+				if ($image = $this->add($image)) {
+					$path = PATH_PIX.$image->getId().$type->getExtension();
+					chown($path, 'nginx');
+					chmod($path, 0777);
+					move_uploaded_file($file['tmp_name'], $path);
+					$db->commit();
+				} else {
+					throw new DatabaseException();
+				}
+			} catch (DatabaseException $e) {
+				$db->rollback();
+			}
+		}
 	}
 ?>

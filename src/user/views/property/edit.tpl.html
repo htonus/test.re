@@ -30,9 +30,9 @@
 	<div class="g_16">
 
 		<form
-			action="/property/<?=$form->getValue('id') ? 'save' : 'add'?>/<?=$form->getActualValue('offerType')->getName()?>"
+			action="/property/<?=$form->getValue('id') ? 'save' : 'add'?>/sell"
 			id="fileupload"
-			method="POST"
+			method="post"
 			enctype="multipart/form-data"
 		>
 
@@ -201,7 +201,7 @@
 
 		<div class="g_16 alpha omega">
 			<fieldset id="images">
-				<input type="file" name="file" id="fileButton" multiple="true" style="display: none;"/>
+				<input type="file" name="file[]" id="fileButton" multiple style="display: none;"/>
 				<label for="images">Property Images (drag & drop in the field below or <span id="fileTrigger">press here</span> to add)</label>
 				<ul class="input" id="fileContainer"></ul>
 			</fieldset>
@@ -254,20 +254,14 @@ $(document).ready(function(){
 		$.post(
 			'/property/<?=$form->getValue('id') ? 'save' : 'add'?>/sell',
 			data,
-			function(data){
-				return;
-				if (data.result == '<?=PrototypedEditor::COMMAND_SUCCEEDED?>') {
-					$('#fileupload').fileupload('send', {
-						files		: ImageLoader.fileList,
-						property	: data.id
-					}, function(data){
-						if (data.result == '<?=PrototypedEditor::COMMAND_SUCCEEDED?>') {
-							// redirect to some place
-							alert('URAH!');
-						} else {
-							// image store error
-						}
-					});
+			function(result){
+//				return;
+				if (result.result == '<?=PrototypedEditor::COMMAND_SUCCEEDED?>') {
+					var formData = {
+						property: result.id
+					};
+					
+					ImageLoader.uploadFiles(formData);
 				} else {
 					// property editor error
 				}

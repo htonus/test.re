@@ -15,7 +15,7 @@ final class controllerProperty extends PrototypedEditor
 	public function __construct()
 	{
 		parent::__construct(Property::create());
-
+		
 		$this->getForm()->
 			drop('offerType')->
 			add(
@@ -28,19 +28,23 @@ final class controllerProperty extends PrototypedEditor
 				setDefault(array())
 			);
 		
+		$this->setMethodMapping('image', 'actionAddImage');
+		
 //		$this->map->addSource('offerType', RequestType::get());
 	}
 
 	public function handleRequest(HttpRequest $request)
 	{
+//		$request->getAttachedVar('logger')->debug($_REQUEST);
+//		$request->getAttachedVar('logger')->debug($_FILES);
+
 		$mav = parent::handleRequest($request);
 		$model = $mav->getModel();
 		
 		if (
 			$model->has('editorResult')
 			&& $model->has('editorResult') == PrototypedEditor::COMMAND_SUCCEEDED
-			&& $model->has("action")
-			&& $model->get('action') != 'drop'
+			&& in_array($model->get("action"), array('add', 'save'))
 		) {
 			$this->storeFeatures($model->get('subject'));
 			$request->setAttachedVar('layout', 'json');
@@ -61,7 +65,39 @@ final class controllerProperty extends PrototypedEditor
 		
 		return $mav;
 	}
-
+	
+	protected function actionAddImage(HttpRequest $request)
+	{
+		$editorResult = PrototypedEditor::COMMAND_FAILED;
+		
+		$form = Form::create()->
+			add(
+				Primitive::identifier('property')->
+				of('Property')->
+				required()
+			)->
+			add(
+				Primitive::set('file')->
+				required()
+			)->
+			import($request->getPost())->
+			importMore($request->getFiles());
+		
+		if ($form->getErrors()) {
+		} else {
+			$object = $form->getValue('property');
+			$result = Picture::dao()->uploadImage($object, $form->getValue('file'));
+		}
+		
+		return ModelAndView::create()->
+			setModel(
+				Model::create()->
+				set('id', $object->getId())->
+				set('subject', $object)->
+				set('form', $form)->
+				set('editorResult', $editorResult)
+			);
+	}
 
 	protected function attachCollections(Model $model)
 	{

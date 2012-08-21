@@ -35,7 +35,9 @@
 	define('PATH_TEMPLATES', PATH_SOURCE.'views'.DS);
 	
 	// onPHP init
-	define('ONPHP_TEMP_PATH', PATH_BASE.'..'.DS.'tmp'.DS);
+	define('LOGS_PATH', PATH_BASE.'..'.DS.'logs'.DS);
+	define('TEMP_PATH', PATH_BASE.'..'.DS.'tmp'.DS);
+	define('ONPHP_TEMP_PATH', TEMP_PATH);
 	require PATH_BASE.'../onphp/global.inc.php.tpl';
 	
 	// everything else
