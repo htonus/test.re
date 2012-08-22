@@ -53,38 +53,6 @@ var ImageLoader = {
 					}
 				});
 			}
-//
-//			done: function (e, data) {
-//				alert('done');
-//			},
-//            send: function (e, data) {
-//                var that = $(this).data('fileupload');
-//                if (!data.isValidated) {
-//                    if (!data.maxNumberOfFilesAdjusted) {
-//                        that._adjustMaxNumberOfFiles(-data.files.length);
-//                        data.maxNumberOfFilesAdjusted = true;
-//                    }
-//                    if (!that._validate(data.files)) {
-//                        return false;
-//                    }
-//                }
-//                if (data.context && data.dataType &&
-//                        data.dataType.substr(0, 6) === 'iframe') {
-//                    // Iframe Transport does not support progress events.
-//                    // In lack of an indeterminate progress bar, we set
-//                    // the progress to 100%, showing the full animated bar:
-//                    data.context
-//                        .find('.progress').addClass(
-//                            !$.support.transition && 'progress-animated'
-//                        )
-//                        .attr('aria-valuenow', 100)
-//                        .find('.bar').css(
-//                            'width',
-//                            '100%'
-//                        );
-//                }
-//                return that._trigger('sent', e, data);
-//            }
 		});
 
 	},
@@ -111,6 +79,17 @@ var ImageLoader = {
 					div.remove();
 					ImageLoader.updateContainer();
 				});
+				$('IMG', div).click(function(){
+					$('LI.file :checkbox').removeAttr('checked');
+					$('LI.file').removeClass('main');
+					
+					$(':checkbox', div).attr('checked', 'checked');
+					div.addClass('main');
+				});
+				
+				if ($('LI.file :checked').size() == 0)
+					$('IMG', div).click();
+				
 				ImageLoader.updateContainer();
 			},
 			{
@@ -134,10 +113,11 @@ var ImageLoader = {
 		}
 	},
 	
-	uploadFiles: function(data){
+	uploadFiles: function(data, callback){
 		$(ImageLoader.form).fileupload('send', {
 			files		: ImageLoader.fileList,
-			formData	: data
+			formData	: data,
+			success		: callback
 		})
 	}
 //	

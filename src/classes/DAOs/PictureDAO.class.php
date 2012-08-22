@@ -7,70 +7,48 @@
 
 	final class PictureDAO extends AutoPictureDAO
 	{
-		public function uploadFiles(Property $property, $file, $options = array())
+		public function add(Identifiable $object)
 		{
-			if (is_array($file['name'])) {
-				foreach($file['name'] as $key => $value) {
-					$this->uploadFile(
-						$property,
-						array(
-							'name'	=> $file['name'][$key],
-							'type'	=> $file['type'][$key],
-							'tmp_name'	=> $file['tmp_name'][$key],
-							'error'	=> $file['error'][$key],
-							'size'	=> $file['size'][$key],
-						),
-						isset($comment[$file['name'][$key]])
-							? $comment[$file['name'][$key]]
-							: null
-					);
+			if ($tmpName = $object->getUploadName()) {
+				try {
+					$type = ImageType::createByFileName($object->getName());
+
+					if ($type->getMimeType() != $object->getTypeId())
+						throw new WrongArgumentException();
+				} catch(WrongArgumentException $e) {
+					$type = $this->getImageTypeByMimeType($file['type']);
 				}
-			} else {
-				$this->uploadFile($property, $file);
-			}
-			
-			return true;
-		}
-		
-		/**
-		 * 
-		 * @param Property $property
-		 * @param type $file
-		 * @param array $options (string comment, bool main)
-		 * @return boolean
-		 */
-		public function uploadFile(Property $property, $file, $options = array())
-		{
-			$image = new Picture();
-			$type = new ImageType($file['type']);
-			
-			$image->
-				setProperty($property)->
-				setType($type);
-			
-			if ($info = getimagesize($file['tmp_name'], $imageinfo)) {
-				$image->
-					setWidth($info[0])->
-					setHeight($imfo[1]);
-			} else {
-				return false;
-			}
-			
-			$db = DBPool::me()->getLink()->begin();
-			
-			try {
-				if ($image = $this->add($image)) {
-					$path = PATH_PIX.$image->getId().$type->getExtension();
-					chown($path, 'nginx');
-					chmod($path, 0777);
-					move_uploaded_file($file['tmp_name'], $path);
-					$db->commit();
+
+				$object->setType($type);
+
+				if ($info = getimagesize($tmpName)) {
+					$object->
+						setWidth($info[0])->
+						setHeight($info[1]);
 				} else {
 					throw new DatabaseException();
 				}
+			} else {
+				throw new WrongArgumentException('No upload file name');
+			}
+			
+			try {
+				$db = DBPool::me()->getLink($this->getLinkName())->begin();
+				
+				if ($object = parent::add($object)) {
+			 		$path = PATH_PIX.$object->getId().'.'.$type->getExtension();
+					
+					if (!move_uploaded_file($tmpName, $path))
+						throw new DatabaseException();
+					
+					$db->commit();
+				} else
+					throw new DatabaseException();
 			} catch (DatabaseException $e) {
 				$db->rollback();
 			}
+		
+			return $object;
 		}
 	}
 ?>

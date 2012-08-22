@@ -255,13 +255,22 @@ $(document).ready(function(){
 			'/property/<?=$form->getValue('id') ? 'save' : 'add'?>/sell',
 			data,
 			function(result){
-//				return;
 				if (result.result == '<?=PrototypedEditor::COMMAND_SUCCEEDED?>') {
+					var notes = {};
+					$('LI.file :text').each(function(i, obj){
+						var name = $(obj).attr('name').match(/\[([^\]]+)\]/);
+						notes[name[1]] = $(obj).val();
+					});
+					
 					var formData = {
-						property: result.id
+						property	: result.id,
+						comments	: JSON.stringify(notes),
+						file_main	: $('LI.file :checked').val()
 					};
 					
-					ImageLoader.uploadFiles(formData);
+					ImageLoader.uploadFiles(formData, function(){
+						document.location.href = '<?=PATH_WEB?>property/success';
+					});
 				} else {
 					// property editor error
 				}
@@ -310,7 +319,8 @@ $(document).ready(function(){
 	
 	<div class="preview"></div>
 	<div class="input">
-		<input type="text" name="file_comment_{%=o.file.id%}" value="" />
+		<input type="checkbox" style="display: none" name="file_main" value="{%=o.file.name%}" />
+		<input type="text" name="file_note[{%=o.file.name%}]" value="" />
 	</div>
 </li>
 </script>

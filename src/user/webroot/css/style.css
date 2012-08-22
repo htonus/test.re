@@ -157,13 +157,21 @@ LABEL {
 fieldset .highlite {
 	border: 1px darkorange solid !important;
 }
+LI.main {
+	border: 5px #FFCD6C solid !important;
+}
 .file {
 	float: left;
 	width: 180px;
-	height: 180px;
+	/*height: 180px;*/
 	background-color: #FFF9E9;
-	margin: 20px 0 0 20px;
+	margin: 15px 0 0 15px;
 	font: 12px sans-serif;
+	border: 5px #FFF solid;
+}
+
+.file:hover {
+	border: 5px #FFE6B6 solid;
 }
 
 .file .name {
@@ -185,4 +193,8 @@ fieldset .highlite {
 
 .button:hover {
 	background-color: #FFE6B6;
+}
+
+.preview {
+	background-color: #FFF;
 }

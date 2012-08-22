@@ -31,6 +31,21 @@
 			return Singleton::getInstance('ProtoPicture');
 		}
 		
-		// your brilliant stuff goes here
+		private $uploadName = null;
+		
+		/**
+		 * @param string $name
+		 * @return Picture
+		 */
+		public function setUploadName($name)
+		{
+			$this->uploadName = $name;
+			return $this;
+		}
+		
+		public function getUploadName()
+		{
+			return $this->uploadName;
+		}
 	}
 ?>

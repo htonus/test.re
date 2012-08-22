@@ -3,9 +3,12 @@
 	
 	// system settings
 	error_reporting(E_ALL | E_STRICT);
+	ini_set('display_errors', '1');
+	ini_set('display_startup_errors', 1);
+	
 	setlocale(LC_CTYPE, "ru_RU.UTF8");
 	setlocale(LC_TIME, "ru_RU.UTF8");
-
+	
 	define('DS', DIRECTORY_SEPARATOR);
 	define('PS', PATH_SEPARATOR);
 	
@@ -22,6 +25,14 @@
 	// paths
 	define('PATH_BASE', dirname(__FILE__).DS);
 	define('PATH_SOURCE', PATH_BASE.'src'.DS.PATH_SOURCE_DIR);
+	define('LOGS_PATH', PATH_BASE.'..'.DS.'logs'.DS);
+	define('TEMP_PATH', PATH_BASE.'..'.DS.'tmp'.DS);
+	define('PATH_UPLOAD', TEMP_PATH.'uploads'.DS);
+	define('PATH_ROOT', PATH_SOURCE.'webroot'.DS);
+	define('PATH_IMG', PATH_ROOT.'i'.DS);
+	define('PATH_PIX', PATH_ROOT.'pix'.DS);
+	
+	// web path
 	define('PATH_WEB', 'http://'.DOMAIN.'/');
 	define('PATH_WEB_ADMIN', 'http://admin.'.DOMAIN.'/');
 	define('PATH_WEB_PIX', '/pix/'); // dynamic stuff
@@ -35,8 +46,6 @@
 	define('PATH_TEMPLATES', PATH_SOURCE.'views'.DS);
 	
 	// onPHP init
-	define('LOGS_PATH', PATH_BASE.'..'.DS.'logs'.DS);
-	define('TEMP_PATH', PATH_BASE.'..'.DS.'tmp'.DS);
 	define('ONPHP_TEMP_PATH', TEMP_PATH);
 	require PATH_BASE.'../onphp/global.inc.php.tpl';
 	
@@ -44,6 +53,7 @@
 	define('DEFAULT_ENCODING', 'UTF-8');
 	mb_internal_encoding(DEFAULT_ENCODING);
 	mb_regex_encoding(DEFAULT_ENCODING);
+	ini_set('upload_tmp_dir', PATH_UPLOAD);
 	
 	
 	define('DEFAULT_AREA', 'main');

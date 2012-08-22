@@ -67,12 +67,11 @@
 		<pattern name="EnumerationClass" />
 	</class>
 
-	<class name="ImageType" type="final">
+	<class name="ImageType">
 		<properties>
 			<identifier name="id" />
-			<property name="name" type="String" size="16" required="true" />
 		</properties>
-		<pattern name="EnumerationClass" />
+		<pattern name="SpookedEnumeration" />
 	</class>
 
 	<class name="Picture" type="final">
@@ -83,6 +82,7 @@
 			<property name="main" type="Boolean" required="true" default="false" />
 			<property name="width" type="Integer" required="true" />
 			<property name="height" type="Integer" required="true" />
+			<property name="comment" type="String" size="64" required="false" />
 			<property name="property" type="Property" relation="OneToOne" required="true" fetch="lazy" />
 		</properties>
 		<pattern name="DictionaryClass" />

@@ -162,7 +162,14 @@
 			if (preg_match('!^(property)/([^/]+)/?([^/]+)?!', $query, $m)) {
 				$request->setGetVar('area', $m[1]);
 				$request->setGetVar('action', $m[2]);
-				$request->setGetVar('offer', isset($m[3]) ? $m[3] : null);
+				
+				if (isset($m[3])) {
+					if (is_numeric($m[3])) {
+						$request->setGetVar('idr', $m[3]);
+					} else {
+						$request->setGetVar('offer', $m[3]);
+					}
+				}
 			}
 
 			return false;

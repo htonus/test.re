@@ -29,6 +29,7 @@ final class controllerProperty extends PrototypedEditor
 			);
 		
 		$this->setMethodMapping('image', 'actionAddImage');
+		$this->setMethodMapping('success', 'actionSuccess');
 		
 //		$this->map->addSource('offerType', RequestType::get());
 	}
@@ -44,10 +45,12 @@ final class controllerProperty extends PrototypedEditor
 		if (
 			$model->has('editorResult')
 			&& $model->has('editorResult') == PrototypedEditor::COMMAND_SUCCEEDED
-			&& in_array($model->get("action"), array('add', 'save'))
+			&& in_array($model->get("action"), array('add', 'save', 'image'))
 		) {
-			$this->storeFeatures($model->get('subject'));
-			$request->setAttachedVar('layout', 'json');
+			if ($model->get("action") != 'image') {
+				$this->storeFeatures($model->get('subject'));
+				$request->setAttachedVar('layout', 'json');
+			}
 			
 			$mav->setModel(
 				Model::create()->set(
@@ -66,6 +69,26 @@ final class controllerProperty extends PrototypedEditor
 		return $mav;
 	}
 	
+	protected function actionSuccess(HttpRequest $request)
+	{
+		$form = Form::create()->
+			add(
+				Primitive::identifier('id')->
+				of('Property')->
+				required()
+			)->
+			import($request->getGet());
+		
+		$url = PATH_WEB;
+		
+		if ($prop = $form->getValue('id')) {
+			$url .= 'property/view/'.$prop->getId();
+		}
+		
+		return ModelAndView::create()->
+			setView(new RedirectView($url));
+	}
+
 	protected function actionAddImage(HttpRequest $request)
 	{
 		$editorResult = PrototypedEditor::COMMAND_FAILED;
@@ -80,22 +103,58 @@ final class controllerProperty extends PrototypedEditor
 				Primitive::set('file')->
 				required()
 			)->
+			add(
+				Primitive::string('comments')->
+				required()
+			)->
+			add(
+				Primitive::string('file_main')->
+				required()
+			)->
 			import($request->getPost())->
 			importMore($request->getFiles());
 		
 		if ($form->getErrors()) {
+			
 		} else {
-			$object = $form->getValue('property');
-			$result = Picture::dao()->uploadImage($object, $form->getValue('file'));
+			$files = $form->getValue('file');
+			$comments = (array)json_decode($form->getValue('comments'));
+			$main = $form->getValue('file_main');
+			$property = $form->getValue('property');
+			
+			$pictures = array();
+			
+			if (is_array($files['name'])) {
+				foreach($files['name'] as $key => $name) {
+					$pictures[] = Picture::create()->
+						setProperty($property)->
+						setTypeId($files['type'][$key])->
+						setComment($comments[$name])->
+						setName($name)->
+						setMain($main == $name)->
+						setUploadName($files['tmp_name'][$key]);
+				}
+			} else {
+				$pictures[] = Picture::create()->
+					setProperty($property)->
+					setTypeId($files['type'])->
+					setComment($comments[$file['name']])->
+					setName($files['name'])->
+					setMain($main == $files['name'])->
+					setUploadName($files['tmp_name'][$key]);
+			}
+			
+			foreach ($pictures as $picture)
+				Picture::dao()->add($picture);
 		}
+		
+		$request->setAttachedVar('layout', 'json');
 		
 		return ModelAndView::create()->
 			setModel(
 				Model::create()->
-				set('id', $object->getId())->
-				set('subject', $object)->
-				set('form', $form)->
-				set('editorResult', $editorResult)
+					set('editorResult', PrototypedEditor::COMMAND_SUCCEEDED)->
+					set('subject', $property)
 			);
 	}
 
