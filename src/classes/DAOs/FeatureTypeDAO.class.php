@@ -7,6 +7,8 @@
 
 	final class FeatureTypeDAO extends AutoFeatureTypeDAO
 	{
+		private $names = array();
+		
 		public function getListByGroup($group)
 		{
 			try {
@@ -16,5 +18,15 @@
 			}
 			
 			return $list;
+		}
+		
+		public function getNames()
+		{
+			if (empty($this->names)) {
+				foreach ($this->getPlainList() as $object)
+					$this->names[$object->getId()] = $object->getName();
+			}
+			
+			return $this->names;
 		}
 	}

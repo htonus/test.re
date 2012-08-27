@@ -75,45 +75,53 @@ final class controllerSearch extends controllerMain
 			importMore($request->getPost());
 
 		$filters = $form->getValue('type');
-		$typeCasts = FeatureType::getCasts();
 		
 		$orLogic = Expression::orBlock();
 		$filterNumber = 0;
-		foreach($typeCasts as $typeId => $castId) {
-			if (!empty($filters[$typeId])) {
-				$andBlock = Expression::andBlock()->
-					expAnd(
-						Expression::eq('features.type', $typeId)
+		foreach(FeatureType::dao()->getPlainList() as $type) {
+			$typeId = $type->getId();
+			
+			if (empty($filters[$typeId]))
+				continue;
+			
+			$andBlock = Expression::andBlock()->
+				expAnd(
+					Expression::eq('features.type', $typeId)
+				);
+
+			switch ($type->getCast()) {
+				case ProtoFeatureType::BOOLEAN:
+					$andBlock->expAnd(
+						Expression::eq('features.value', 1)
 					);
-				
-				switch ($castId) {
-					case ProtoFeatureType::BOOLEAN:
-						$andBlock->expAnd(
-							Expression::eq('features.value', 1)
-						);
-						break;
-					case ProtoFeatureType::INTEGER:
+					break;
+				case ProtoFeatureType::INTEGER:
+					if (
+						empty($filters[$typeId]['min'])
+						&& empty($filters[$typeId]['max'])
+					) {
 						$andBlock->expAnd(
 							Expression::eq('features.value', $filters[$typeId])
 						);
-						break;
-					case ProtoFeatureType::INT_RANGE:
-						if (!empty($filters[$typeId]['min']))
-							$andBlock->expAnd(
-								Expression::gtEq ('features.value', $filters[$typeId]['min'])
-							);
-							
-						if (!empty($filters[$typeId]['max']))
-							$andBlock->expAnd(
-								Expression::ltEq ('features.value', $filters[$typeId]['max'])
-							);
 						
 						break;
-				}
-				
-				$orLogic->expOr($andBlock);
-				$filterNumber ++;
+					}
+				case ProtoFeatureType::INT_RANGE:
+					if (!empty($filters[$typeId]['min']))
+						$andBlock->expAnd(
+							Expression::gtEq ('features.value', $filters[$typeId]['min'])
+						);
+
+					if (!empty($filters[$typeId]['max']))
+						$andBlock->expAnd(
+							Expression::ltEq ('features.value', $filters[$typeId]['max'])
+						);
+
+					break;
 			}
+
+			$orLogic->expOr($andBlock);
+			$filterNumber ++;
 		}
 		
 		$logic = Expression::chain()->

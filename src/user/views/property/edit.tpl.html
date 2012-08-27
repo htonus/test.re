@@ -30,7 +30,7 @@
 	<div class="g_16">
 
 		<form
-			action="/property/<?=$form->getValue('id') ? 'save' : 'add'?>/sell"
+			action="/property/<?=$form->getValue('id') ? 'save' : 'add'?>/buy"
 			id="fileupload"
 			method="post"
 			enctype="multipart/form-data"
@@ -268,8 +268,11 @@ $(document).ready(function(){
 						file_main	: $('LI.file :checked').val()
 					};
 					
-					ImageLoader.uploadFiles(formData, function(){
-						document.location.href = '<?=PATH_WEB?>property/success';
+					ImageLoader.uploadFiles(formData, function(result){
+						if (result.result == '<?=PrototypedEditor::COMMAND_SUCCEEDED?>')
+							document.location.href = '<?=PATH_WEB?>' + data.url;
+						else
+							alert('Something went wrong!');
 					});
 				} else {
 					// property editor error

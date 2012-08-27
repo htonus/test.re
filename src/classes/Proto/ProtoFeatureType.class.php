@@ -5,5 +5,10 @@
  *   This file will never be generated again - feel free to edit.            *
  *****************************************************************************/
 
-	final class ProtoFeatureType extends AutoProtoFeatureType {/*_*/}
+	final class ProtoFeatureType extends AutoProtoFeatureType
+	{
+		const BOOLEAN	= 1;
+		const INTEGER	= 2;
+		const INT_RANGE	= 3;
+	}
 ?>

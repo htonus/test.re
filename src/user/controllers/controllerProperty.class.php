@@ -29,7 +29,6 @@ final class controllerProperty extends PrototypedEditor
 			);
 		
 		$this->setMethodMapping('image', 'actionAddImage');
-		$this->setMethodMapping('success', 'actionSuccess');
 		
 //		$this->map->addSource('offerType', RequestType::get());
 	}
@@ -47,19 +46,20 @@ final class controllerProperty extends PrototypedEditor
 			&& $model->has('editorResult') == PrototypedEditor::COMMAND_SUCCEEDED
 			&& in_array($model->get("action"), array('add', 'save', 'image'))
 		) {
+			$data = array(
+				'result'	=> PrototypedEditor::COMMAND_SUCCEEDED,
+				'id'		=> $model->get('subject')->getId()
+			);
+
 			if ($model->get("action") != 'image') {
 				$this->storeFeatures($model->get('subject'));
 				$request->setAttachedVar('layout', 'json');
+				$data['url'] = $request->getAttachedVar('urlMapper')->
+					getRedirectUrl($request, $mav->getModel()->get('subject'));
 			}
 			
 			$mav->setModel(
-				Model::create()->set(
-					'data',
-					array(
-						'result'	=> PrototypedEditor::COMMAND_SUCCEEDED,
-						'id'		=> $model->get('subject')->getId()
-					)
-				)
+				Model::create()->set('data', $data)
 			);
 		} else {
 			$this->attachCollections($mav->getModel());
@@ -69,26 +69,6 @@ final class controllerProperty extends PrototypedEditor
 		return $mav;
 	}
 	
-	protected function actionSuccess(HttpRequest $request)
-	{
-		$form = Form::create()->
-			add(
-				Primitive::identifier('id')->
-				of('Property')->
-				required()
-			)->
-			import($request->getGet());
-		
-		$url = PATH_WEB;
-		
-		if ($prop = $form->getValue('id')) {
-			$url .= 'property/view/'.$prop->getId();
-		}
-		
-		return ModelAndView::create()->
-			setView(new RedirectView($url));
-	}
-
 	protected function actionAddImage(HttpRequest $request)
 	{
 		$editorResult = PrototypedEditor::COMMAND_FAILED;

@@ -33,6 +33,7 @@
 			<property name="name" type="String" size="32" required="true" />
 			<property name="weight" type="Integer" required="true" default="1" />
 			<property name="group" type="Integer" required="false" default="0" />
+			<property name="cast" type="Integer" required="true" />
 			<property name="unit" type="Unit" relation="OneToOne" required="false" fetch="lazy" />
 		</properties>
 		<pattern name="DictionaryClass" />

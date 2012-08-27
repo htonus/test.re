@@ -37,7 +37,17 @@
 				.(defined('NICE_URL') ? '/' : '&id=').$object->getId();
 		}
 		
-		public function getRedirectMav(HttpRequest $request)
+		public function getRedirectMav(HttpRequest $request, Property $property = null)
+		{
+			return ModelAndView::create()->
+				setView(
+					RedirectView::create(
+						$this->getRedirectUrl($request, $property)
+					)
+				);
+		}
+		
+		public function getRedirectUrl(HttpRequest $request, Property $property = null)
 		{
 			$form = Form::create()->
 				add(
@@ -64,7 +74,8 @@
 				.$this->toNamed($types, FeatureType::AREA)
 				.'-'.$form->getActualValue('property')->getName()
 				.$this->toNamed($types, FeatureType::PRICE, 'for')
-				.'-in-cyprus';
+				.'-in-cyprus'
+				.($property ? '-'.$property->getId() : null);
 			
 			$model = Model::create();
 			
@@ -72,17 +83,14 @@
 				$model->set('city', $cityList);
 			}
 			
-			return ModelAndView::create()->
-				setView(
-					RedirectView::create($url)->
-						setBuildArrays(true)
-				)->
-				setModel($model);
+			return $this->getLocationUrl($url, $model);
 		}
 		
 		private function toNamed($types, $typeId, $prefix = '')
 		{
 			$named = '';
+			
+			$typeNames = FeatureType::dao()->getNames();
 			
 			if (isset($types[$typeId])) {
 				$named =
@@ -100,7 +108,7 @@
 					.(
 						$prefix
 							? null
-							: '-'.EnumHelper::getObject('FeatureType', $typeId)->getName()
+							: '-'.$typeNames[$typeId]
 					);
 			}
 			
@@ -135,23 +143,27 @@
 				$request->setGetVar('action', $m[1]);
 				$request->setGetVar('property', $m[8]);
 				
+				$type = array();
+				
 				$typeId = FeatureType::BEDROOMS;
 				if (!empty($m[2])) {
-					$request->setGetVar("type[$typeId][min]", $m[3]);
-					$request->setGetVar("type[$typeId][max]", $m[4]);
+					$type[$typeId]['min'] =  $m[3];
+					$type[$typeId]['max'] =  $m[4];
 				}
 				
 				$typeId = FeatureType::AREA;
 				if (!empty($m[5])) {
-					$request->setGetVar("type[$typeId][min]", $m[6]);
-					$request->setGetVar("type[$typeId][max]", $m[7]);
+					$type[$typeId]['min'] =  $m[6];
+					$type[$typeId]['max'] =  $m[7];
 				}
 				
 				$typeId = FeatureType::PRICE;
 				if (!empty($m[9])) {
-					$request->setGetVar("type[$typeId][min]", $m[10]);
-					$request->setGetVar("type[$typeId][max]", $m[11]);
+					$type[$typeId]['min'] =  $m[10];
+					$type[$typeId]['max'] =  $m[11];
 				}
+				
+				$request->setGetVar('type', $type);
 			}
 			
 			if (preg_match('!^(get)/([^/]+)!', $query, $m)) {
@@ -174,5 +186,44 @@
 
 			return false;
 		}
+		
+		protected function getLocationUrl($url, Model $model = null)
+		{
+			$postfix = null;
+			
+			if ($model && $model->getList()) {
+				$qs = array();
+				
+				foreach ($model->getList() as $key => $val) {
+					if (
+						(null === $val)
+						|| is_object($val)
+					) {
+						continue;
+					} elseif (is_array($val)) {
+						$qs[] = http_build_query(
+							array($key => $val), null, '&'
+						);
+						
+						continue;
+						
+					} elseif (is_bool($val)) {
+						$val = (int) $val;
+					}
+					
+					$qs[] = $key.'='.urlencode($val);
+				}
+				
+				if (strpos($url, '?') === false)
+					$first = '?';
+				else
+					$first = '&';
+					
+				if ($qs)
+					$postfix = $first.implode('&', $qs);
+			}
+			
+			return $url.$postfix;
+		}
 	}
-?>
+	
