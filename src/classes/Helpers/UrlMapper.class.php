@@ -185,9 +185,10 @@
 			}
 			
 			// last chance
-			if (preg_match('!^([^/]+)/([^/]+)?!', $query, $m)) {
+			if (preg_match('!^([^/]+)/?([^/]+)?/?([^/]+)?!', $query, $m)) {
 				$request->setGetVar('area', $m[1]);
 				$request->setGetVar('action', isset($m[2]) ? $m[2] : null);
+				$request->setGetVar('param', isset($m[3]) ? $m[3] : null);
 			}
 			
 			return false;

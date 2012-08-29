@@ -9,7 +9,7 @@
 			return $string;
 		}
 
-		public static function dump($object, $echo = true, $safe = false)
+		public static function dump($object, $exit = false, $echo = true, $safe = false)
 		{
 			if ($echo) {
 				echo '<pre>';
@@ -17,6 +17,8 @@
 				echo '</pre>';
 			} else
 				return $safe ? print_r($object, true) : var_export($object, true);
+			
+			(!$exit) || exit();
 		}
 		
 		public static function passgen($length = 8, $strength = 0)
@@ -52,7 +54,12 @@
 		
 		public static function makeHash($string)
 		{
-			return md5($string.StringHelper::passgen(8,8));
+			return strtolower(
+				md5(
+					$string
+					.StringHelper::passgen(8,8)
+				)
+			);
 		}
 	}
 ?>

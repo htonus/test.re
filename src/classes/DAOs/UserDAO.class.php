@@ -7,7 +7,7 @@
 
 	final class UserDAO extends AutoUserDAO
 	{
-		public function checkUnique($email)
+		public function isUnique($email)
 		{
 			try {
 				$this->getByLogic(
@@ -18,6 +18,28 @@
 			} catch (TooManyRowsException $e) {/*_*/}
 			
 			return false;
+		}
+		
+		public function activate($code, $password)
+		{
+			try {
+				$user = $this->getByLogic(
+					Expression::eq('code', $code)
+				);
+				
+				$user->
+					setCode(null)->
+					setPassword(md5($password))->
+					setActivated(Timestamp::makeNow());
+				
+				return $this->save($user);
+			} catch (ObjectNotFoundException $e) {
+				return null;
+			} catch (TooManyRowsException $e) {
+				return null;
+			}
+			
+			return null;
 		}
 	}
 ?>

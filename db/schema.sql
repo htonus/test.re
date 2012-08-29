@@ -24,10 +24,13 @@ CREATE TABLE "user" (
     "email" 	VARCHAR(128) NOT NULL, 
     "password" 	VARCHAR(40) NULL, 
 	"phone"		CHARACTER VARYING(64) NULL, 
-	"activated" BOOLEAN NULL DEFAULT FALSE, 
+	"created"	TIMESTAMP NOT NULL DEFAULT now(), 
+	"activated" TIMESTAMP NULL, 
 	"code"		CHARACTER VARYING(32) NULL, 
 	"auto_login" CHARACTER VARYING(32) NULL 
 );
+CREATE UNIQUE INDEX user_email_uidx ON "user"(email); 
+CREATE UNIQUE INDEX user_code_uidx ON "user"(code); 
 
 
 CREATE SEQUENCE offer_type_id

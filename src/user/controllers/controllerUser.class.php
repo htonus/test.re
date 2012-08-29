@@ -16,8 +16,11 @@ class controllerUser extends PrototypedEditor
 	{
 		parent::__construct(User::create());
 		
+		$this->getForm()->drop('created');
+		
 		$this->setMethodMapping('activate', 'actionActivate');
 		$this->setMethodMapping('success', 'actionSuccess');
+		$this->setMethodMapping('error', 'actionError');
 	}
 	
 	public function handleRequest(HttpRequest $request)
@@ -50,8 +53,9 @@ class controllerUser extends PrototypedEditor
 //		$form->setValue('password', StringHelper::passgen());
 		$email = $form->getValue('email');
 		
-		if (!User::dao()->checkUnique($email)) {
-			$form->setValue('code', StringHelper::makeHash($email));
+		if (User::dao()->isUnique($email)) {
+			$form->	setValue('code', StringHelper::makeHash($email));
+			$object->setCreated(Timestamp::makeNow());
 			$object = parent::addObject($request, $form, $object);
 			
 			if ($object->getId())
@@ -71,10 +75,53 @@ class controllerUser extends PrototypedEditor
 	
 	protected function actionActivate(HttpRequest $request)
 	{
+		$mav = ModelAndView::create();
 		
+		$form = Form::create()->
+			add(
+				Primitive::string('param')->
+					addImportFilter(Filter::trim())->
+					required()
+			)->
+			import($request->getGet());
+		
+		if ($code = $form->getValue('param')) {
+			$pass = StringHelper::passgen();
+			
+			if ($user = User::dao()->activate($code, $pass)) {
+				Session::assign('user', $user);
+				
+				MailHelper::send(
+					Model::create()->
+						set('user', $user)->
+						set('password', $pass)->
+						set('subject', 'Your user account activated')->
+						set('template', 'confirm')
+				);
+
+				$mav->setView(
+					new RedirectView(PATH_WEB.'user/success')
+				);
+			} else {
+				$mav->setView(
+					new RedirectView(PATH_WEB.'user/error')
+				);
+			}
+		} else {
+			$mav->setView(
+				new RedirectView(PATH_WEB)
+			);
+		}
+		
+		return $mav;
 	}
 	
 	protected function actionSuccess(HttpRequest $request)
+	{
+		return ModelAndView::create();
+	}
+	
+	protected function actionError(HttpRequest $request)
 	{
 		return ModelAndView::create();
 	}
