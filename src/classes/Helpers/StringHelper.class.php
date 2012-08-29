@@ -18,5 +18,41 @@
 			} else
 				return $safe ? print_r($object, true) : var_export($object, true);
 		}
+		
+		public static function passgen($length = 8, $strength = 0)
+		{
+			$vowels = 'aeyui';
+			$consonants = 'bdghjmnpqrstvzf';
+			
+			if ($strength & 1)
+				$consonants .= 'BDGHJLMNPQRSTVWXZF';
+			
+			if ($strength & 2)
+				$vowels .= "AEYU";
+			
+			if ($strength & 4)
+				$consonants .= '23456789';
+			
+			if ($strength & 8)
+				$consonants .= '@#$%';
+
+			$password = '';
+			$alt = time() % 2;
+			for ($i = 0; $i < $length; $i++) {
+				if ($alt)
+					$password .= $consonants[(rand() % strlen($consonants))];
+				else
+					$password .= $vowels[(rand() % strlen($vowels))];
+				
+				$alt = !$alt;
+			}
+			
+			return $password;
+		}
+		
+		public static function makeHash($string)
+		{
+			return md5($string.StringHelper::passgen(8,8));
+		}
 	}
 ?>

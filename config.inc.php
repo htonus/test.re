@@ -57,6 +57,9 @@
 	
 	
 	define('DEFAULT_AREA', 'main');
+	define('DEFAULT_EMAIL', 'meincyp+test@gmail.com');
+	
+	define('PROJECT_NAME', 'Realestate.com.cy');
 	
 		
 	DBPool::me()->setDefault(

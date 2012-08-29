@@ -7,6 +7,17 @@
 
 	final class UserDAO extends AutoUserDAO
 	{
-		// last chance for customization
+		public function checkUnique($email)
+		{
+			try {
+				$this->getByLogic(
+					Expression::eq('email', $email)
+				);
+			} catch (ObjectNotFoundException $e) {
+				return true;
+			} catch (TooManyRowsException $e) {/*_*/}
+			
+			return false;
+		}
 	}
 ?>

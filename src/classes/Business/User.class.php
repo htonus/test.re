@@ -31,6 +31,9 @@
 			return Singleton::getInstance('ProtoUser');
 		}
 		
-		// your brilliant stuff goes here
+		public function getFullName()
+		{
+			return "$this->name $this->surname";
+		}
 	}
 ?>

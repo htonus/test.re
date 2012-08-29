@@ -16,7 +16,8 @@ final class Application
 		'main',
 		'search',
 		'get',
-		'property'
+		'property',
+		'user'
 	);
 	
 	public static function create()

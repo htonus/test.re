@@ -1,0 +1,71 @@
+<?php
+/*
+ * $Id$
+ */
+
+	$partViewer->view('_parts/js', Model::create()->set('name', 'selector'));
+?>
+
+<div class="container_24">
+
+	<!-- Main Form -->
+	<div class="g_16">
+
+		<form action="/user/<?=$form->getValue('id') ? 'save' : 'add'?>" method="post">
+<?php
+	$partViewer->view(
+		'_parts/form/inputLine',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'email',
+				'label'	=> "e-Mail (Login)",
+				'hint'	=> 'You will use this email as login.'
+			))
+	);
+	
+	$partViewer->view(
+		'_parts/form/inputLine',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'name',
+				'label'	=> "First name",
+			))
+	);
+	
+	$partViewer->view(
+		'_parts/form/inputLine',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'surname',
+				'label'	=> "Last name",
+			))
+	);
+	
+	$partViewer->view(
+		'_parts/form/inputLine',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'phone',
+				'label'	=> "Telephone",
+				'hint'	=> 'This telephone only for us to contact you, It will not be published anywhere.'
+			))
+	);
+?>
+		<br />
+		<div class="g_16 alpha omega">
+			<fieldset id="submit">
+				<div class="input">
+					<input type="submit" value="Send request" id="btnSubmit" />
+				</div>
+			</fieldset>
+		</div>
+
+		</form>
+	</div>
+
+	<!-- Useful Hints -->
+	<div class="g_10">
+
+	</div>
+
+</div>

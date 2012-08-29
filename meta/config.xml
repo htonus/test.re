@@ -10,10 +10,13 @@
 		<properties>
 			<identifier name="id" />
 			<property name="name" type="String" size="64" required="true" />
-			<property name="surname" type="String" size="64" required="true" />
-			<property name="username" type="String" size="64" required="true" />
-			<property name="password" type="String" size="40" required="true" />
+			<property name="surname" type="String" size="64" required="false" />
 			<property name="email" type="String" size="128" required="true" />
+			<property name="password" type="String" size="40" required="false" />
+			<property name="phone" type="String" size="64" required="false" />
+			<property name="activated" type="Boolean" required="false" default="false" />
+			<property name="code" type="String" size="32" required="false" default="false" />
+			<property name="autoLogin" type="String" size="32" required="false" default="false" />
 		</properties>
 		<pattern name="DictionaryClass" />
 	</class>

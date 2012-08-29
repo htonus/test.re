@@ -1,0 +1,17 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<title><?=$subject?></title>
+</head>
+<body>
+	<p>Dear <?=$user->getFullName()?>,</p>
+	<p>You successfully registered at Cyprus Realestate Website. To finish your registration please press the activation link below.</p>
+	<p><a href="<?=PATH_WEB?>user/activate/<?=$user->getCode()?>"><b><?=PATH_WEB?>user/activate/<?=$user->getCode()?></b></a></p>
+	<p>If this is an error, please ignore the letter.</p>
+	<br />
+	<p>
+		Kind Reagrds,<br />
+		<?=PROJECT_NAME?> Administration.
+	</p>
+</body>
+</html>

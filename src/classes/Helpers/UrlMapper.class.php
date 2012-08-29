@@ -166,10 +166,10 @@
 				$request->setGetVar('type', $type);
 			}
 			
-			if (preg_match('!^(get)/([^/]+)!', $query, $m)) {
-				$request->setGetVar('area', $m[1]);
-				$request->setGetVar('action', $m[2]);
-			}
+//			if (preg_match('!^(get)/([^/]+)!', $query, $m)) {
+//				$request->setGetVar('area', $m[1]);
+//				$request->setGetVar('action', $m[2]);
+//			}
 			
 			if (preg_match('!^(property)/([^/]+)/?([^/]+)?!', $query, $m)) {
 				$request->setGetVar('area', $m[1]);
@@ -183,7 +183,13 @@
 					}
 				}
 			}
-
+			
+			// last chance
+			if (preg_match('!^([^/]+)/([^/]+)?!', $query, $m)) {
+				$request->setGetVar('area', $m[1]);
+				$request->setGetVar('action', isset($m[2]) ? $m[2] : null);
+			}
+			
 			return false;
 		}
 		

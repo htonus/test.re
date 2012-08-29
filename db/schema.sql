@@ -17,13 +17,16 @@ CREATE TABLE "city" (
 
 CREATE SEQUENCE user_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
-CREATE TABLE "user" (
-    id			BIGINT PRIMARY KEY DEFAULT nextval('user_id'::regclass) NOT NULL,
-    name		VARCHAR(64) NOT NULL,
-    surname		VARCHAR(64) NOT NULL,
-    email		VARCHAR(128) NOT NULL,
-    username	VARCHAR(64) NOT NULL,
-    password	VARCHAR(40) NOT NULL
+CREATE TABLE "user" ( 
+    id 			BIGINT PRIMARY KEY DEFAULT nextval('user_id'::regclass) NOT NULL, 
+    "name"		VARCHAR(64) NOT NULL, 
+    "surname" 	VARCHAR(64) NULL, 
+    "email" 	VARCHAR(128) NOT NULL, 
+    "password" 	VARCHAR(40) NULL, 
+	"phone"		CHARACTER VARYING(64) NULL, 
+	"activated" BOOLEAN NULL DEFAULT FALSE, 
+	"code"		CHARACTER VARYING(32) NULL, 
+	"auto_login" CHARACTER VARYING(32) NULL 
 );
 
 
