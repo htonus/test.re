@@ -76,6 +76,7 @@
 		.PATH_CLASSES.'Business'.PS
 		.PATH_CLASSES.'Proto'.PS
 		.PATH_CLASSES.'Helpers'.PS
+		.PATH_CLASSES.'Filters'.PS
 		
 		.PATH_CLASSES.'Auto'.DS.'Business'.PS
 		.PATH_CLASSES.'Auto'.DS.'Proto'.PS

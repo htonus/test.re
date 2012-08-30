@@ -59,7 +59,10 @@ final class Application
 //				}
 //				break;
 			default:
-				$chain = new $controller;
+				$chain = 
+					new filterUserSession(
+						new $controller
+					);
 				break;
 		}
 		
