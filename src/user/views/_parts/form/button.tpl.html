@@ -1,0 +1,20 @@
+<?php
+/*
+ * $Id$
+ */
+	extract($params);
+
+	if (!isset($value))
+		$value = null;
+
+	$class = isset($class)
+		? ' class="'.$class.'"'
+		: null;
+?>
+			<fieldset id="fs_<?=$name?>">
+				<label for="fs_<?=$name?>">&nbsp;</label>
+				<div class="button">
+					<input type="button" id="<?=$name?>" name="<?=$name?>" value="<?=$value?>"<?=$class?> onclick="this.form.submit()" />
+				</div>
+			</fieldset>
+

@@ -9,23 +9,54 @@ BODY {
 	background: url(/i/bg.png) repeat-y center #E3E3E3;
 }
 
-.topMenu, .userStuff {
-	text-align: right;
-}
-
-.block {
-/*	background: url(/i/block.png) repeat-x;
-	padding-top: 20px;*/
-}
-
 H1, H2, H3 {
 	color: #666666;
 }
 
-.topMenu, .userStuff {
-	text-align: right;
+.hr {
+	background-color: #ffce6e;
+	position: fixed;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	height: 10px;
+	z-index: 100;
 }
 
+.mainMenu {
+	padding-top: 20px;
+	border-bottom: 2px #ffc251 solid;
+}
+
+.mainMenu UL LI {
+	position: relative;
+	float: left;
+	display: block;
+	margin-right: 5px;
+}
+.mainMenu UL LI A {
+	display: block;
+	padding: 5px 10px;
+	background-color: #ffc251;
+	font: bold 12px sans-serif;
+	text-decoration: none;
+	color: #FFF;
+}
+
+.userStuff {
+	background-color: #FFF;
+	border: 1px #FFCD6C solid;
+	margin-top: -70px;
+}
+.userStuff A {
+	text-transform: uppercase;
+	font: bold 10px sans-serif;
+	color: #999;
+}
+
+
+
+/* get rid of the tabs,  use top menu */
 .searchTab LI {
 	float: left;
 	width: 50%;
@@ -36,17 +67,24 @@ H1, H2, H3 {
 	font: bold 18px sans-serif;
 	text-transform: uppercase;
 	color: #FFCD6C;
-	border-top: 2px #FFE6B6 solid;
+	border: 2px #FFCD6C solid;
+	border-top: 2px #FFF solid;
+	border-right: 2px #FFCD6C solid;
 	border-left: 2px #FFCD6C solid;
-	border-bottom: 2px #FFCD6C solid;
 	cursor: pointer;
+	background-color: #FFF;
 }
-
 .searchTab LI DIV.active {
-	border-top: 2px #FFCD6C solid;
+	border: 2px #FFCD6C solid;
 	border-bottom: 2px #FFE6B6 solid;
-	color: #FFF;
+	border-left: 2px #FFE6B6 solid;
+	color: #FFCD6C;
+	background-color: #FFE6B6;
 }
+/* get rid of the tabs,  use top menu */
+
+
+
 
 INPUT, SELECT, TEXTAREA {
 	background-color: #FFF;
@@ -72,6 +110,17 @@ INPUT, SELECT, TEXTAREA {
 .input {
 	border: 1px #FFCD6C solid;
 	background-color: #FFF;
+}
+
+.button {
+	border: 1px #ffc251 solid;
+	background-color: #ffc251 !important;
+	color: #FFF;
+}
+.button INPUT {
+	background-color: transparent;
+	color: #FFF;
+	font: bold 12px sans-serif;
 }
 
 .select DL {
