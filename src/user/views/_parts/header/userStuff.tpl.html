@@ -2,8 +2,122 @@
 /*
  * $Id$
  */
-
 ?>
-<div class="g_8 omega" style="text-align: right">
-user buttons
+<form method="post">
+<div class="alpha p_1 g_10 s_1 omega userStuff">
+	<div class="g_4 alpha">
+<?php
+	$partViewer->view(
+		'_parts/form/input',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'name',
+				'label'	=> "First name",
+			))
+	);
+?>
+	</div>
+	<div class="g_4">
+<?php
+	$partViewer->view(
+		'_parts/form/input',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'surname',
+				'label'	=> "Last name",
+			))
+	);
+?>
+	</div>
+	<div class="g_2 omega close"><a href="">close<span>x</span></a></div>
+
+	<div class="clear"></div>
+	
+	<div class="g_4 alpha">
+<?php
+	$partViewer->view(
+		'_parts/form/input',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'username',
+				'label'	=> "User name",
+			))
+	);
+?>
+	</div>
+	<div class="g_4">
+<?php
+	$partViewer->view(
+		'_parts/form/input',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'password',
+				'label'	=> "Password",
+				'type'	=> 'password',
+			))
+	);
+	$partViewer->view(
+		'_parts/form/input',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'phone',
+				'label'	=> "Telephone",
+			))
+	);
+?>
+	</div>
+	<div class="g_2 omega">
+<?php
+	$partViewer->view(
+		'_parts/form/button',
+		Model::create()->
+			set('params', array(
+				'value'	=> 'SUBMIT',
+				'name'	=> 'login',
+			))
+	);
+?>
+	</div>
+	<div class="clear"></div>
+	
+	<div class="g_4 alpha"><a href="javascript:void(null)" alt="Simple Registration" title="Simple Registration" id="toggleReg">Registration</a></div>
+	<div class="g_4"><a href="/">Forgot password</a></div>
+	<div class="clear"></div>
+	<br />
 </div>
+</form>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#fs_phone').hide();
+	
+	$('#toggleReg').click(function(){
+		$('<div class="shadow">&nbsp;</div>').appendTo("body");
+		$('.userStuff')
+			.css('position', 'absolute')
+			.animate(
+				{'margin-top': -10},
+				'fast',
+				'swing',
+				function(){
+					$('#fs_password').val('').hide();
+					$('#fs_phone').val('').show();
+				}
+			);
+	});
+	
+	$('.close').click(function(){
+		$('.userStuff')
+			.animate(
+				{'margin-top': -70},
+				'slow',
+				function(){
+					$('.shadow').remove();
+					$(this).css('position', 'relative');
+					$('#fs_password').val('').show();
+					$('#fs_phone').val('').hide();
+				}
+			);
+	});
+});
+</script>

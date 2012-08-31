@@ -13,6 +13,17 @@ H1, H2, H3 {
 	color: #666666;
 }
 
+.shadow {
+	position: fixed;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	background-color: #000;
+	opacity: 0.7;
+	z-index: 50;
+}
+
 .hr {
 	background-color: #ffce6e;
 	position: fixed;
@@ -47,6 +58,8 @@ H1, H2, H3 {
 	background-color: #FFF;
 	border: 1px #FFCD6C solid;
 	margin-top: -70px;
+	float: left;
+	z-index: 70;
 }
 .userStuff A {
 	text-transform: uppercase;
@@ -54,7 +67,24 @@ H1, H2, H3 {
 	color: #999;
 }
 
+.close {
+	margin-top: 5px;
+	text-align: right;
+}
 
+.close A {
+	font: bold 10px monospace  !important;
+	text-decoration: none !important;
+	border-bottom: 1px #CCC solid;
+	color: #000;
+}
+
+.close SPAN {
+	background-color: #EEE;
+	margin-left: 5px;
+	padding: 0px 5px;
+	font-weight: bold;
+}
 
 /* get rid of the tabs,  use top menu */
 .searchTab LI {
