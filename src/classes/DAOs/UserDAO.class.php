@@ -9,37 +9,76 @@
 	{
 		public function isUnique($email)
 		{
-			try {
-				$this->getByLogic(
-					Expression::eq('email', $email)
-				);
-			} catch (ObjectNotFoundException $e) {
-				return true;
-			} catch (TooManyRowsException $e) {/*_*/}
-			
-			return false;
+			return null=== $this->
+				getByLogicSafe(Expression::eq('email', $email));
 		}
 		
 		public function activate($code, $password)
 		{
-			try {
-				$user = $this->getByLogic(
-					Expression::eq('code', $code)
-				);
-				
+			$user = $this->getByLogicSafe(
+				Expression::eq('code', $code)
+			);
+			
+			if (!empty($user))
 				$user->
 					setCode(null)->
 					setPassword(md5($password))->
 					setActivated(Timestamp::makeNow());
 				
-				return $this->save($user);
-			} catch (ObjectNotFoundException $e) {
-				return null;
-			} catch (TooManyRowsException $e) {
-				return null;
-			}
+				$user = $this->save($user);
+			
+			return $user;
+		}
+		
+		public function login($login, $hash)
+		{
+			$user = $this->
+				getByLogicSafe(
+					Expression::andBlock(
+						Expression::eq('username', $login),
+						Expression::eq('password', $hash)
+					)
+				);
+			
+			if ($user)
+				$this->updateLastLogin($user);
+			
+			return $user;
+		}
+		
+		public function autoLogin($hash)
+		{
+			$user = $this->getByLogicSafe(Expression::eq('auto_login', $hash));
+			
+			if ($user)
+				$this->updateLastLogin($user);
+			
+			return $user;
+		}
+		
+		/**
+		 * Safe getByLogic method
+		 * @param LogicalChain $logic
+		 * @return User or NULL
+		 */
+		public function getByLogicSafe(LogicalChain $logic)
+		{
+			try {
+				return $this->getByLogic($logic);
+			} catch (ObjectNotFoundException $e) {/*_*/}
+			catch (TooManyRowsException $e) {/*_*/}
 			
 			return null;
+		}
+		
+		/**
+		 * Not sure about the method
+		 * @param User $user
+		 * @return User $user
+		 */
+		private function updateLastLogin(User $user)
+		{
+			return $user;
 		}
 	}
 ?>
