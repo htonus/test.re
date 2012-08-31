@@ -40,7 +40,7 @@
 		Model::create()->
 			set('params', array(
 				'name'	=> 'username',
-				'label'	=> "User name",
+				'label'	=> "User name |e-mail|",
 			))
 	);
 ?>
@@ -92,6 +92,8 @@ $(document).ready(function(){
 	$('#fs_phone').hide();
 	
 	$('#toggleReg').click(function(){
+		if ($('.shadow').size() > 0)
+			return;
 		$('<div class="shadow">&nbsp;</div>').appendTo("body");
 		$('.userStuff')
 			.css('position', 'absolute')
