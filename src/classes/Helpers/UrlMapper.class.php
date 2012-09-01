@@ -54,7 +54,8 @@
 					Primitive::set('city')
 				)->
 				add(
-					Primitive::enumeration('status')->of('OfferType')
+					Primitive::enumerationByValue('action')->
+						of('OfferType')
 				)->
 				add(
 					Primitive::enumeration('property')->
@@ -69,7 +70,7 @@
 			$types = $form->getValue('type');
 			
 			$url = $this->pathWeb
-				.$form->getValue('status')->getName()
+				.$form->getValue('action')->getName()
 				.$this->toNamed($types, FeatureType::BEDROOMS)
 				.$this->toNamed($types, FeatureType::AREA)
 				.'-'.$form->getActualValue('property')->getName()
@@ -127,12 +128,16 @@
 			if ($request->hasGetVar('query'))
 				$query = trim($request->getGetVar('query'));
 			
-			// dont need to parse URL, because this is POST to GET redirect
-			if (
-				count($request->getPost())
-				&& !$query
-			)
-				return true;
+			// is POST to GET redirect for SEO links (browsing properties)
+			if (preg_match('!^(buy|rent)/?$!', $query, $m[1])) {
+				if (count($request->getPost()))
+					return true;
+				
+				$request->setGetVar('area', 'main');
+				$request->setGetVar('action', $m[1]);
+				
+				return false;
+			}
 			
 			$rega = '!^(buy|rent)(-(\d)-?(\d)?-bedrooms)?(-(\d+)-?(\d+)?-area)?'
 				.'-('.implode('|', EnumHelper::getNames('PropertyType')).')'
@@ -164,6 +169,7 @@
 				}
 				
 				$request->setGetVar('type', $type);
+				return false;
 			}
 			
 //			if (preg_match('!^(get)/([^/]+)!', $query, $m)) {

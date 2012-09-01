@@ -1,0 +1,17 @@
+<?php
+/*
+ * $Id$
+ */
+	$partViewer->view('_parts/header');
+?>
+
+<div class="hr"></div>
+
+<div class="container_24 container">
+	
+<?php
+	$partViewer->view('_parts/menu');
+	
+	$partViewer->view("$area/$action");
+
+	$partViewer->view('_parts/footer');

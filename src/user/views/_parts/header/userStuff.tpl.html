@@ -3,7 +3,7 @@
  * $Id$
  */
 ?>
-<form method="post">
+<form method="post" id="signinForm">
 <div class="alpha p_1 g_10 s_1 omega userStuff">
 	<div class="g_4 alpha">
 <?php
@@ -39,7 +39,7 @@
 		'_parts/form/input',
 		Model::create()->
 			set('params', array(
-				'name'	=> 'username',
+				'name'	=> 'email',
 				'label'	=> "User name |e-mail|",
 			))
 	);
@@ -72,15 +72,15 @@
 		'_parts/form/button',
 		Model::create()->
 			set('params', array(
-				'value'	=> 'SUBMIT',
-				'name'	=> 'login',
+				'value'	=> 'Sign In',
+				'name'	=> 'button',
 			))
 	);
 ?>
 	</div>
 	<div class="clear"></div>
 	
-	<div class="g_4 alpha"><a href="javascript:void(null)" alt="Simple Registration" title="Simple Registration" id="toggleReg">Registration</a></div>
+	<div class="g_4 alpha"><a href="javascript:void(null)" alt="Simple Registration" title="Simple Registration" id="toggleReg">Simple Registration</a></div>
 	<div class="g_4"><a href="/">Forgot password</a></div>
 	<div class="clear"></div>
 	<br />
@@ -104,6 +104,8 @@ $(document).ready(function(){
 				function(){
 					$('#fs_password').val('').hide();
 					$('#fs_phone').val('').show();
+					$('#button').val('Sign Up');
+					$('#signinForm').attr('action', '<?=PATH_WEB?>user/add');
 				}
 			);
 	});
@@ -118,6 +120,8 @@ $(document).ready(function(){
 					$(this).css('position', 'relative');
 					$('#fs_password').val('').show();
 					$('#fs_phone').val('').hide();
+					$('#button').val('Sign In')
+					$('#signinForm').attr('action', '');
 				}
 			);
 	});

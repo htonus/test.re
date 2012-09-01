@@ -16,10 +16,11 @@ class controllerMain extends MethodMappedController
 	{
 		parent::setMethodMappingList(
 			array(
-				'index'	=> 'actionIndex',
+				'buy'	=> 'actionIndex',
+				'rent'	=> 'actionIndex',
 			)
 		)->
-		setDefaultAction('index');
+		setDefaultAction('buy');
 	}
 
 	public function actionIndex(HttpRequest $request)
@@ -33,7 +34,7 @@ class controllerMain extends MethodMappedController
 		
 		return $mav;
 	}
-
+	
 	protected function attachCollections(Model $model)
 	{
 		$model->

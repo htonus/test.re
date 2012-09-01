@@ -28,13 +28,19 @@ final class filterUserSession implements Controller
 		 */
 		
 		
-		if (!($user = Session::get('user'))) {
-			$user = $this->doLogin($request);
-		}
+		($user = Session::get('user'))
+		|| ($user = $this->doLogin($request))
+		|| ($user = $this->doAutoLogin($request));
 		
 		$request->setAttachedVar('user', $user);
 		
-		$mav = $this->inner->handleRequest($request);
+		if ($request->hasAttachedVar('redirect')) {
+			$mav = ModelAndView::create()->
+				setView(
+					RedirectView::create($request->getAttachedVar('redirect'))
+				);
+		} else
+			$mav = $this->inner->handleRequest($request);
 		
 		if (!$mav->viewIsRedirect())
 			$mav->getModel()->
@@ -47,11 +53,7 @@ final class filterUserSession implements Controller
 	{
 		$form = Form::create()->
 			add(
-				Primitive::string('autoLogin')->
-					addImportFilter(Filter::trim())
-			)->
-			add(
-				Primitive::string('username')->
+				Primitive::string('email')->
 					addImportFilter(Filter::trim())
 			)->
 			add(
@@ -59,17 +61,45 @@ final class filterUserSession implements Controller
 					addImportFilter(Filter::trim())->
 					addImportFilter(Filter::hash())
 			)->
-			import($request->getCookie())->
-			importMore($request->getPost());
+			import($request->getPost());
 		
 		$user = null;
 		
-		if ($login = $form->getValue('username'))  {
-			$user = User::dao()->login($login, $form->getValue('password'));
-		} elseif ($login = $form->getValue('autoLogin')) {
-			$user = User::dao()->autLogin($login);
+		if ($hash = $form->getValue('password')) {
+			$user = User::dao()->login($form->getValue('email'), $hash);
+			
+			if ($user) {
+				$backUrl = $request->getAttachedVar('query');
+				
+				if (Session::get('backUrl')) {
+					$backUrl = Session::get('backUrl');
+					Session::drop('backUrl');
+				}
+				
+				$request->setAttachedVar('redirect', $backUrl);
+			} else {
+				$request->setAttachedVar('redirect', PATH_WEB.'user/error');
+				Session::assign('backUrl', $request->getAttachedVar('query'));
+			}
 		}
+	
+		return $user;
+	}
+	
+	private function doAutoLogin(HttpRequest $request)
+	{
+		$form = Form::create()->
+			add(
+				Primitive::string('autoLogin')->
+					addImportFilter(Filter::trim())
+			)->
+			import($request->getCookie());
 		
+		$user = null;
+		
+		if ($code = $form->getValue('autoLogin'))
+			$user = User::dao()->autoLogin($code);
+	
 		return $user;
 	}
 }

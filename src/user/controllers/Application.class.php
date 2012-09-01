@@ -17,7 +17,9 @@ final class Application
 		'search',
 		'get',
 		'property',
-		'user'
+		'user',
+		'buy',
+		'rent'
 	);
 	
 	public static function create()
@@ -28,7 +30,7 @@ final class Application
 	public function run()
 	{
 		if (!Session::isStarted())
-			Session::start ();
+			Session::start();
 		
 		$request = HttpRequest::create()->
 			setGet($_GET)->
@@ -41,6 +43,7 @@ final class Application
 		$urlMapper = UrlMapper::create(PATH_WEB);
 		$logger = Logger::create(Logger::DEBUG);
 		
+		// for SEO links while browsing properties
 		if ($urlMapper->resolveRequest($request)) {
 			return $this->render($urlMapper->getRedirectMav($request), $request);
 		}

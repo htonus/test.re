@@ -10,7 +10,7 @@
 		public function isUnique($email)
 		{
 			return null=== $this->
-				getByLogicSafe(Expression::eq('email', $email));
+				getByLogicSafe(	Expression::eq('email', $email));
 		}
 		
 		public function activate($code, $password)
@@ -61,7 +61,7 @@
 		 * @param LogicalChain $logic
 		 * @return User or NULL
 		 */
-		public function getByLogicSafe(LogicalChain $logic)
+		public function getByLogicSafe(LogicalObject $logic)
 		{
 			try {
 				return $this->getByLogic($logic);

@@ -125,6 +125,7 @@ INPUT, SELECT, TEXTAREA {
 	cursor: pointer;
 	margin: 0px;
 }
+
 .fields > DIV {
 	border: 1px #FFCD6C solid;
 	background-color: #FFF;

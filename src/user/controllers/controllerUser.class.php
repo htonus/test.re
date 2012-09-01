@@ -12,6 +12,8 @@
  */
 class controllerUser extends PrototypedEditor
 {
+	const EMAIL_UNIQUE	= 1;
+	
 	public function __construct()
 	{
 		parent::__construct(User::create());
@@ -27,23 +29,27 @@ class controllerUser extends PrototypedEditor
 	{
 //		$request->getAttachedVar('logger')->debug($_REQUEST);
 //		$request->getAttachedVar('logger')->debug($_FILES);
-
+		
 		$mav = parent::handleRequest($request);
 		$model = $mav->getModel();
 		
 		if (
 			$model->has('editorResult')
-			&& $model->has('editorResult') == PrototypedEditor::COMMAND_SUCCEEDED
 			&& in_array($model->get("action"), array('add', 'save'))
 		) {
-			$mav->
-				setView(
-					RedirectView::create(PATH_WEB.'user/success')
-				)->
-				setModel(Model::create());
+			if (
+				$model->get('editorResult')
+				== PrototypedEditor::COMMAND_SUCCEEDED
+			) {
+				$mav->
+					setView(
+						RedirectView::create(PATH_WEB.'user/success')
+					)->
+					setModel(Model::create());
+			} else {
+				$mav->getModel()->set('action', 'edit');
+			}
 		}
-		
-		$request->setAttachedVar('layout', 'main');
 		
 		return $mav;
 	}
@@ -67,7 +73,7 @@ class controllerUser extends PrototypedEditor
 						set('object', $object)
 				);
 		} else {
-			$form->markWrong('email');
+			$form->markCustom('email', self::EMAIL_UNIQUE);
 		}
 		
 		return $object;

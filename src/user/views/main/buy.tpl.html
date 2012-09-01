@@ -14,7 +14,7 @@
 	for ($number = 100000; $number < 500000; $number += 100000)
 		$priceList[$number] = $number;
 ?>
-<div class="container_24 block" style="background-color: #FFE6B6">
+<div class="container_24 block">
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -50,17 +50,8 @@ $(document).ready(function(){
 
 	<div class="g_14">
 
-		<form name="searchForm" id="searchForm" action="<?=PATH_WEB?>" method="POST">
-			<input type="hidden" name="status" value="<?=OfferType::BUY?>"/>
-		<!-- search tabs -->
-		<div class="g_14 alpha omega">
-			<ul class="searchTab">
-				<li class="buy"><div class="active">buy</div></li>
-				<li class="rent"><div>rent</div></li>
-			</ul>
-			<div class="clear"></div>
-		</div>
-		<div class="clear"></div>
+		<form name="searchForm" id="searchForm" method="POST">
+			<input type="hidden" name="action" value="<?=$action?>"/>
 
 		<!-- search form -->
 		<div class="g_14 alpha omega">
