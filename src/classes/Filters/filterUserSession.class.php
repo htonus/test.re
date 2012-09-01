@@ -38,7 +38,7 @@ final class filterUserSession implements Controller
 			$this->doLogout($request);
 			$user = null;
 		}
-	
+		
 		$request->setAttachedVar('user', $user);
 		
 		if ($request->hasAttachedVar('redirect')) {
@@ -81,6 +81,8 @@ final class filterUserSession implements Controller
 			$user = User::dao()->login($form->getValue('email'), $hash);
 			
 			if ($user) {
+				Session::assign('user', $user);
+				
 				if ($form->getValue('autoLogin')) {
 					$cookie = strtoupper(md5(StringHelper::passgen(16, 8)));
 					$user->setAutoLogin($cookie);
@@ -140,7 +142,7 @@ final class filterUserSession implements Controller
 			setDomain(DOMAIN)->
 			setPath('/')->
 			setValue($value)->
-			setMaxAge($age->toTimestamp())->
+			setMaxAge($age->toStamp())->
 			httpSet();
 		
 		return $this;

@@ -19,13 +19,14 @@
 				Expression::eq('code', $code)
 			);
 			
-			if (!empty($user))
+			if (!empty($user)) {
 				$user->
 					setCode(null)->
-					setPassword(md5($password))->
+					setPassword(sha1($password))->
 					setActivated(Timestamp::makeNow());
 				
 				$user = $this->save($user);
+			}
 			
 			return $user;
 		}
@@ -35,7 +36,7 @@
 			$user = $this->
 				getByLogicSafe(
 					Expression::andBlock(
-						Expression::eq('username', $login),
+						Expression::eq('email', $login),
 						Expression::eq('password', $hash)
 					)
 				);

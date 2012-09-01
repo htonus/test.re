@@ -128,6 +128,8 @@
 			if ($request->hasGetVar('query'))
 				$query = trim($request->getGetVar('query'));
 			
+			$request->setAttachedVar('query', $query);
+			
 			// is POST to GET redirect for SEO links (browsing properties)
 			if (preg_match('!^(buy|rent)/?$!', $query, $m[1])) {
 				if ($request->hasPostVar('action'))

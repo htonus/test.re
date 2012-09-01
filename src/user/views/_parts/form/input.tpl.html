@@ -10,11 +10,14 @@
 	$class = isset($class)
 		? ' class="'.$class.'"'
 		: null;
+	
+	if (empty($autocomplete))
+		$autocomplete = false;
 ?>
 			<fieldset id="fs_<?=$name?>">
 				<label for="fs_<?=$name?>"><?=$label?></label>
 				<div class="select">
-					<input type="<?=empty($type) ? 'text' : $type?>" name="<?=$name?>" id="<?=$name?>" value="<?=$value?>"<?=$class?> autocomplete="off" />
+					<input type="<?=empty($type) ? 'text' : $type?>" name="<?=$name?>" id="<?=$name?>" value="<?=$value?>"<?=$class?><?=$autocomplete ? null : ' autocomplete="off"'?> />
 				</div>
 			</fieldset>
 
