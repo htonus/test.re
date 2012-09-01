@@ -1,0 +1,31 @@
+<?php
+/*
+ * $Id$
+ */
+?>
+<form method="post" id="signinForm">
+<input type="hidden" name="signout" value="1"/>
+
+<div class="alpha p_1 g_10 s_1 omega userStuff">
+	<div class="g_8 alpha">
+		User: <?=$user->getFullName()?><br/>
+		Last visit: <?=Timestamp::makeNow()->toDateTime()?><br/>
+		Property Views: <?=10?><br/>
+		<a href="">Your Property list</a>
+		<a href="">wish list</a>
+		<a href="">Subscription list</a>
+	</div>
+	<div class="g_2 omega">
+<?php
+	$partViewer->view(
+		'_parts/form/button',
+		Model::create()->
+			set('params', array(
+				'value'	=> 'Sign Out',
+				'name'	=> 'button',
+			))
+	);
+?>
+	</div>
+</div>
+</form>

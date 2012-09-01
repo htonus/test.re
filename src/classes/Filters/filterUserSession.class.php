@@ -12,6 +12,9 @@
  */
 final class filterUserSession implements Controller
 {
+	const COOKIE_NAME	= 'autoLogin';
+	const COOKIE_EXPIRE	= '1 year';
+	
 	private $inner = null;
 	
 	public function __construct(Controller $controller)
@@ -27,11 +30,15 @@ final class filterUserSession implements Controller
 		 * 4. нет пользователя
 		 */
 		
-		
 		($user = Session::get('user'))
 		|| ($user = $this->doLogin($request))
 		|| ($user = $this->doAutoLogin($request));
 		
+		if ($user && $request->hasPostVar('signout')) {
+			$this->doLogout($request);
+			$user = null;
+		}
+	
 		$request->setAttachedVar('user', $user);
 		
 		if ($request->hasAttachedVar('redirect')) {
@@ -61,7 +68,12 @@ final class filterUserSession implements Controller
 					addImportFilter(Filter::trim())->
 					addImportFilter(Filter::hash())
 			)->
-			import($request->getPost());
+			add(
+				Primitive::ternary('autoLogin')->
+					setDefault(false)
+			)->
+			import($request->getPost())->
+			importMore($request->getCookie());
 		
 		$user = null;
 		
@@ -69,6 +81,13 @@ final class filterUserSession implements Controller
 			$user = User::dao()->login($form->getValue('email'), $hash);
 			
 			if ($user) {
+				if ($form->getValue('autoLogin')) {
+					$cookie = strtoupper(md5(StringHelper::passgen(16, 8)));
+					$user->setAutoLogin($cookie);
+					$user = $user->dao()->save($user);
+					$this->setAutoLoginCookie ($cookie);
+				}
+				
 				$backUrl = $request->getAttachedVar('query');
 				
 				if (Session::get('backUrl')) {
@@ -90,16 +109,40 @@ final class filterUserSession implements Controller
 	{
 		$form = Form::create()->
 			add(
-				Primitive::string('autoLogin')->
+				Primitive::string(self::COOKIE_NAME)->
 					addImportFilter(Filter::trim())
 			)->
 			import($request->getCookie());
 		
 		$user = null;
 		
-		if ($code = $form->getValue('autoLogin'))
+		if ($code = $form->getValue(self::COOKIE_NAME))
 			$user = User::dao()->autoLogin($code);
 	
 		return $user;
+	}
+	
+	private function doLogout(HttpRequest $request)
+	{
+		Session::drop('user');
+		$this->setAutoLoginCookie(null, Timestamp::makeNow()->spawn('-1 hour'));
+		$request->setAttachedVar('redirect', $request->getAttachedVar('query'));
+		
+		return $this;
+	}
+	
+	private function setAutoLoginCookie($value = null, Timestamp $age = null)
+	{
+		if (!$age)
+			$age = Timestamp::makeNow()->spawn(self::COOKIE_EXPIRE);
+		
+		Cookie::create(self::COOKIE_NAME)->
+			setDomain(DOMAIN)->
+			setPath('/')->
+			setValue($value)->
+			setMaxAge($age->toTimestamp())->
+			httpSet();
+		
+		return $this;
 	}
 }

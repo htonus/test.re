@@ -130,7 +130,7 @@
 			
 			// is POST to GET redirect for SEO links (browsing properties)
 			if (preg_match('!^(buy|rent)/?$!', $query, $m[1])) {
-				if (count($request->getPost()))
+				if ($request->hasPostVar('action'))
 					return true;
 				
 				$request->setGetVar('area', 'main');

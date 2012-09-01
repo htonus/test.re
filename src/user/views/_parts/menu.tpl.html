@@ -14,7 +14,10 @@
 	
 <div class="g_12 topMenu">
 <?php
-	$partViewer->view('_parts/header/userStuff');
+	if ($user)
+		$partViewer->view('_parts/header/userStuffIn');
+	else
+		$partViewer->view('_parts/header/userStuffOut');
 ?>
 </div>
 
