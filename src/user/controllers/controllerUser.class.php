@@ -101,7 +101,7 @@ class controllerUser extends PrototypedEditor
 					Model::create()->
 						set('user', $user)->
 						set('password', $pass)->
-						set('subject', 'Your user account activated')->
+						set('subject', 'Your user account is activated')->
 						set('template', 'confirm')
 				);
 

@@ -85,9 +85,8 @@ final class filterUserSession implements Controller
 				
 				if ($form->getValue('autoLogin')) {
 					$cookie = strtoupper(md5(StringHelper::passgen(16, 8)));
-					$user->setAutoLogin($cookie);
-					$user = $user->dao()->save($user);
-					$this->setAutoLoginCookie ($cookie);
+					$user = $user->dao()->save($user->setAutoLogin($cookie));
+					$this->setAutoLoginCookie($cookie);
 				}
 				
 				$backUrl = $request->getAttachedVar('query');
@@ -139,7 +138,7 @@ final class filterUserSession implements Controller
 			$age = Timestamp::makeNow()->spawn(self::COOKIE_EXPIRE);
 		
 		Cookie::create(self::COOKIE_NAME)->
-			setDomain(DOMAIN)->
+			setDomain(COOKIE_DOMAIN)->
 			setPath('/')->
 			setValue($value)->
 			setMaxAge($age->toStamp())->

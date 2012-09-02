@@ -60,7 +60,7 @@ H1, H2, H3 {
 	float: left;
 	z-index: 70;
 }
-.userStuff A {
+.userStuff A, .userStuff LABEL {
 	text-transform: uppercase;
 	font: bold 10px sans-serif;
 	color: #999;
@@ -123,6 +123,10 @@ INPUT, SELECT, TEXTAREA {
 	padding: 5px;
 	cursor: pointer;
 	margin: 0px;
+}
+
+INPUT[type="checkbox"] {
+	width: auto;
 }
 
 .fields > DIV {
