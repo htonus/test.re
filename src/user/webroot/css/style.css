@@ -270,7 +270,7 @@ LI.main {
 	cursor: pointer;
 }
 
-.button:hover {
+.control:hover {
 	background-color: #FFE6B6;
 }
 

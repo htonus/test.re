@@ -14,15 +14,15 @@ final class controllerProperty extends PrototypedEditor
 {
 	public function __construct()
 	{
-		parent::__construct(Property::create());
+		parent::__construct(
+			Property::create()->
+				setCreated(Timestamp::makeNow())->
+				setOfferType(OfferType::buy())
+		);
 		
 		$this->getForm()->
+			drop('created')->
 			drop('offerType')->
-			add(
-				Primitive::enumerationByValue('offerType')->
-					of('OfferType')->
-					setDefault(OfferType::buy())
-			)->
 			add(
 				Primitive::set('type')->
 				setDefault(array())
@@ -37,7 +37,7 @@ final class controllerProperty extends PrototypedEditor
 	{
 //		$request->getAttachedVar('logger')->debug($_REQUEST);
 //		$request->getAttachedVar('logger')->debug($_FILES);
-
+		
 		$mav = parent::handleRequest($request);
 		$model = $mav->getModel();
 		
@@ -48,15 +48,17 @@ final class controllerProperty extends PrototypedEditor
 		) {
 			$data = array(
 				'result'	=> PrototypedEditor::COMMAND_SUCCEEDED,
-				'id'		=> $model->get('subject')->getId()
+				'id'		=> $model->get('subject')->getId(),
 			);
-
-			if ($model->get("action") != 'image') {
-				$this->storeFeatures($model->get('subject'));
-				$request->setAttachedVar('layout', 'json');
+			
+			if ($model->get("action") == 'image') {
 				$data['url'] = $request->getAttachedVar('urlMapper')->
-					getRedirectUrl($request, $mav->getModel()->get('subject'));
+					getObjectUrl($model->get('subject'), 'view');
+			} else {
+				$this->storeFeatures($model->get('subject'));
 			}
+			
+			$request->setAttachedVar('layout', 'json');
 			
 			$mav->setModel(
 				Model::create()->set('data', $data)
@@ -180,5 +182,75 @@ final class controllerProperty extends PrototypedEditor
 		}
 
 		return $object;
+	}
+	
+	public function doAdd(HttpRequest $request)
+	{
+		$form = $this->getForm()->
+			importOne('user', $request->getPost());
+		
+		if (!$form->getValue('user')) {
+			if ($user = $this->createUser($request)) {
+				$form->markGood('user');
+				$form->drop('user');
+				$this->subject->setUser($user);
+			}
+		}
+		
+		return parent::doAdd($request);
+	}
+	
+	private function createUser(HttpRequest $request)
+	{
+		$form = Form::create()->
+			add(
+				Primitive::string('userEmail')->
+					addImportFilter(Filter::trim())->
+					setAllowedPattern(PrimitiveString::MAIL_PATTERN)->
+					required()
+			)->
+			add(
+				Primitive::string('userName')->
+					addImportFilter(Filter::trim())->
+					required()
+			)->
+			add(
+				Primitive::string('userSurname')->
+					addImportFilter(Filter::trim())
+			)->
+			import($request->getPost());
+		
+		if (
+			$form->getErrors()
+			|| !($email = $form->getValue('userEmail'))
+			|| !User::dao()->isUnique($email)
+		 )
+			return null;
+		
+		$user = User::create()->
+			setEmail($email)->
+			setName($form->getValue('userName'))->
+			setSurname($form->getValue('userSurname'))->
+			setCode(StringHelper::makeHash($email))->
+			setCreated(Timestamp::makeNow());
+		
+		try {
+			$user = $user->dao()->add($user);
+			
+			if ($user->getId())
+				MailHelper::send(
+					Model::create()->
+						set('user', $user)->
+						set('template', 'activate')->
+						set('subject', PROJECT_NAME.' User activation')->
+						set('object', $user)
+				);
+			else
+				return null;
+		} catch (DatabaseException $e) {
+			return null;
+		}
+		
+		return $user;
 	}
 }

@@ -57,7 +57,7 @@
 			return strtolower(
 				md5(
 					$string
-					.StringHelper::passgen(8,8)
+					.StringHelper::passgen(16,8)
 				)
 			);
 		}

@@ -19,22 +19,16 @@
 		
 		public function getAreaUrl($area)
 		{
-			return $this->pathWeb
-				.(
-					defined('NICE_URL')
-						? $area
-						: '?area='.$area
-				);
+			return $this->pathWeb.$area;
 		}
 
 		public function getObjectUrl(Identifiable $object, $action='edit')
 		{
-			$area = get_class($object);
-			$area[0] = strtolower($area[0]);
+			$area = StringHelper::lcfirst(get_class($object));
 			
 			return $this->getAreaUrl($area)
-				.(defined('NICE_URL') ? '/' : '&action=').$action
-				.(defined('NICE_URL') ? '/' : '&id=').$object->getId();
+				.($action ? '/'.$action : null)
+				.'/'.$object->getId();
 		}
 		
 		public function getRedirectMav(HttpRequest $request, Property $property = null)
@@ -70,7 +64,11 @@
 			$types = $form->getValue('type');
 			
 			$url = $this->pathWeb
-				.$form->getValue('action')->getName()
+				.(
+					$property
+					? $property->getOfferType()->getName()
+					: $form->getValue('action')->getName()
+				)
 				.$this->toNamed($types, FeatureType::BEDROOMS)
 				.$this->toNamed($types, FeatureType::AREA)
 				.'-'.$form->getActualValue('property')->getName()

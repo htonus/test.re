@@ -30,7 +30,7 @@
 	<div class="g_16">
 
 		<form
-			action="/property/<?=$form->getValue('id') ? 'save' : 'add'?>/buy"
+			action="/property/<?=$form->getValue('id') ? 'save' : 'add'?>"
 			id="fileupload"
 			method="post"
 			enctype="multipart/form-data"
@@ -65,6 +65,59 @@
 		</div>
 		<div class="clear"></div>
 
+
+<?php
+	if (!empty($user)) {
+?>
+	<input type="hidden" name="user" value="<?=$user->getId()?>" />
+<?php
+	} else {
+?>
+		<div class="g_6 alpha">
+<?php
+	$partViewer->view(
+		'_parts/form/input',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'userEmail',
+				'label'	=> "Contact e-Mail (or Sifn In)",
+				'autocomplete'	=> true,
+			))
+	);
+?>
+		</div>
+		<div class="g_5">
+<?php
+	$partViewer->view(
+		'_parts/form/input',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'userName',
+				'label'	=> "Contact Name",
+				'autocomplete'	=> true,
+			))
+	);
+?>
+		</div>
+		<div class="g_5 omega">
+<?php
+	$partViewer->view(
+		'_parts/form/input',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'userSurname',
+				'label'	=> "Contact Surname",
+				'autocomplete'	=> true,
+			))
+	);
+?>
+		</div>
+		<div class="clear"></div>
+		
+<?php
+	}
+?>
+
 		<div class="g_6 alpha">
 			<div class="g_6 alpha omega">
 <?php
@@ -81,6 +134,7 @@
 ?>
 			</div>
 			<div class="clear"></div>
+			
 			<div class="g_3 alpha">
 <?php
 	$partViewer->view(
@@ -234,25 +288,21 @@ $(document).ready(function(){
 	$('INPUT#edit_location').auto_grep();
 	$('#btnSubmit').click(function(){
 		var form = $(this).get(0).form;
-		var data = {
-			'user'		: 2,	// FIXME: REAL ONE!!!
-			'name'		: form.name.value,
-//			'location'		: form.city.value,
-			'offerType'		: 'sell', // FIXME: REAL ONE!!!
-			'propertyType'	: form.propertyType.value,
-			'description'	: form.description.value
-		};
+		var data = {};
 		
-		$('INPUT["name^=type["]:text').each(function(){
-			data[$(this).attr('name')] = $(this).val();
-		});
-		
-		$('INPUT["name^=type["]:checked').each(function(){
+<?php
+	if ($user) {
+?>
+		data['user'] = <?=$user->getId()?>;
+<?php
+	}
+?>
+		$('INPUT:text, TEXTAREA, INPUT["name^=type["]:checked', $('#fileupload')).each(function(){
 			data[$(this).attr('name')] = $(this).val();
 		});
 		
 		$.post(
-			'/property/<?=$form->getValue('id') ? 'save' : 'add'?>/sell',
+			'/property/<?=$form->getValue('id') ? 'save' : 'add'?>',
 			data,
 			function(result){
 				if (result.result == '<?=PrototypedEditor::COMMAND_SUCCEEDED?>') {
@@ -270,7 +320,7 @@ $(document).ready(function(){
 					
 					ImageLoader.uploadFiles(formData, function(result){
 						if (result.result == '<?=PrototypedEditor::COMMAND_SUCCEEDED?>')
-							document.location.href = '<?=PATH_WEB?>' + data.url;
+							document.location.href = result.url;
 						else
 							alert('Something went wrong!');
 					});
@@ -317,7 +367,7 @@ $(document).ready(function(){
 <script type="text/x-tmpl" id="tmplUpload">
 <li class="file" id="file_{%= '' + o.file.id %}">
 	<div class="name">{%= o.file.name %} ({% if (o.file.size >> 20 > 0) print(o.file.size >> 20 + 'Mb'); else print(o.file.size >> 10 + 'kb'); %})</div>
-	<div class="button drop">x</div>
+	<div class="control drop">x</div>
 	<div class="clear"></div>
 	
 	<div class="preview"></div>

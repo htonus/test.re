@@ -117,6 +117,8 @@
 			<property name="image" type="Picture" relation="OneToOne" required="false" />
 			<property name="pictures" type="Picture" relation="OneToMany" required="false" />
 			<property name="location" type="City" relation="OneToOne" required="true" fetch="lazy" />
+			<property name="created" type="Timestamp" required="true" />
+			<property name="published" type="Timestamp" required="false" />
 		</properties>
 		<pattern name="DictionaryClass" />
 	</class>
