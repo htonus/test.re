@@ -47,5 +47,10 @@
 		{
 			return $this->uploadName;
 		}
+		
+		public function getUrl()
+		{
+			return PATH_WEB_PIX.$this->id.'.'.$this->getType()->getExtension();
+		}
 	}
 ?>

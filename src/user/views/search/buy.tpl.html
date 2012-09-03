@@ -139,6 +139,7 @@
 		<table width="100%">
 			<tr>
 				<th>Title</th>
+				<th>Type</th>
 				<th>Price</th>
 				<th>Area</th>
 				<th>Beds</th>
@@ -157,7 +158,8 @@
 		$features = $item->getFeatures()->getList();
 ?>
 			<tr>
-				<td><?=$item->getName()?></td>
+				<td><a href="<?=$urlMapper->getObjectUrl($item, 'view')?>"><?=$item->getName()?></a></td>
+				<td><?=$item->getPropertyType()->getName()?></td>
 <?php
 		foreach ($typesList as $typeId) {
 ?>

@@ -96,7 +96,7 @@ final class filterUserSession implements Controller
 					Session::drop('backUrl');
 				}
 				
-				$request->setAttachedVar('redirect', $backUrl);
+				$request->setAttachedVar('redirect', PATH_WEB.$backUrl);
 			} else {
 				$request->setAttachedVar('redirect', PATH_WEB.'user/error');
 				Session::assign('backUrl', $request->getAttachedVar('query'));
@@ -127,7 +127,7 @@ final class filterUserSession implements Controller
 	{
 		Session::drop('user');
 		$this->setAutoLoginCookie(null, Timestamp::makeNow()->spawn('-1 hour'));
-		$request->setAttachedVar('redirect', $request->getAttachedVar('query'));
+		$request->setAttachedVar('redirect', PATH_WEB.$request->getAttachedVar('query'));
 		
 		return $this;
 	}

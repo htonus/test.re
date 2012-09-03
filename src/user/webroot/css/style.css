@@ -281,3 +281,47 @@ LI.main {
 .preview {
 	background-color: #FFF;
 }
+
+/* images */
+.gallery .previewList UL {
+	white-space: nowrap;
+	overflow: hidden;
+	margin: 5px 0px;
+	height: 100px;
+}
+.gallery .previewList LI {
+	float: left;
+	display: block;
+	width: 150px;
+	margin-left: 10px;
+	padding-top: 5px;
+}
+.gallery .previewList LI.first {
+	margin-left: 0 !important;
+}
+.gallery .title {
+	font: 14px sans-serif;
+	color: #FFF;
+	background-color: #999;
+	padding: 5px;
+}
+.gallery .previewList IMG {
+	border-top: 1px #FFF solid;
+}
+.gallery .previewList LI:hover {
+	background-color: #ffce6e;
+}
+.gallery .previewList LI.highlite {
+	background-color: #999;
+}
+.info {
+	text-align: center;
+	background-color: #090;
+	color: #FFF;
+	font: bold 12px sans-serif;
+	padding: 3px 0px;
+	text-transform: uppercase;
+}
+.nok {
+	background-color: #F00 !important;
+}

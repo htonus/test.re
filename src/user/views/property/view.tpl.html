@@ -1,0 +1,85 @@
+<?php
+/*
+ * $Id$
+ */
+
+	$pictures = $property->getPictures()->getList();
+	$date = $property->getPublished();
+?>
+
+<br/>
+<div class="container_24">
+
+	<div class="g_20">
+		<h1><?=$property->getName()?> (#<?=$property->getId()?>)</h1>
+	</div>
+	<div class="g_4 info <?=$date ? null : 'nok'?>">
+<?php
+	if ($date) {
+		echo 'Published: '.$date->toDate();
+	} else {
+		echo 'Is not published';
+	}
+?>
+	</div>
+	<div class="clear"></div>
+	
+	<div class="g_8">
+		описание
+	</div>
+	<div class="g_16 gallery">
+		<div class="g_16 alpha omega">
+			<div class="title">asdada sdas dasd ad</div>
+		</div>
+		<div class="clear"></div>
+				
+		<div class="g_16 alpha omega">
+<?php
+	$partViewer->view(
+		'_parts/picture',
+		Model::create()->
+			set('picture', $property->getImage())->
+			set('size', ImageSize::big())
+	)
+?>
+		</div>
+		<div class="clear"></div>
+		
+		<div class="g_16 alpha omega previewList">
+			<ul>
+<?php
+	$first = true;
+
+	foreach ($pictures as $picture) {
+		$class = '';
+		
+		if ($first)
+			$class .= ' first';
+		
+		if ($picture->isMain())
+			$class .= ' highlite';
+?>
+				<li class="<?=$class?>">
+<?php
+		$partViewer->view(
+			'_parts/picture',
+			Model::create()->
+				set('picture', $picture)->
+				set('size', ImageSize::preview())
+		);
+		
+		$first = false;
+?>
+				</li>
+<?php
+	}
+?>
+			</ul>
+		</div>
+	</div>
+		 
+</div>
+
+<script type="text/javascript">
+	
+</script>

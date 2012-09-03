@@ -35,6 +35,10 @@
 			try {
 				$db = DBPool::me()->getLink($this->getLinkName())->begin();
 				
+				if ($object->isMain()) {
+					$this->dropMain($object->getProperty());
+				}
+				
 				if ($object = parent::add($object)) {
 			 		$path = PATH_PIX.$object->getId().'.'.$type->getExtension();
 					
@@ -50,5 +54,22 @@
 		
 			return $object;
 		}
+		
+		public function dropMain(Property $property)
+		{
+			try {
+				$picture = $this->getByLogic(
+					Expression::andBlock(
+						Expression::eqId('property', $property),
+						Expression::isTrue('main')
+					)
+				);
+				
+				if ($picture->getId()) {
+					$this->save($picture->setMain(false));
+				}
+			} catch (DatabaseException $e) {/*_*/}
+			
+			return $this;
+		}
 	}
-?>

@@ -114,7 +114,7 @@
 			<property name="propertyType" type="PropertyType" relation="OneToOne" required="true" fetch="lazy" />
 			<property name="offerType" type="OfferType" relation="OneToOne" required="true" fetch="lazy" />
 			<property name="features" type="Feature" relation="OneToMany" required="false" />
-			<property name="image" type="Picture" relation="OneToOne" required="false" />
+			<property name="image" type="Picture" relation="OneToOne" required="false" fetch="lazy" />
 			<property name="pictures" type="Picture" relation="OneToMany" required="false" />
 			<property name="location" type="City" relation="OneToOne" required="true" fetch="lazy" />
 			<property name="created" type="Timestamp" required="true" />

@@ -29,6 +29,7 @@ final class controllerProperty extends PrototypedEditor
 			);
 		
 		$this->setMethodMapping('image', 'actionAddImage');
+		$this->setMethodMapping('view', 'actionView');
 		
 //		$this->map->addSource('offerType', RequestType::get());
 	}
@@ -126,8 +127,14 @@ final class controllerProperty extends PrototypedEditor
 					setUploadName($files['tmp_name'][$key]);
 			}
 			
-			foreach ($pictures as $picture)
-				Picture::dao()->add($picture);
+			foreach ($pictures as $picture) {
+				if ($picture = Picture::dao()->add($picture)) {
+					if ($picture->isMain())
+						$property->dao()->save(
+							$property->setImage($picture)
+						);
+				}
+			}
 		}
 		
 		$request->setAttachedVar('layout', 'json');
@@ -152,7 +159,37 @@ final class controllerProperty extends PrototypedEditor
 		
 		return $this;
 	}
-
+	
+	protected function actionView(HttpRequest $request)
+	{
+		$mav = ModelAndView::create();
+		$user = $request->getAttachedVar('user');
+			
+		$property = $this->getForm()->
+			importOne('id', $request->getGet())->
+			getValue('id');
+		
+		if ($property) {
+			if (
+				$property->getPublished()
+				|| (
+					$user
+					&& $property->getUserId() == $user->getId()
+				)
+			) {
+				$mav->getModel()->set('property', $property);
+				return $mav;
+			}
+		}
+		
+		$mav->
+			setView('error')->
+			getModel()->
+				set('error', 'No such object');
+		
+		return $mav;
+	}
+	
 	private function storeFeatures(Property $object)
 	{
 		if (!($list = $this->getForm()->getValue('type'))) {

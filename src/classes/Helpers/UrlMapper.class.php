@@ -183,7 +183,7 @@
 				
 				if (isset($m[3])) {
 					if (is_numeric($m[3])) {
-						$request->setGetVar('idr', $m[3]);
+						$request->setGetVar('id', $m[3]);
 					} else {
 						$request->setGetVar('offer', $m[3]);
 					}

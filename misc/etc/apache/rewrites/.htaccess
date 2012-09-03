@@ -5,6 +5,8 @@
 #	RewriteRule ^(buy|rent)/(.+)/(.+)$			index.php?area=search&action=$1&property=$2&filter=$3 [L]
 #	RewriteRule ^([a-z0-9]+)/([a-zA-Z0-9]+)$	index.php?area=$1&action=$2&%{QUERY_STRING} [L]
 
+	RewriteRule	^$		/buy	[R=301,L]
+
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule		^(.+)$		index.php?query=$1&%{QUERY_STRING} [QSA,L]
