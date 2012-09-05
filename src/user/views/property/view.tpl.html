@@ -32,15 +32,19 @@
 
 <?/* main description */?>
 	<div class="g_8 infoBlock">
+		<ul>
 <?php
 	$first = true;
 	foreach(array(FeatureType::BEDROOMS, FeatureType::TOYLETS, FeatureType::CAR_PLACES) as $typeId) {
 ?>
-		<div class="<?=$first ? 'alpha' : null?>"><?=$features[$typeId]->getValue()?> x <image src="" width="24" height="24" alt='<?=$features[$typeId]->getType()->getName()?>'/></div>
+		<li class="<?=$first ? 'alpha' : null?>"><?=$features[$typeId]->getValue()?> x <image src="<?=PATH_WEB_IMG?>icon<?=$typeId?>.png" width="24" height="24" alt='<?=$features[$typeId]->getType()->getName()?>'/></li>
 <?php
 		$first = false;
 	}
 ?>
+		</ul>
+		<div class="clear"></div>
+
 	</div>
 
 
