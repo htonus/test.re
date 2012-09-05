@@ -296,9 +296,6 @@ LI.main {
 	margin-left: 10px;
 	padding-top: 5px;
 }
-.gallery .previewList LI.first {
-	margin-left: 0 !important;
-}
 .gallery .title {
 	font: 14px sans-serif;
 	color: #FFF;
@@ -324,4 +321,7 @@ LI.main {
 }
 .nok {
 	background-color: #F00 !important;
+}
+.infoBlock DIV {
+	margin-left: 20px;
 }
