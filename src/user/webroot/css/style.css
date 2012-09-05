@@ -39,10 +39,13 @@ H1, H2, H3 {
 	border-bottom: 2px #ffc251 solid;
 }
 
-.mainMenu UL LI {
+UL LI {
 	position: relative;
 	float: left;
 	display: block;
+}
+
+.mainMenu UL LI {
 	margin-right: 5px;
 }
 .mainMenu UL LI A {
@@ -290,8 +293,6 @@ LI.main {
 	height: 100px;
 }
 .gallery .previewList LI {
-	float: left;
-	display: block;
 	width: 150px;
 	margin-left: 10px;
 	padding-top: 5px;
