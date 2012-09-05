@@ -3,6 +3,7 @@
  * $Id$
  */
 
+	$features = $property->getFeatures()->getList();
 	$pictures = $property->getPictures()->getList();
 	$date = $property->getPublished();
 ?>
@@ -10,9 +11,13 @@
 <br/>
 <div class="container_24">
 
+<?/* ttile */?>
 	<div class="g_20">
 		<h1><?=$property->getName()?> (#<?=$property->getId()?>)</h1>
 	</div>
+
+
+<?/* published flag */?>
 	<div class="g_4 info <?=$date ? null : 'nok'?>">
 <?php
 	if ($date) {
@@ -23,17 +28,29 @@
 ?>
 	</div>
 	<div class="clear"></div>
-	
-	<div class="g_8">
-		описание
+
+
+<?/* main description */?>
+	<div class="g_8 infoBlock">
+<?php
+	$first = true;
+	foreach(array(FeatureType::BEDROOMS, FeatureType::TOYLETS, FeatureType::CAR_PLACES) as $typeId) {
+?>
+		<div class="<?=$first ? 'alpha' : null?>"><?=$features[$typeId]->getValue()?> x <image src="" width="24" height="24" alt='<?=$features[$typeId]->getType()->getName()?>'/></div>
+<?php
+		$first = false;
+	}
+?>
 	</div>
+
+
+<?/* main image */?>
 	<div class="g_16 gallery">
 		<div class="g_16 alpha omega">
-			<div class="title">asdada sdas dasd ad</div>
+			<div class="title"><?=$property->getImage()->getComment()?></div>
 		</div>
 		<div class="clear"></div>
-				
-		<div class="g_16 alpha omega">
+		<div class="g_16 alpha omega" id="bigPicture">
 <?php
 	$partViewer->view(
 		'_parts/picture',
@@ -44,17 +61,18 @@
 ?>
 		</div>
 		<div class="clear"></div>
+
 		
+<?/* preview list */?>
 		<div class="g_16 alpha omega previewList">
 			<ul>
 <?php
 	$first = true;
-
 	foreach ($pictures as $picture) {
 		$class = '';
 		
 		if ($first)
-			$class .= ' first';
+			$class .= ' alpha';
 		
 		if ($picture->isMain())
 			$class .= ' highlite';
