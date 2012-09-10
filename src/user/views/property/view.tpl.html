@@ -32,19 +32,69 @@
 
 <?/* main description */?>
 	<div class="g_8 infoBlock">
-		<ul>
+		<dl>
 <?php
 	$first = true;
 	foreach(array(FeatureType::BEDROOMS, FeatureType::TOYLETS, FeatureType::CAR_PLACES) as $typeId) {
 ?>
-		<li class="<?=$first ? 'alpha' : null?>"><?=$features[$typeId]->getValue()?> x <image src="<?=PATH_WEB_IMG?>icon<?=$typeId?>.png" width="24" height="24" alt='<?=$features[$typeId]->getType()->getName()?>'/></li>
+			<dd title="<?=$features[$typeId]->getType()->getDisplayName()?>" class="type<?=$typeId?><?=$first ? ' alpha' : null?>"><div><?=$features[$typeId]->getValue()?></div></dd>
 <?php
 		$first = false;
 	}
+	
+	if (isset($features[FeatureType::AREA])) {
 ?>
-		</ul>
+			<dd class="square"><div>Area: <?=$features[FeatureType::AREA]->getValue()?> m<sup>2</sup></div></dd>
+<?php
+	}
+?>
+		</dl>
+		<div class="clear"></div>
+		
+		<div class="g_8 price">
+			<div>&euro; <?=number_format($features[FeatureType::PRICE]->getValue(), 0, null, "'")?></div>
+		</div>
+		
+		<div class="g_8">
+			<br/>
+			<b>Indoor features</b><br/>
+			<ul>
+<?php
+	foreach (FeatureType::dao()->getListByGroup(FeatureType::INDOOR) as $typeId => $type) {
+		if (isset($features[$typeId])) {
+?>
+				<li>- <?=$type->getDisplayName()?></li>
+<?php
+		}
+	}
+?>
+			</ul>
+		</div>
 		<div class="clear"></div>
 
+		<div class="g_8">
+			<br/>
+			<b>Outdoor features</b><br/>
+			<ul>
+<?php
+	foreach (FeatureType::dao()->getListByGroup(FeatureType::OUTDOOR) as $typeId => $type) {
+		if (isset($features[$typeId])) {
+?>
+				<li>- <?=$type->getDisplayName()?></li>
+<?php
+		}
+	}
+?>
+			</ul>
+		</div>
+		<div class="clear"></div>
+
+		<div class="g_8">
+			<br/>
+			<b>Description</b><br/>
+			<?=$property->getDescription()?>
+		</div>
+		<div class="clear"></div>
 	</div>
 
 
@@ -68,8 +118,8 @@
 
 		
 <?/* preview list */?>
-		<div class="g_16 alpha omega previewList">
-			<ul>
+		<div class="g_16 alpha omega previewList nowrap">
+			<dl>
 <?php
 	$first = true;
 	foreach ($pictures as $picture) {
@@ -81,7 +131,7 @@
 		if ($picture->isMain())
 			$class .= ' highlite';
 ?>
-				<li class="<?=$class?>">
+				<dd class="<?=$class?>">
 <?php
 		$partViewer->view(
 			'_parts/picture',
@@ -92,11 +142,11 @@
 		
 		$first = false;
 ?>
-				</li>
+				</dd>
 <?php
 	}
 ?>
-			</ul>
+			</dl>
 		</div>
 	</div>
 		 

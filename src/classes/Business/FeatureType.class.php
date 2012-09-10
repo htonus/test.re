@@ -31,7 +31,7 @@
 			return Singleton::getInstance('ProtoFeatureType');
 		}
 		
-		const INDOOR	= 0x0001;
+		const INDOOR		= 0x0001;
 		const OUTDOOR	= 0x0002;
 
 		// MOST IMPORTAT FEATURES

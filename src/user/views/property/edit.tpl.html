@@ -307,7 +307,7 @@ $(document).ready(function(){
 			function(result){
 				if (result.result == '<?=PrototypedEditor::COMMAND_SUCCEEDED?>') {
 					var notes = {};
-					$('LI.file :text').each(function(i, obj){
+					$('DD.file :text').each(function(i, obj){
 						var name = $(obj).attr('name').match(/\[([^\]]+)\]/);
 						notes[name[1]] = $(obj).val();
 					});
@@ -365,7 +365,7 @@ $(document).ready(function(){
 
 </script>
 <script type="text/x-tmpl" id="tmplUpload">
-<li class="file" id="file_{%= '' + o.file.id %}">
+<dd class="file" id="file_{%= '' + o.file.id %}">
 	<div class="name">{%= o.file.name %} ({% if (o.file.size >> 20 > 0) print(o.file.size >> 20 + 'Mb'); else print(o.file.size >> 10 + 'kb'); %})</div>
 	<div class="control drop">x</div>
 	<div class="clear"></div>
@@ -375,5 +375,5 @@ $(document).ready(function(){
 		<input type="checkbox" style="display: none" name="file_main" value="{%=o.file.name%}" />
 		<input type="text" name="file_note[{%=o.file.name%}]" value="" />
 	</div>
-</li>
+</dd>
 </script>

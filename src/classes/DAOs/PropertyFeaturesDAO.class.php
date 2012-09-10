@@ -33,5 +33,16 @@
 		{
 			return ArrayHelper::toListByGetter(parent::getList(), 'getTypeId');
 		}
+		
+		public function getGroupList($group = null)
+		{
+			$out = array();
+			foreach($this->getList() as $typeId => $feature) {
+				if ($feature->getType()->getGroup() == $group)
+					$out[$typeId] = $feature;
+			}
+			
+			return $out;
+		}
 	}
 ?>

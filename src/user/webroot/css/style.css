@@ -13,6 +13,11 @@ H1, H2, H3 {
 	color: #666666;
 }
 
+H1 {
+	font: bold 20px sans-serif;
+	margin: 10px 0px;
+}
+
 .shadow {
 	position: fixed;
 	left: 0px;
@@ -39,16 +44,18 @@ H1, H2, H3 {
 	border-bottom: 2px #ffc251 solid;
 }
 
-UL LI {
+.nowrap DL DD {
 	position: relative;
 	float: left;
 	display: block;
-}
-
-.mainMenu UL LI {
 	margin-right: 5px;
 }
-.mainMenu UL LI A {
+
+DL DD {
+	display: block;
+}
+
+.mainMenu DL DD A {
 	display: block;
 	padding: 5px 10px;
 	background-color: #ffc251;
@@ -87,33 +94,6 @@ UL LI {
 	padding: 0px 5px;
 	font-weight: bold;
 }
-
-/* get rid of the tabs,  use top menu */
-.searchTab LI {
-	float: left;
-	width: 50%;
-}
-.searchTab LI DIV {
-	padding: 5px 0px;
-	text-align: center;
-	font: bold 18px sans-serif;
-	text-transform: uppercase;
-	color: #FFCD6C;
-	border: 2px #FFCD6C solid;
-	border-top: 2px #FFF solid;
-	border-right: 2px #FFCD6C solid;
-	border-left: 2px #FFCD6C solid;
-	cursor: pointer;
-	background-color: #FFF;
-}
-.searchTab LI DIV.active {
-	border: 2px #FFCD6C solid;
-	border-bottom: 2px #FFE6B6 solid;
-	border-left: 2px #FFE6B6 solid;
-	color: #FFCD6C;
-	background-color: #FFE6B6;
-}
-/* get rid of the tabs,  use top menu */
 
 
 
@@ -243,7 +223,7 @@ LABEL {
 fieldset .highlite {
 	border: 1px darkorange solid !important;
 }
-LI.main {
+DD.main {
 	border: 5px #FFCD6C solid !important;
 }
 .file {
@@ -251,7 +231,7 @@ LI.main {
 	width: 180px;
 	/*height: 180px;*/
 	background-color: #FFF9E9;
-	margin: 15px 0 0 15px;
+	margin: 15px 0 0 10px;
 	font: 12px sans-serif;
 	border: 5px #FFF solid;
 }
@@ -286,13 +266,13 @@ LI.main {
 }
 
 /* images */
-.gallery .previewList UL {
+.gallery .previewList DL {
 	white-space: nowrap;
 	overflow: hidden;
 	margin: 5px 0px;
 	height: 100px;
 }
-.gallery .previewList LI {
+.gallery .previewList DD {
 	width: 150px;
 	margin-left: 10px;
 	padding-top: 5px;
@@ -306,10 +286,10 @@ LI.main {
 .gallery .previewList IMG {
 	border-top: 1px #FFF solid;
 }
-.gallery .previewList LI:hover {
+.gallery .previewList DD:hover {
 	background-color: #ffce6e;
 }
-.gallery .previewList LI.highlite {
+.gallery .previewList DD.highlite {
 	background-color: #999;
 }
 .info {
@@ -323,6 +303,44 @@ LI.main {
 .nok {
 	background-color: #F00 !important;
 }
-.infoBlock DIV {
-	margin-left: 20px;
+.infoBlock DD {
+	display: block;
+	float: left;
+	width: 32px;
+	height: 32px;
+	text-align: right;
+	margin-left: 10px;
+}
+.infoBlock DD DIV {
+	color: #FFF;
+	padding: 2px 5px 0 0;
+	font: bold 14px monospace;
+}
+.infoBlock .square DIV {
+	padding-top: 14px;
+	font: bold 18px sans-serif;
+	color: #999;
+	width: 180px;
+	text-align: left;
+}
+.type3, .type4, .type7 {
+	background-repeat: no-repeat;
+}
+.type3 {
+	background-image: url(/i/type3.png);
+}
+.type4 {
+	background-image: url(/i/type4.png);
+}
+.type7 {
+	background-image: url(/i/type7.png);
+}
+.infoBlock .price {
+	padding: 10px 0 0 0;
+	font: bold 48px sans-serif;
+	color: #ffc251;
+}
+
+.alpha {
+	margin-left: 0px !important;
 }

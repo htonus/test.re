@@ -80,14 +80,14 @@ var ImageLoader = {
 					ImageLoader.updateContainer();
 				});
 				$('IMG', div).click(function(){
-					$('LI.file :checkbox').removeAttr('checked');
-					$('LI.file').removeClass('main');
+					$('DD.file :checkbox').removeAttr('checked');
+					$('DD.file').removeClass('main');
 					
 					$(':checkbox', div).attr('checked', 'checked');
 					div.addClass('main');
 				});
 				
-				if ($('LI.file :checked').size() == 0)
+				if ($('DD.file :checked').size() == 0)
 					$('IMG', div).click();
 				
 				ImageLoader.updateContainer();
