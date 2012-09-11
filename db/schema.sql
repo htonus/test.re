@@ -56,7 +56,7 @@ CREATE TABLE property (
     id			BIGINT PRIMARY KEY DEFAULT nextval('property_id'::regclass) NOT NULL,
     name		VARCHAR(128) NOT NULL,
     description VARCHAR(512),
-	"created"	TIMESTAMP WITHOUT TIME ZONE NOT NULL, 
+	"created"	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
 	"published"	TIMESTAMP WITHOUT TIME ZONE NULL DEFAULT NULL,
     user_id				BIGINT NOT NULL REFERENCES "user"(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     property_type_id	BIGINT NOT NULL REFERENCES property_type(id) ON UPDATE CASCADE ON DELETE RESTRICT,
@@ -83,6 +83,7 @@ CREATE TABLE feature_type (
     "name" 		VARCHAR(32) NOT NULL,
 	"group"  	INTEGER NULL DEFAULT 0,
     weight 		INTEGER NOT NULL DEFAULT 1,
+	"cast"		INTEGER NOT NULL,
     unit_id bigint NULL REFERENCES unit(id) ON UPDATE CASCADE ON DELETE SET NULL
 );
 CREATE INDEX feature_type_unit_id_idx ON feature_type USING btree (unit_id);
@@ -119,6 +120,17 @@ CREATE TABLE picture (
 );
 CREATE INDEX picture_property_id_idx ON picture USING btree (property_id);
 ALTER TABLE "property" ADD COLUMN "image_id" BIGINT NULL REFERENCES "picture"("id") ON DELETE RESTRICT ON UPDATE REStRICT;
+
+CREATE SEQUENCE mail_queue_id;
+CREATE TABLE mail_queue (
+    id 			BIGINT PRIMARY KEY DEFAULT nextval('mail_queue_id'::regclass) NOT NULL,
+	"user_id"	BIGINT NOT NULL REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE,
+	"title"		CHARACTER VARYING(16) NOT NULL,
+	"body"		CHARACTER VARYING(4096) NOT NULL,
+	"created"	TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+	"sent"		TIMESTAMP WITHOUT TIME ZONE NULL
+);
+CREATE INDEX "mail_queue_user_id_idx" ON "mail_queue"("user_id");
 
 -- CREATE INDEX "image_id_idx" ON "property"("image_id");
 

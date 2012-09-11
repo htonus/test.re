@@ -275,7 +275,7 @@ final class controllerProperty extends PrototypedEditor
 			$user = $user->dao()->add($user);
 			
 			if ($user->getId())
-				MailHelper::send(
+				MailHelper::add(
 					Model::create()->
 						set('user', $user)->
 						set('template', 'activate')->
