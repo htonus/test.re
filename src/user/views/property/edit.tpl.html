@@ -315,7 +315,7 @@ $(document).ready(function(){
 					var formData = {
 						property	: result.id,
 						comments	: JSON.stringify(notes),
-						file_main	: $('LI.file :checked').val()
+						file_main	: $('DD.file :checked').val()
 					};
 					
 					ImageLoader.uploadFiles(formData, function(result){

@@ -121,7 +121,7 @@ final class controllerProperty extends PrototypedEditor
 				$pictures[] = Picture::create()->
 					setProperty($property)->
 					setTypeId($files['type'])->
-					setComment($comments[$file['name']])->
+					setComment($comments[$files['name']])->
 					setName($files['name'])->
 					setMain($main == $files['name'])->
 					setUploadName($files['tmp_name'][$key]);

@@ -33,11 +33,11 @@
 			}
 			
 			try {
-				$db = DBPool::me()->getLink($this->getLinkName())->begin();
-				
 				if ($object->isMain()) {
 					$this->dropMain($object->getProperty());
 				}
+				
+				$db = DBPool::me()->getLink($this->getLinkName())->begin();
 				
 				if ($object = parent::add($object)) {
 			 		$path = PATH_PIX.$object->getId().'.'.$type->getExtension();
