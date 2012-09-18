@@ -61,5 +61,11 @@
 				)
 			);
 		}
+
+		public static function cut($text, $length = 100)
+		{
+			$part = mb_substr($text, 0, $length);
+			return mb_substr($part, 0, mb_strrpos($part, ' ')).'...';
+		}
 	}
 ?>

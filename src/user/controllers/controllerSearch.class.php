@@ -127,6 +127,9 @@ final class controllerSearch extends controllerMain
 		$logic = Expression::chain()->
 			expAnd(
 				Expression::eqId("offerType", $offerType)
+			)->
+			expAnd(
+				Expression::notNull('published')
 			);
 
 		if (

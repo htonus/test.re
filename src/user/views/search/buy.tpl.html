@@ -15,7 +15,8 @@
 
 	// TODO: add to object builder fetch collection and store in interanl array
 ?>
-
+	<br/>
+	
 	<div class="g_6 fields" style="background-acolor: #FFE6B6">
 		<form name="searchForm" id="searchForm" action="<?=PATH_WEB?>" method="POST">
 		<input type="hidden" name="status" value="<?=OfferType::BUY?>"/>
@@ -135,41 +136,58 @@
 
 	</div>
 
-	<div class="g_18">
-		<table width="100%">
-			<tr>
-				<th>Title</th>
-				<th>Type</th>
-				<th>Price</th>
-				<th>Area</th>
-				<th>Beds</th>
-				<th>Baths</th>
-			</tr>
-<?php
-	$typesList = array(
-		FeatureType::PRICE,
-		FeatureType::AREA,
-		FeatureType::BEDROOMS,
-		FeatureType::TOYLETS,
-	);
+
 	
+	<div class="g_18">
+<?php
+	$subModel = Model::create()->set('size', ImageSize::forList());
+
 	foreach ($relevance as $id => $relevance) {
 		$item = $list[$id];
+		$subModel->set('picture', $item->getImage());
 		$features = $item->getFeatures()->getList();
 ?>
-			<tr>
-				<td><a href="<?=$urlMapper->getObjectUrl($item, 'view')?>"><?=$item->getName()?></a></td>
-				<td><?=$item->getPropertyType()->getName()?></td>
+		<div class="g_12 alpha omega infoBlock">
+			<div class="title">
+				<?=$item->getPropertyType()->getName()?> in <?=$item->getLocation()->getName()?>
+				<div style="float: right; font: 12px sans-serif">Published: <?=$item->getPublished()->toDate()?></div>
+			</div>
+			<div class="clear"></div>
+
+			<div class="g_6 alpha"><?$partViewer->view('_parts/picture', $subModel)?></div>
+			<div class="g_6 omega">
+				<h3><?=$item->getName()?></h3>
+				<div class="clear"></div>
+
+				<dl>
 <?php
-		foreach ($typesList as $typeId) {
+		$first = true;
+		foreach(array(FeatureType::BEDROOMS, FeatureType::TOYLETS, FeatureType::CAR_PLACES) as $typeId) {
 ?>
-				<td><?=empty($features[$typeId]) ? '-' : $features[$typeId]->getValue()?></td>
+					<dd title="<?=$features[$typeId]->getType()->getDisplayName()?>" class="type<?=$typeId?><?=$first ? ' alpha' : null?>"><div><?=$features[$typeId]->getValue()?></div></dd>
+<?php
+			$first = false;
+		}
+
+		if (false && isset($features[FeatureType::AREA])) {
+?>
+					<dd class="square"><div>Area: <?=$features[FeatureType::AREA]->getValue()?> m<sup>2</sup></div></dd>
 <?php
 		}
 ?>
-			</tr>
-<?
+				</dl>
+				<div class="clear"></div>
+
+				<div style="color: #ffc251; font: bold 2em sans-serif">&euro; <?=number_format($features[FeatureType::PRICE]->getValue(), 0, null, "'")?></div>
+
+				<div><?=StringHelper::cut($item->getDescription())?></div>
+
+			</div>
+		</div>
+		<div class="clear"></div>
+		<br/>
+
+<?php
 	}
 ?>
-		</table>
 	</div>

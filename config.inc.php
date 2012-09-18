@@ -60,7 +60,8 @@
 	define('DEFAULT_EMAIL', 'meincyp+test@gmail.com');
 	
 	define('PROJECT_NAME', 'Realestate.com.cy');
-	
+
+//	define('DEBUG_VIEW', 1);
 		
 	DBPool::me()->setDefault(
 		DB::spawn('PgSQL', 'htonus', '', 'localhost', 're_pro')->

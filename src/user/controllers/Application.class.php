@@ -137,10 +137,12 @@ final class Application
 	private function attachResolver(HttpRequest $request)
 	{
 		$resolver = MultiPrefixPhpViewResolver::create()->
-			setViewClassName('SimplePhpView')->
+			setViewClassName(
+				defined('DEBUG_VIEW') ? 'DebugPhpView': 'SimplePhpView'
+			)->
 			setPostfix(EXT_TPL)->
 			addPrefix(PATH_TEMPLATES);
-		
+
 		$request->setAttachedVar('resolver', $resolver);
 		
 		return $this;

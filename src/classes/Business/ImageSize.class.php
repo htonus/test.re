@@ -4,12 +4,14 @@
 	{
 		const BIG		= 1;
 		const PREVIEW	= 2;
+		const FOR_LIST	= 3;
 		
 		private $size	= null;
 		
 		private $sizeList = array(
 			self::BIG		=> array (630,400),
 			self::PREVIEW	=> array (150,100),
+			self::FOR_LIST	=> array (230,120),
 		);
 		
 		public function __construct($size)
@@ -53,9 +55,14 @@
 		{
 			return new self(self::BIG);
 		}
-		
+
 		public static function preview()
 		{
 			return new self(self::PREVIEW);
+		}
+
+		public static function forList()
+		{
+			return new self(self::FOR_LIST);
 		}
 	}
