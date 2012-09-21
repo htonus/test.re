@@ -1,0 +1,168 @@
+<?php
+/*
+ * $Id$
+ */
+
+	$simpleList = array();
+	for ($number = 1; $number < 5; $number ++)
+		$simpleList[$number] = $number;
+
+	$priceList = array();
+	for ($number = 100000; $number < 500000; $number += 100000)
+		$priceList[$number] = $number;
+?>
+		<form name="searchForm" id="searchForm" action="<?=PATH_WEB?>buy" method="POST">
+
+		<div class="g_6 alpha omega">
+
+<?php
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'property',
+				'label'	=> "Property type",
+				'list'	=> $propertyTypeList,
+				'value'	=> $property->getId()
+			))
+	);
+?>
+		</div>
+		<div class="clear"></div>
+
+		<div class="g_3 alpha">
+<?php
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::BEDROOMS.'][min]',
+				'label'	=> "Min Bedrooms",
+				'list'	=> $simpleList,
+				'topOption'	=> 'Any',
+				'value'	=> isset($filters[FeatureType::BEDROOMS]['min']) ? $filters[FeatureType::BEDROOMS]['min'] : null
+			))
+	);
+?>
+		</div>
+		<div class="g_3 omega">
+<?php
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::BEDROOMS.'][max]',
+				'label'	=> "Max Bedrooms",
+				'list'	=> $simpleList,
+				'topOption'	=> 'Any',
+				'value'	=> isset($filters[FeatureType::BEDROOMS]['max']) ? $filters[FeatureType::BEDROOMS]['max'] : null
+			))
+	);
+?>
+		</div>
+		<div class="clear"></div>
+
+		<div class="g_3 fields alpha">
+<?php
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::PRICE.'][min]',
+				'label'	=> "Min Price",
+				'list'	=> $priceList,
+				'topOption'	=> 'Any',
+				'value'	=> isset($filters[FeatureType::PRICE]['min']) ? $filters[FeatureType::PRICE]['min'] : null
+			))
+	);
+?>
+		</div>
+		<div class="g_3 fields omega">
+<?php
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::PRICE.'][max]',
+				'label'	=> "Max Price",
+				'list'	=> $priceList,
+				'topOption'	=> 'Any',
+				'value'	=> isset($filters[FeatureType::PRICE]['max']) ? $filters[FeatureType::PRICE]['max'] : null
+			))
+	);
+?>
+		</div>
+		<div class="clear"></div>
+
+		<div class="g_3 alpha">
+<?php
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::TOYLETS.']',
+				'label'	=> "Toylets",
+				'list'	=> $simpleList,
+				'topOption'	=> 'Any',
+				'value'	=> isset($filters[FeatureType::TOYLETS]) ? $filters[FeatureType::TOYLETS] : null
+			))
+	);
+?>
+		</div>
+		<div class="g_3 fields omega">
+<?php
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type['.FeatureType::CAR_PLACES.']',
+				'label'	=> "Min Parkplaces",
+				'list'	=> $simpleList,
+				'topOption'	=> 'Any',
+				'value'	=> isset($filters[FeatureType::CAR_PLACES]) ? $filters[FeatureType::CAR_PLACES] : null
+			))
+	);
+?>
+		</div>
+		<div class="clear"></div>
+
+		<div class="g_6 fields alpha omega">
+<?php
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type',
+				'label'	=> "Indoor features",
+				'list'	=> FeatureType::dao()->getListByGroup(FeatureType::INDOOR),
+				'type'	=> 'multiselect',
+			))
+	);
+?>
+		</div>
+		<div class="clear"></div>
+
+		<div class="g_6 fields alpha omega">
+<?php
+	$partViewer->view(
+		'_parts/form/select',
+		Model::create()->
+			set('params', array(
+				'name'	=> 'type',
+				'label'	=> "Outdoor features",
+				'list'	=> FeatureType::dao()->getListByGroup(FeatureType::OUTDOOR),
+				'type'	=> 'multiselect',
+			))
+	);
+?>
+		</div>
+		<div class="clear"></div>
+
+		<div class="g_6 alpha omega">
+			<fieldset id="submit">
+				<div class="input">
+					<input type="submit" value="Send request" id="btnSubmit" name="submit" />
+				</div>
+			</fieldset>
+		</div>
+	</form>

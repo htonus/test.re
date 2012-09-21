@@ -5,6 +5,11 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 
+CREATE TABLE "role" (
+    "id" 		BIGINT PRIMARY KEY NOT NULL,
+    "name" 		VARCHAR(16) NOT NULL
+);
+
 CREATE SEQUENCE city_id
     START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
 CREATE TABLE "city" (
@@ -27,7 +32,8 @@ CREATE TABLE "user" (
 	"created"	TIMESTAMP NOT NULL DEFAULT now(), 
 	"activated" TIMESTAMP NULL, 
 	"code"		CHARACTER VARYING(32) NULL, 
-	"auto_login" CHARACTER VARYING(32) NULL 
+	"auto_login" CHARACTER VARYING(32) NULL,
+    "role_id"   BIGINT NOT NULL REFERENCES "role"(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 CREATE UNIQUE INDEX user_email_uidx ON "user"(email); 
 CREATE UNIQUE INDEX user_code_uidx ON "user"(code); 
@@ -131,6 +137,18 @@ CREATE TABLE mail_queue (
 	"sent"		TIMESTAMP WITHOUT TIME ZONE NULL
 );
 CREATE INDEX "mail_queue_user_id_idx" ON "mail_queue"("user_id");
+
+CREATE SEQUENCE article_id;
+CREATE TABLE article (
+    id 			BIGINT PRIMARY KEY DEFAULT nextval('article_id'::regclass) NOT NULL,
+	"user_id"	BIGINT NOT NULL REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE,
+	"title"		CHARACTER VARYING(16) NOT NULL,
+	"body"		CHARACTER VARYING(10000) NOT NULL,
+	"created"	TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+	"published"	TIMESTAMP WITHOUT TIME ZONE NOT NULL
+);
+CREATE INDEX "mail_queue_user_id_idx" ON "mail_queue"("user_id");
+
 
 -- CREATE INDEX "image_id_idx" ON "property"("image_id");
 

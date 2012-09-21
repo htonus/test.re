@@ -125,3 +125,8 @@ var ImageLoader = {
 //		
 //	}
 }
+
+
+$(document).ready(function(){
+	ImageLoader.init();
+});

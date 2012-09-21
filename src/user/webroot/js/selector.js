@@ -107,3 +107,7 @@ var Selector = {
 		}
 	}
 }
+
+$(document).ready(function(){
+	Selector.init();
+});

@@ -19,7 +19,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	Map.init();
-	Selector.init();
 
 	$('.searchTab LI').click(function(){
 		$('.searchTab DIV').removeClass('active');
@@ -50,8 +49,7 @@ $(document).ready(function(){
 
 	<div class="g_14">
 
-		<form name="searchForm" id="searchForm" method="POST">
-			<input type="hidden" name="action" value="<?=$action?>"/>
+		<form name="searchForm" id="searchForm" method="POST" action="<?=PATH_WEB?>buy">
 
 		<!-- search form -->
 		<div class="g_14 alpha omega">
@@ -166,7 +164,7 @@ $(document).ready(function(){
 			<div class="g_2 s_1 omega">
 					<fieldset id="submit">
 						<label for="submit">&nbsp;</label>
-						<input type="submit" value=">>" style="height: 150px; border: 1px #FFCD6C solid;" />
+						<input type="submit" value=">>" style="height: 150px; border: 1px #FFCD6C solid;" name="submit" />
 					</fieldset>
 			</div>
 			<div class="clear"></div>

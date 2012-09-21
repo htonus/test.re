@@ -6,6 +6,14 @@
 <metaconfiguration>
 <classes>
 
+	<class name="Role" type="final">
+		<properties>
+			<identifier name="id" />
+			<property name="name" type="String" size="16" required="true" />
+		</properties>
+		<pattern name="EnumerationClass" />
+	</class>
+
 	<class name="User" type="final">
 		<properties>
 			<identifier name="id" />
@@ -18,6 +26,7 @@
 			<property name="activated" type="Timestamp" required="false" />
 			<property name="code" type="String" size="32" required="false" />
 			<property name="autoLogin" type="String" size="32" required="false" />
+			<property name="role" type="Role" relation="OneToOne" required="true" fetch="lazy" />
 		</properties>
 		<pattern name="DictionaryClass" />
 	</class>

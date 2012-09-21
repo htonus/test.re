@@ -9,7 +9,10 @@
 	
 	if (!isset($value))
 		$value = 0;
-	
+
+	if (!isset($size))
+		$size = 6;
+
 	if (isset($topOption)) {
 		array_merge(array($value => $topOption), $list);
 	} else {
@@ -30,7 +33,13 @@
 		: $topOption;
 ?>
 					<fieldset id="<?=$name?>">
+<?php
+	if (!empty($label)) {
+?>
 						<label for="<?=$name?>"><?=$label?></label>
+<?php
+	}
+?>
 						<div class="<?=$type?>">
 <?php
 	if (isset($topOption) && $type == 'select') {
@@ -39,7 +48,7 @@
 <?php
 	}
 ?>
-							<dl>
+							<dl<?=$type=='multiselect' ? ' style="height: '.(25 * $size).'px;"' : null?>>
 <?php
 	foreach ($list as $index => $option) {
 		if ($option instanceof NamedObject) {
@@ -58,7 +67,7 @@
 <?php
 			}
 		} else {
-			if ($value == $index) {
+			if (isset($value[$index])) {
 ?>
 								<dd class="checked"><input type="checkbox" name="<?=$name?>[<?=$index?>]" value="1"  checked="checked" /><div><?=$option?></div></dd>
 <?php

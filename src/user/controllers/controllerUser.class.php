@@ -18,7 +18,9 @@ class controllerUser extends PrototypedEditor
 	{
 		parent::__construct(User::create());
 		
-		$this->getForm()->drop('created');
+		$this->getForm()->
+			drop('role')->
+			drop('created');
 		
 		$this->setMethodMapping('activate', 'actionActivate');
 		$this->setMethodMapping('success', 'actionSuccess');
@@ -61,7 +63,9 @@ class controllerUser extends PrototypedEditor
 		
 		if (User::dao()->isUnique($email)) {
 			$form->	setValue('code', StringHelper::makeHash($email));
-			$object->setCreated(Timestamp::makeNow());
+			$object->
+				setRole(Role::guest())->
+				setCreated(Timestamp::makeNow());
 			$object = parent::addObject($request, $form, $object);
 			
 			if ($object->getId())

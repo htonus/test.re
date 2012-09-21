@@ -22,6 +22,7 @@
 			if (!empty($user)) {
 				$user->
 					setCode(null)->
+					setRole(Role::user())->
 					setPassword(sha1($password))->
 					setActivated(Timestamp::makeNow());
 				

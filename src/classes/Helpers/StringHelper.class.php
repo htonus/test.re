@@ -12,7 +12,7 @@
 		public static function dump($object, $exit = false, $echo = true, $safe = false)
 		{
 			if ($echo) {
-				echo '<pre>';
+				echo '<br/><pre>';
 				$safe ? print_r($object) : var_dump($object);
 				echo '</pre>';
 			} else

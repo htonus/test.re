@@ -129,14 +129,18 @@
 			$request->setAttachedVar('query', $query);
 			
 			// is POST to GET redirect for SEO links (browsing properties)
-			if (preg_match('!^(buy|rent)/?$!', $query, $m[1])) {
-				if ($request->hasPostVar('action'))
+			if (preg_match('!^(buy|rent)/?$!', $query, $m)) {
+				$request->setPostVar('action', $m[1]);
+				
+				if ($request->hasPostVar('submit')) {
+					// post to get redirect required
+					$request->setPostVar('area', 'search');
 					return true;
-				
-				$request->setGetVar('area', 'main');
-				$request->setGetVar('action', $m[1]);
-				
-				return false;
+				} else {
+					// main page
+					$request->setPostVar('area', 'main');
+					return false;
+				}
 			}
 			
 			$rega = '!^(buy|rent)(-(\d)-?(\d)?-bedrooms)?(-(\d+)-?(\d+)?-area)?'
