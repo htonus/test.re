@@ -15,10 +15,7 @@
 	defined('MODE') || define('MODE', 'user');
 	defined('PATH_SOURCE_DIR') || define('PATH_SOURCE_DIR', MODE.DS);
 
-	if (isset($_SERVER['HTTP_HOST']))
-		define('DOMAIN', $_SERVER['HTTP_HOST']);
-	else
-		define('DOMAIN', 'php.pro');
+	define('DOMAIN', 'php.pro');
 
 	define('COOKIE_DOMAIN', '.'.DOMAIN);
 	

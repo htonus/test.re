@@ -3,7 +3,9 @@
  * $Id$
  */
 ?>
-	<a href="<?=$urlMapper->getObjectUrl($subject, 'edit')?>">Add new</a><br />
+	<a href="/index.php?area=property&action=edit">Add new</a> |
+	<a href="/index.php?area=property&action=list">Full list</a> |
+	<a href="/index.php?area=property&action=unpublished">Not published</a> |
 	
 	<table width="50%">
 		<tr>
@@ -15,14 +17,16 @@
 		</tr>
 <?php
 	foreach ($list as $item) {
+		$features = $item->getFeatures()->getList();
 ?>
 	<tr>
-		<td><b><?=$item->getName()?></b></td>
+		<td><a target="_blank" href="<?=PATH_WEB?>property/view/<?=$item->getId()?>"><b><?=$item->getName()?></a></b></td>
 		<td><b><?=$item->getPropertyType()->getName()?></b></td>
 		<td><b><?=$item->getOfferType()->getName()?></b></td>
-		<td rowspan="2">
-			<a href="<?=$urlMapper->getObjectUrl($item, 'edit')?>">edit</a> |
-			<a href="<?=$urlMapper->getObjectUrl($item, 'drop')?>">drop</a>
+		<td nowrap><b>&euro; <?=number_format($features[FeatureType::PRICE]->getValue(), 0, '.',  "'")?></b></td>
+		<td rowspan="2" nowrap>
+			<a href="/index.php?area=property&action=edit&id=<?=$item->getId()?>">edit</a> |
+			<a href="/index.php?area=property&action=drop&id=<?=$item->getId()?>">drop</a>
 		</td>
 	</tr><tr>
 		<td colspan="3"><?=$item->getFeaturesAnounce()?></td>

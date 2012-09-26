@@ -35,5 +35,9 @@
 		{
 			return "$this->name $this->surname";
 		}
+
+		public function isAdmin()
+		{
+			return $this->getRoleId() == Role::ADMINISTRATOR;
+		}
 	}
-?>

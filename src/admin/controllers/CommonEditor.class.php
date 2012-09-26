@@ -13,6 +13,8 @@
  */
 class CommonEditor extends PrototypedEditor
 {
+	const PER_PAGE = 20;
+
 	public function __construct($subject)
 	{
 		parent::__construct($subject);
@@ -54,18 +56,40 @@ class CommonEditor extends PrototypedEditor
 
 	public function doIndex(HttpRequest $request)
 	{
+		$model = Model::create();
+
 		try {
-			$list = $this->subject->dao()->getPlainList();
+			$criteria = $this->getListCriteria($request, $model);
+			$request->setAttachedVar('criteria', $criteria);
+
+			// paging stuff
+			PagerHelper::create($request)->
+				setPerPage($this::PER_PAGE)->
+				page($model);
+			
 		} catch (ObjectNotFoundException $e) {
-			$list = array();
+			$model->set('list', array());
 		}
 		
-		$model = Model::create()->
-			set('list', $list)->
+		$model->
+//			set('list', $list)-> // pager does
 			set('subject', $this->subject);
 
 		return ModelAndView::create()->
 			setModel($model);
+	}
+
+	/**
+	 * Returns base list criteria
+	 * @param HttpRequest $request
+	 * @param Model $model
+	 * @return Criteria $criteria
+	 */
+	protected function getListCriteria(HttpRequest $request, Model $model)
+	{
+		$criteria = Criteria::create($this->subject->dao());
+
+		return $criteria;
 	}
 
 	protected function attachCollections(Model $model)
