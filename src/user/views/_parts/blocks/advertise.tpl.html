@@ -1,0 +1,29 @@
+<?php
+/*
+ * $Id$
+ */
+	$elemSize = 6;
+	$total = count($list);
+
+	if (empty($size))
+		$size = 6 * $total;
+	else
+		$elemSize = (int)($size / $total);
+?>
+	<div class="g_<?=$size?>">
+<?php
+	$index = 0;
+	foreach ($list as $item) {
+		$index ++;
+
+		$class = $index == 1
+			? ' alpha'
+			: ($total == $index ? ' omega' : null);
+?>
+		<div class="g_<?=$elemSize.$class?>">
+			
+		</div>
+<?php
+	}
+?>
+	</div>

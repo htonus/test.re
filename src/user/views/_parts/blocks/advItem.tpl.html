@@ -1,0 +1,45 @@
+<?php
+/*
+ * $Id$
+ */
+	$subModel = Model::create()->
+		set('size', ImageSize::forList())->
+		set('picture', $item->getImage());
+	
+	$features = $item->getFeatures()->getList();
+?>
+		<div class="g_6 infoBlock">
+			<div class="title">
+				<?=$item->getPropertyType()->getName()?> in <?=$item->getLocation()->getName()?>
+			</div>
+			<div class="clear"></div>
+
+			<div><?$partViewer->view('_parts/picture', $subModel)?></div>
+			<div class="clear"></div>
+
+			<dl>
+<?php
+		$first = true;
+		foreach(array(FeatureType::BEDROOMS, FeatureType::TOYLETS, FeatureType::CAR_PLACES) as $typeId) {
+?>
+				<dd title="<?=$features[$typeId]->getType()->getDisplayName()?>" class="type<?=$typeId?><?=$first ? ' alpha' : null?>"><div><?=$features[$typeId]->getValue()?></div></dd>
+<?php
+			$first = false;
+		}
+
+		if (false && isset($features[FeatureType::AREA])) {
+?>
+				<dd class="square"><div>Area: <?=$features[FeatureType::AREA]->getValue()?> m<sup>2</sup></div></dd>
+<?php
+		}
+?>
+				<dd style="color: #ffc251; font: bold 1.4em sans-serif; width: 100px">&euro; <?=number_format($features[FeatureType::PRICE]->getValue(), 0, null, "'")?></dd>
+			</dl>
+			<div class="clear"></div>
+
+			<div class="title">
+				<div style="text-align: right; font: 12px sans-serif">Published: <?=$item->getPublished()->toDate()?></div>
+			</div>
+			<div class="clear"></div>
+			
+		</div>

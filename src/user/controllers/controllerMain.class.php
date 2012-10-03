@@ -43,7 +43,13 @@ class controllerMain extends MethodMappedController
 				EnumHelper::getAnyObject('PropertyType')->getDisplayNames()
 			)->
 			set('cityList', City::dao()->getCityList());
+
+		$list = Criteria::create(Property::dao())->
+			setLimit(4)->
+			getList();
 		
+		$model->set('advertiseList', $list);
+
 		return $this;
 	}
 }

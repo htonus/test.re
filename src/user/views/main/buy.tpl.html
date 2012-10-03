@@ -176,3 +176,23 @@ $(document).ready(function(){
 	</div>
 	
 </div>
+
+<?php
+	// Advertisement of new or paid offers
+	if (!empty($advertiseList)) {
+?>
+<div class="container_24">
+<?php
+		foreach ($advertiseList as $item) {
+			$partViewer->view(
+				'_parts/blocks/advItem',
+				Model::create()->set('item', $item)
+			);
+		}
+?>
+</div>
+<?php
+	}
+?>
+	
+</div>
