@@ -1,6 +1,7 @@
+<pre>
 <?php
-    $appPath =
-  realpath(
+$appPath =
+	realpath(
 		dirname(__FILE__).DIRECTORY_SEPARATOR
 		.'..'.DIRECTORY_SEPARATOR
 		.'..'.DIRECTORY_SEPARATOR
@@ -17,3 +18,4 @@ include '../../classes/Auto/schema.php';
 
 echo $schema->toDialectString(PostgresDialect::me());
 ?>
+</pre>
